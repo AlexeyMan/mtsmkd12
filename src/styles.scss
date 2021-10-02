@@ -1,1 +1,174 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../src/assets/style/styles.scss";
+// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+// @import "~@ng-select/ng-select/themes/default.theme.css";
+// @import "~perfect-scrollbar/css/perfect-scrollbar.css";
+// @import "~material-design-icons/iconfont/material-icons.css";
+// @import " ~@ng-select/ng-select/themes/material.theme.css";
+
+.mat-row:hover {
+  background-color: lightgray;
+}
+
+.btn {
+  white-space: normal;
+  font-size: 1.1rem !important;
+}
+
+.mat-table {
+  display: table;
+  width: 100%;
+
+  > .mat-header-row,
+  > .mat-row {
+    display: table-row;
+    padding: 5;
+    border: none;
+
+    > .mat-header-cell,
+    > .mat-cell {
+      display: table-cell;
+      height: 48px;
+      vertical-align: middle;
+
+      border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    }
+  }
+}
+
+.mat-column-category_name {
+  max-width: 200px;
+}
+
+.mat-column-group_id {
+  max-width: 100px;
+  min-width: 100px;
+}
+
+.mat-column-id {
+  max-width: 100px;
+  min-width: 100px;
+}
+
+td.mat-cell,
+td.mat-footer-cell,
+th.mat-header-cell {
+  padding: 7px !important;
+}
+
+.table-container {
+  overflow: auto;
+}
+
+.form-control {
+  padding: 3px;
+}
+
+.col-form-label {
+  padding: 3px;
+  line-height: 20px;
+}
+
+.col-form-label-filter {
+  padding: 3px;
+  line-height: 36px;
+}
+
+.left-floater {
+  float: left;
+  min-width: 50%;
+}
+
+.table > thead > tr > th {
+  border-bottom-width: 2px;
+  border-top-width: 0;
+  font-weight: 900 !important;
+}
+
+.datepicker table tr td,
+.datepicker table tr th {
+  border-radius: 0%;
+}
+
+ng-select.ng-select.custom.ng-invalid .ng-select-container {
+  border-color: #dc3545;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #fde6e8;
+}
+
+ng-select.ng-invalid.ng-touched .ng-select-container {
+  border-color: #dc3545;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #fde6e8;
+}
+
+ng-select.ng-invalid .ng-select-container {
+  border-color: #dc3545;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 0 3px #fde6e8;
+}
+
+.dropzone-container > .dropzone.dz-wrapper {
+  overflow: visible !important;
+}
+
+.dropzone-container {
+  height: 100%;
+}
+
+.delete-icon {
+  color: red;
+}
+
+.delete-icon:hover {
+  font-weight: 900;
+}
+
+// .ng-bar-placeholder {
+//   // bar placeholder
+
+//   // change the height of the progress bar
+//   height: 5px !important;
+// }
+
+button {
+  outline: none !important;
+}
+
+.snackbar-error {
+  background: #f44336;
+  color: white;
+}
+
+.snackbar-success {
+  background: #69f0ae;
+  color: black;
+  button {
+    color: black;
+  }
+}
+
+.snackbar-warning {
+  background: #ffd740;
+  color: black;
+}
+
+.modal-content {
+  overflow: visible !important;
+}
+
+.status-mkd {
+  .mat-form-field-infix {
+    padding: 0.5em 0 0.5em 0 !important;
+  }
+  .mat-form-field-wrapper {
+    margin: 0em 0 !important;
+    padding-bottom: 0em !important;
+  }
+
+  // .mat-form-field-label-wrapper {
+  //   top: -1.35em;
+  // }
+
+  mat-form-field {
+    margin-top: 1em;
+    max-width: 12em;
+  }
+}
