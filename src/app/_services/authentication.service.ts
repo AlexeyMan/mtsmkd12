@@ -185,13 +185,13 @@ export class AuthenticationService {
     this.router.navigate(["/error500"]);
   }
 
-  // hasRole(role): Observable<boolean> {
-  //   let isEnabledRole = false;
-  //   this.userRole.subscribe((roles) => {
-  //     roles.indexOf("ROLE_ADMIN") !== -1
-  //       ? (isEnabledRole = true)
-  //       : (isEnabledRole = roles.indexOf(role) !== -1);
-  //   });
-  //   return of(isEnabledRole);
-  // }
+  hasRole(role:any): Observable<boolean> {
+    let isEnabledRole = false;
+    this._userRole.subscribe((roles:any) => {
+      roles.indexOf("ROLE_ADMIN") !== -1
+        ? (isEnabledRole = true)
+        : (isEnabledRole = roles.indexOf(role) !== -1);
+    });
+    return of(isEnabledRole);
+  }
 }
