@@ -11,17 +11,16 @@ import {
   ErrorInterceptor,
   JwtInterceptor,
 } from './_helpers';
-// import { HeaderComponent } from "./components/header/header.component";
-
-import { MatIconModule } from "@angular/material/icon";
+import { HeaderComponent } from "./components/header/header.component";
 import { TepTableComponent } from "./components/tep-table/tep-table.component";
-
+// material
+import { MaterialModule } from "./material-module";
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    TepTableComponent
-    // HeaderComponent
+    TepTableComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +29,7 @@ import { TepTableComponent } from "./components/tep-table/tep-table.component";
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatIconModule,
+    MaterialModule
   ],
   providers: [
     AuthGuard,

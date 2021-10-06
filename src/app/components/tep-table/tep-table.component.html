@@ -1,27 +1,613 @@
-<!-- <app-header></app-header> -->
+<app-header></app-header>
 <div class="container">
-  <div class="panel panel-default">
-    <div class="panel-heading panel-heading-divider">
-      <div class="tools">
-        <button
-          mat-stroked-button
-          style="height: 44px"
-        >
-          <mat-icon>insert_drive_file</mat-icon>
-          <mat-icon>keyboard_arrow_up</mat-icon>
-          Создать ТЭП
-        </button>
+  <!-- <div class="panel panel-default">
+    <div class="button-group">
+      <button (click)="saveFilter()" mat-raised-button color="primary">
+        Сохранить для пользователя
+      </button>
+      <button (click)="clearFilter()" mat-raised-button color="primary">
+        Сброс поисковых значений
+      </button>
+    </div>
+  </div> -->
+  <!-- <div class="panel-heading panel-heading-divider"></div> -->
+
+  <!-- Таблица -->
+  <div class="container">
+    <ng-container>
+      <div class="panel panel-border-color panel-border-color-info">
+        <div class="panel-body table-container">
+          <!-- спинер -->
+          <!-- <div
+            class="row justify-content-center"
+            *ngIf="dataSource.loading$ | async"
+          >
+            <div class="spinner-container">
+              <mat-spinner [diameter]="20"></mat-spinner>
+            </div>
+          </div> -->
+
+          <table
+            mat-table
+            #table
+            [dataSource]="dataSource"
+            matSort
+          >
+            <!-- Столбец любимых -->
+            <ng-container matColumnDef="favorite">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-icon>star</mat-icon>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <div
+                  class="tools"
+                  style="font-size: 20px; padding-left: 0px; cursor: pointer"
+                >
+                  <button mat-icon-button>
+                    <mat-icon
+                      [ngStyle]="{ color: row.favorite ? '#ffbc00' : '' }"
+                      >star</mat-icon
+                    >
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+            <!-- Столбец удалить -->
+            <ng-container matColumnDef="house_id">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-icon>delete</mat-icon>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <div
+
+                  class="tools"
+                  style="font-size: 20px; padding-left: 0px; cursor: pointer"
+                >
+                  <button data-target="#md-tep-danger" mat-icon-button>
+                    <mat-icon color="warn">delete</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="district_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Район</th>
+              <td mat-cell *matCellDef="let row">{{ row.district_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Адрес</th>
+              <td mat-cell *matCellDef="let row">{{ row.address }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="category_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Категория
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.category_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="total_damage">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Износ</th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.actual_defect_status === 6 ? row.total_damage : "" }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Статус</th>
+              <td mat-cell *matCellDef="let row">{{ row.status_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="total_building_area">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Общая площадь
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.total_building_area }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="non_living_building_area">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Нежилая площадь функциональная
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.non_living_building_area }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="room_service_area">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Нежилая площадь общего имущества (уборочная площадь служебных
+                помещений)
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.room_service_area }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="stairs_hall_area">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Площадь л/кл и коридоров
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.stairs_hall_area }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="living_building_area">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Площадь жилых помещений
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.living_building_area }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="failure">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Аварийность
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{ boolStatus(row.failure) }} -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="management_company">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Управляющая организация
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.management_company }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="residents_count">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Количество проживающих
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.residents_count }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="flat_count">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Количество квартир
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.flat_count }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="culture">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ОКН</th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{ boolStatus(row.culture) }} -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="lifts">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Лифты</th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{ boolStatus(row.lifts) }} -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="bdate">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Год постройки
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.bdate }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="storeys">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Этажность
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.storeys }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="project_type">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Серия, тип проекта
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.project_type }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="heating_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Отопление
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.heating_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="hot_water_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ГВС</th>
+              <td mat-cell *matCellDef="let row">{{ row.hot_water_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="coldwater">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ХВС</th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{ boolStatus(row.coldwater) }} -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="reconstruction_year">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Год реконструкции
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.reconstruction_year }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="total_building_volume">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Строительный объем
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.total_building_volume }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="electro">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Эл-во</th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{ boolStatus(row.electro) }} -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="sewer">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Водоотв</th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{ boolStatus(row.sewer) }} -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="gas_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Газоснабжение
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.gas_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="pzu">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ПЗУ</th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{ boolStatus(row.pzu) }} -->
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="appz">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>АППЗ</th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{ boolStatus(row.appz) }} -->
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="archive">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Архив МКД
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <!-- {{ boolStatus(row.archive) }} -->
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="disabled_people_lifts_count">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Количество подъемников для инвалидов
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.disabled_people_lifts_count }}
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <!-- <ng-container>
+              <tr
+                [ngStyle]="{
+                  background:
+                    lastSelectedRowIndex == row.house_id ? '#c5cae9' : ''
+                }"
+                mat-row
+                *matRowDef="let row; columns: displayedColumns"
+                [ngClass]="{ highlight: selectedRowIndex == row.house_id }"
+              ></tr>
+            </ng-container>
+            <ng-template #noClickedTEP>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns"
+                [ngClass]="{ highlight: selectedRowIndex == row.house_id }"
+              ></tr>
+            </ng-template> -->
+          </table>
+
+          <mat-paginator
+            #paginator
+            [length]="totalDataTable"
+            [pageSize]="10"
+            [pageSizeOptions]="[10, 25, 50, 100]"
+          >
+          </mat-paginator>
+        </div>
+        <div class="col-md-12">
+          <button style="margin-bottom: 15px" mat-raised-button color="primary">
+            Экспорт в Excel
+          </button>
+          <button mat-raised-button style="margin-left: 1%" color="primary">
+            Износ по сроку
+          </button>
+        </div>
       </div>
-      Список ТЭП
-      <span class="panel-subtitle"> Выберите фильтры для отображения ТЭП </span>
+    </ng-container>
+  </div>
+
+  <!-- <form>
+<div id="accordionMain">
+  <div class="card">
+    <div id="headingOne" class="card-header">
+      <button
+        data-toggle="collapse"
+        data-target="#collapseOne"
+        aria-expanded="true"
+        aria-controls="collapseOne"
+        class="btn"
+      >
+        <span class="icon s7-angle-right"> </span>Основной фильтр
+      </button>
+    </div>
+
+      <div
+      id="collapseOne"
+      aria-labelledby="headingOne"
+      data-parent="#accordionMain"
+      class="collapse show"
+      >
+      <div class="panel panel-default panel-nomargin">
+        <div class="container">
+          <h4>Адрес</h4>
+          <mat-divider></mat-divider>
+          <div class="row">
+            <div class="col-sm-4">
+              <mat-form-field appearance="fill">
+                <mat-label>Район</mat-label>
+                <mat-select
+                (selectionChange)="districtChange($event)"
+                name="districts"
+                [multiple]="true"
+                [(ngModel)]="selectedDistricts"
+                >
+                <mat-option
+                *ngFor="let district of this.filters?.districts"
+                [value]="district.districtId"
+                >
+                {{ district.districtName }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-4">
+          <ng-select
+          [virtualScroll]="true"
+          [items]="this.allstreets"
+          [(ngModel)]="selectedStreet"
+          name="selectedStreet"
+          placeholder="Улица (Выбрано: {{
+            selectedStreet ? selectedStreet.length : '0'
+          }})"
+          [multiple]="true"
+          (change)="streetChange($event)"
+          bindValue="id"
+          bindLabel="name"
+          >
+          <ng-template
+          ng-option-tmp
+          let-item="item"
+          let-item$="item$"
+          let-index="index"
+          >
+          <mat-checkbox
+          [checked]="
+          this.selectedStreet.indexOf(item$.value.id) > -1
+          "
+          >{{ item.name }}</mat-checkbox
+          >
+        </ng-template>
+      </ng-select>
+    </div>
+    <div class="col-sm-1">
+      <mat-form-field appearance="fill">
+        <mat-label>Номер</mat-label>
+        <input
+        matInput
+        id="number"
+        name="number"
+        (change)="this.loadTepPage()"
+        [(ngModel)]="number"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-sm-1">
+      <mat-form-field appearance="fill">
+        <mat-label>Корпус</mat-label>
+        <input
+        matInput
+        id="building"
+        name="building"
+        (change)="this.loadTepPage()"
+        [(ngModel)]="building"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-sm-1">
+      <mat-form-field appearance="fill">
+        <mat-label>Литера</mat-label>
+        <input
+        matInput
+        id="letter"
+        name="letter"
+        (change)="this.loadTepPage()"
+        [(ngModel)]="letter"
+        />
+      </mat-form-field>
+    </div>
+    <div class="col-sm-1">
+      <mat-form-field appearance="fill">
+        <mat-label>Строение</mat-label>
+        <input
+        matInput
+        id="contruction"
+        name="contruction"
+        (change)="this.loadTepPage()"
+        [(ngModel)]="house_construction"
+        />
+      </mat-form-field>
     </div>
   </div>
+  <h4>Общие параметры</h4>
+  <mat-divider></mat-divider>
+  <div class="row">
+    <div class="col-sm-8">
+      <mat-form-field appearance="fill">
+        <mat-label>Категория</mat-label>
+        <mat-select
+        [multiple]="true"
+        (selectionChange)="catyChange($event)"
+        name="categories"
+        [(ngModel)]="selectedCategories"
+        >
+        <mat-option
+        *ngFor="let category of this.filters?.categories"
+        [value]="category.id"
+        >
+        {{ category.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+<div class="col-sm-4" style="text-align: end">
+              <div class="row">
+                <div class="col-sm-4">Аварийность</div>
+                <div class="col-sm-8">
+                  <mat-radio-group
+                  name="failure"
+                  (change)="failureChange($event)"
+                  [value]="this.failure"
+                  >
+                  <mat-radio-button value="null">Выкл</mat-radio-button>
+                  <mat-radio-button value="true">Да</mat-radio-button>
+                  <mat-radio-button value="false">Нет</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-4">ОКН</div>
+              <div class="col-sm-8">
+                <mat-radio-group
+                name="okn"
+                (change)="oknChange($event)"
+                [value]="culture"
+                >
+                <mat-radio-button value="null">Выкл</mat-radio-button>
+                <mat-radio-button value="true">Да</mat-radio-button>
+                <mat-radio-button value="false">Нет</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4">Лифты</div>
+            <div class="col-sm-8">
+              <mat-radio-group
+              name="lift"
+              (change)="liftChange($event)"
+              [value]="lifts"
+              >
+              <mat-radio-button value="null">Выкл</mat-radio-button>
+              <mat-radio-button value="true">Да</mat-radio-button>
+              <mat-radio-button value="false">Нет</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">
+        <mat-form-field appearance="fill">
+          <mat-label>Тип управляющей организации</mat-label>
+          <mat-select
+          [multiple]="true"
+          (selectionChange)="mtypeChange($event)"
+          name="mtype"
+          [(ngModel)]="selectedMtypes"
+          >
+          <mat-option
+          *ngFor="let mtype of this.allmtypes"
+          [value]="mtype.id"
+          >
+          {{ mtype.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="col-sm-4">
+    <mat-form-field appearance="fill">
+      <mat-label>Вид собственности</mat-label>
+      <mat-select
+      [multiple]="true"
+      (selectionChange)="otypeChange($event)"
+      name="otype"
+      [(ngModel)]="selectedOtypes"
+      >
+      <mat-option
+      *ngFor="let owntype of this.allowntypes"
+      [value]="owntype.id"
+      >
+      {{ owntype.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+</div>
+<div class="col-sm-4">
+  <ng-select
+  [virtualScroll]="true"
+  [items]="this.filters?.management_company"
+  [(ngModel)]="selectedCompany"
+  name="selectedCompany"
+  placeholder="Управляющая компания (Выбрано: {{
+    selectedCompany ? selectedCompany.length : '0'
+  }})"
+  [multiple]="true"
+  (change)="companyChange($event)"
+  bindValue="id"
+  bindLabel="name"
+  >
+  <ng-template
+  ng-option-tmp
+  let-item="item"
+  let-item$="item$"
+  let-index="index"
+  >
+  <mat-checkbox
+  [checked]="
+  this.selectedCompany.indexOf(item$.value.id) > -1
+  "
+  >{{ item.name }}</mat-checkbox
+  >
+</ng-template>
+</ng-select>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</form> -->
 </div>
 
 <!-- <app-newpassport (notify)="onNotify($event)"></app-newpassport> -->
 
-
 <!-- <app-tepdelete
   [selected_id]="this.canEditRow$ | async"
   (notify)="onNotify($event)"
-></app-tepdelete> -->
+  ></app-tepdelete> -->

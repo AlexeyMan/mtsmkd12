@@ -162,6 +162,8 @@ export class AuthenticationService {
   // }
 
   logout() {
+    localStorage.removeItem("mainPageTableData");
+    localStorage.removeItem("mainPageTotal");
     // remove user from local storage to log user out
     this._userName.next("");
     this._userFullName.next("");

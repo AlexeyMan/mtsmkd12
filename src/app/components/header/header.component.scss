@@ -1,0 +1,120 @@
+.big {
+  font-size: 40px;
+  vertical-align: middle;
+}
+
+.s7-user .small {
+  vertical-align: middle;
+}
+
+.s7-bell {
+  font-size: 40px;
+  vertical-align: middle;
+}
+
+.s7-next-2 {
+  font-size: 40px;
+  vertical-align: middle;
+}
+
+.indication-number {
+  font-size: 8px;
+  font-weight: 900;
+  color: white;
+  vertical-align: top;
+}
+
+.big-indicator {
+  width: 18px;
+  height: 18px;
+}
+
+.mai-top-header .mai-icons-nav > .nav-item.dropdown.show > a:after,
+.mai-top-header .mai-icons-nav > .nav-item.dropdown.show:hover > a:after {
+  bottom: -2px;
+}
+
+.mai-top-header .mai-icons-nav .mai-messages > .dropdown-menu .footer a,
+.mai-top-header .mai-icons-nav .mai-notifications > .dropdown-menu .footer a,
+.mai-top-header .mai-icons-nav .mai-settings > .dropdown-menu .footer a {
+  border-radius: 0 0 3px 3px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.mat-toolbar-row,
+.mat-toolbar-single-row {
+  max-width: 88rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+button {
+  outline: none;
+}
+
+mat-toolbar-row >>> .mat-button-base {
+  border-radius: 0;
+  padding: 10px;
+}
+
+mat-toolbar-row >>> mat-icon {
+  font-size: 40px;
+  height: auto;
+  width: auto;
+}
+
+.mat-list-item-content {
+  padding: 0;
+}
+.content ul {
+  list-style-type: none;
+  padding: 0;
+  color: black;
+}
+
+.desc {
+  text-align: left;
+}
+
+.date {
+  text-align: right;
+}
+
+.name {
+  text-align: left;
+}
+
+.content >>> .col-md-6 {
+  height: 30px;
+}
+
+.content >>> .col-md-12 {
+  height: 30px;
+}
+
+.col-md-6 >>> p {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.col-md-12 >>> p {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.row {
+  padding-bottom: 5px;
+}
+
+ul {
+  margin: 0;
+}
+
+.mat-badge-medium.mat-badge-above .mat-badge-content {
+  top: -2px;
+}
+.navbar-brand{
+  background-image: url("../../../assets/img/logo2.svg");
+}

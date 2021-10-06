@@ -1,152 +1,171 @@
-.nopadding-right {
-  padding-right: 0px;
+.mat-column {
+height: 30px;
 }
+.mat-column-category_name {
+  max-width: 250px;
+  min-width: 215px;
+}
+.mat-column-address{
+  min-width: 250px;
+}
+.mat-column-management_company{
+  min-width: 180px;
+}
+.mat-column-status_name{
+  min-width: 180px;
+}
+.mat-cell {
+  font-family: auto;
+}
+// .nopadding-right {
+//   padding-right: 0px;
+// }
 
-.nopadding {
-  padding: 0px;
-}
+// .nopadding {
+//   padding: 0px;
+// }
 
-.col-form-label-filter {
-  padding: 3px;
-  line-height: 5px;
-}
+// .col-form-label-filter {
+//   padding: 3px;
+//   line-height: 5px;
+// }
 
-.form-control-xs {
-  height: 28px !important;
-}
+// .form-control-xs {
+//   height: 28px !important;
+// }
 
-.panel-body {
-  padding-top: 2px;
-  padding-bottom: 2px;
-}
+// .panel-body {
+//   padding-top: 2px;
+//   padding-bottom: 2px;
+// }
 
-.panel-heading {
-  padding-top: 14px;
-}
+// .panel-heading {
+//   padding-top: 14px;
+// }
 
-.whitespace {
-  padding: 1px;
-}
+// .whitespace {
+//   padding: 1px;
+// }
 
-/*.panel-nomargin {
-    margin-bottom: 0px;
-}*/
+// /*.panel-nomargin {
+//     margin-bottom: 0px;
+// }*/
 
-hr {
-  margin: 0px;
-}
+// hr {
+//   margin: 0px;
+// }
 
-.fh-inline {
-  margin-left: 4rem;
-}
+// .fh-inline {
+//   margin-left: 4rem;
+// }
 
-.fh-inline .custom-control-label {
-  position: unset;
-  margin-left: -7.5rem;
-}
+// .fh-inline .custom-control-label {
+//   position: unset;
+//   margin-left: -7.5rem;
+// }
 
-.fh-inline .custom-control-input {
-  position: unset;
-}
+// .fh-inline .custom-control-input {
+//   position: unset;
+// }
 
-.rf-radio-group {
-  display: flex;
-  flex-direction: column;
-  margin: 15px 0;
-}
+// .rf-radio-group {
+//   display: flex;
+//   flex-direction: column;
+//   margin: 15px 0;
+// }
 
-.rf-radio-button {
-  margin: 5px;
-}
+// .rf-radio-button {
+//   margin: 5px;
+// }
 
-.mat-form-field-appearance-fill .mat-form-field-flex {
-  width: 10rem;
-}
+// .mat-form-field-appearance-fill .mat-form-field-flex {
+//   width: 10rem;
+// }
 
-.example-full-width {
-  width: 100%;
-}
+// .example-full-width {
+//   width: 100%;
+// }
 
-.panel-border-color-info {
-  border-top-color: #3f51b5;
-}
+// .panel-border-color-info {
+//   border-top-color: #3f51b5;
+// }
 
-.button-group {
-  width: 84%;
-}
+// .button-group {
+//   width: 84%;
+// }
 
-.button-group button {
-  margin: 5px;
-  float: right;
-}
+// .button-group button {
+//   margin: 5px;
+//   float: right;
+// }
 
-button {
-  outline: none;
-}
+// button {
+//   outline: none;
+// }
 
-.mat-form-field {
-  width: 100%;
-}
+// .mat-form-field {
+//   width: 100%;
+// }
 
-mat-radio-group mat-radio-button {
-  margin-right: 15px;
-}
+// mat-radio-group mat-radio-button {
+//   margin-right: 15px;
+// }
 
-.checkbox-group .checkbox-group-item {
-  margin-right: 15px;
-}
+// .checkbox-group .checkbox-group-item {
+//   margin-right: 15px;
+// }
 
-th mat-icon {
-  margin-left: 7px;
-}
+// th mat-icon {
+//   margin-left: 7px;
+// }
 
-.container {
-  padding: 10px;
-}
+// .container {
+//   padding: 10px;
+// }
 
-mat-divider {
-  padding: 5px;
-}
+// mat-divider {
+//   padding: 5px;
+// }
 
-#headingOne {
-  display: flex;
-}
-#headingStatInfo {
-  display: flex;
-}
-#headingCurrentRepair {
-  display: flex;
-}
-#headingCapitalRepair {
-  display: flex;
-}
+// #headingOne {
+//   display: flex;
+// }
+// #headingStatInfo {
+//   display: flex;
+// }
+// #headingCurrentRepair {
+//   display: flex;
+// }
+// #headingCapitalRepair {
+//   display: flex;
+// }
 
-.ng-select >>> .ng-select-container {
-  min-height: 47.7px;
-  padding: 0em .75em 0 .75em;
-  border-radius: 4px 4px 0 0;
-  background: whitesmoke;
-}
+// .ng-select >>> .ng-select-container {
+//   min-height: 47.7px;
+//   padding: 0em .75em 0 .75em;
+//   border-radius: 4px 4px 0 0;
+//   background: whitesmoke;
+// }
 
-.ng-select >>> .ng-value {
-  max-width: 23rem;
-}
+// .ng-select >>> .ng-value {
+//   max-width: 23rem;
+// }
 
-.ng-select >>> .ng-value-label {
-  overflow: hidden;
-  max-width: 15rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  display: inline-block;
-  max-height: 18px;
-  margin-left: 0.8rem;
-}
+// .ng-select >>> .ng-value-label {
+//   overflow: hidden;
+//   max-width: 15rem;
+//   white-space: nowrap;
+//   text-overflow: ellipsis;
+//   display: inline-block;
+//   max-height: 18px;
+//   margin-left: 0.8rem;
+// }
 
-.ng-select >>> .ng-value-icon {
-  position: absolute;
-  line-height: 1.9rem;
-}
+// .ng-select >>> .ng-value-icon {
+//   position: absolute;
+//   line-height: 1.9rem;
+// }
 
-.card-header .btn {
-  font-weight: bold;
-}
+// .card-header .btn {
+//   font-weight: bold;
+// }
