@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading panel-heading-divider">
+      Избранные карточки МКД
+    </div>
+    <div class="panel panel-body">
+      <!--  -->
+      <div class="example-container mat-elevation-z8">
+        <div
+          class="example-loading-shade"
+          *ngIf="isLoadingResults || isRateLimitReached"
+        >
+          <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+          <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+            GitHub's API rate limit has been reached. It will be reset in one
+            minute.
+          </div>
+        </div>
+
+        <div class="example-table-container">
+          <table
+            mat-table
+            [dataSource]="dataSource['data']"
+            class="example-table"
+            matSort
+            matSortActive="created"
+            matSortDisableClear
+            matSortDirection="desc"
+          >
+            <!--  -->
+            <ng-container matColumnDef="favorite">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-icon>star</mat-icon>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <div
+                  class="tools"
+                  style="font-size: 20px; padding-left: 0px; cursor: pointer"
+                >
+                  <button
+                    (click)="
+                      addToFavourites(row.house_id, row.favorite);
+                      $event.stopPropagation()
+                    "
+                    mat-icon-button
+                  >
+                    <mat-icon
+                      [ngStyle]="{ color: row.favorite ? '#ffbc00' : '' }"
+                      >star</mat-icon
+                    >
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="house_id">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-icon>delete</mat-icon>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <div
+                  class="tools"
+                  style="font-size: 20px; padding-left: 0px; cursor: pointer"
+                >
+                  <button
+                    (click)="deleteTep(row.house_id); $event.stopPropagation()"
+                    mat-icon-button
+                  >
+                    <mat-icon color="warn">delete</mat-icon>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="district_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Район</th>
+              <td mat-cell *matCellDef="let row">{{ row.district_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Адрес</th>
+              <td mat-cell *matCellDef="let row">{{ row.address }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="category_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Категория
+              </th>
+              <td mat-cell *matCellDef="let row">{{ row.category_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="total_damage">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Износ</th>
+              <td mat-cell *matCellDef="let row">{{ row.total_damage }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="status_name">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Статус</th>
+              <td mat-cell *matCellDef="let row">{{ row.status_name }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="total_building_area">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Общая площадь
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.total_building_area }}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="living_building_area">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                Площадь жилых помещений
+              </th>
+              <td mat-cell *matCellDef="let row">
+                {{ row.living_building_area }}
+              </td>
+            </ng-container>
+
+            <!--  -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              (click)="onRowClicked(row, $event)"
+            ></tr>
+          </table>
+        </div>
+
+        <mat-paginator
+          (page)="pageChange($event)"
+          [length]="dataSource['options'].total"
+          [pageSize]="10"
+          [pageSizeOptions]="[10, 25, 50, 100]"
+        ></mat-paginator>
+      </div>
+      <!--  -->
+    </div>
+  </div>
+</div>

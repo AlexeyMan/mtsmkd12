@@ -15,12 +15,16 @@ import { HeaderComponent } from "./components/header/header.component";
 import { TepTableComponent } from "./components/tep-table/tep-table.component";
 // material
 import { MaterialModule } from "./material-module";
+import { FiltersComponent } from './components/filters/filters.component';
+import { SelectAutocompleteModule } from 'mat-select-autocomplete';
+// import {MatButtonModule, MatCheckboxModule} from '@angular/material';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     TepTableComponent,
-    HeaderComponent
+    HeaderComponent,
+    FiltersComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +33,8 @@ import { MaterialModule } from "./material-module";
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    SelectAutocompleteModule,
   ],
   providers: [
     AuthGuard,
@@ -37,6 +42,7 @@ import { MaterialModule } from "./material-module";
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],
+  exports: [ FiltersComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

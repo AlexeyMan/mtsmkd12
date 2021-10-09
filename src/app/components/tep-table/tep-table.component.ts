@@ -10,6 +10,8 @@ import {MatTableDataSource} from '@angular/material/table';
 // import { ListFilter, RefItem } from "../../_models/filters";
 import { Mkdlistitem } from '../../_models/mkdlistitem';
 import { TeplistService } from '../../_services/teplist.service';
+import { LocalStorageService } from '../../_services/store';
+// import { FiltersComponent } from '../filters/filters.component';
 import {
   GeneralSettings,
   Ownershipform,
@@ -33,6 +35,9 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource <Mkdlistitem> ([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  // @ViewChild(FiltersComponent)
+  // private counterComponent: FiltersComponent|undefined;
+  openCloseFilter: boolean = false;
   // filters = <TepListFilter>{};
   // dataSource: TepListDataSource;
   options: Options | undefined;
@@ -56,36 +61,41 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   tableLocal:any = [];
 
   constructor(
-    private api: TeplistService
+    private api: TeplistService,
+    private apiStore: LocalStorageService
     ) {
       if(localStorage.mainPageTableData){
         this.reconnectTableData = true;
-        let tableStore = localStorage.getItem("mainPageTableData");
-        this.tableLocal = JSON.parse(tableStore as "");
-        this.dataSource = new MatTableDataSource(this.tableLocal);
         // this.totalDataTable = Number(localStorage.getItem("mainPageTotal"));
       }
     }
     ngOnInit() {
-      if(!this.reconnectTableData){
-        this.loadMkdListItems(this.filters);
+      if(this.apiStore.checkStore("mainPageTableData")){
+        let tableStore = this.apiStore.getStore("mainPageTableData");
+        this.dataSource = new MatTableDataSource(tableStore);
+      }else
+      this.loadMkdListItems(this.filters);
+
+      // if(!this.reconnectTableData){
         // this.reconnectTableData = true;
+        // }
       }
-    }
-    ngAfterViewInit(){
-      if(this.reconnectTableData){
-        this.dataSource.paginator = this.paginator;
+      ngAfterViewInit(){
+        if(this.apiStore.checkStore("mainPageTableData")){
         this.dataSource.sort = this.sort;
-        setTimeout(() => this.totalDataTable = Number(localStorage.getItem("mainPageTotal")));
+        this.dataSource.paginator = this.paginator;
+        setTimeout(() =>this.totalDataTable = Number(this.apiStore.getStore("mainPageTotal")));
       }
     }
-    loadPage() {
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      setTimeout(() => this.totalDataTable = Number(localStorage.getItem("mainPageTotal")));
-    }
-    saveFilter() {}
-    clearFilter() {}
+    // }
+    // if(this.reconnectTableData){
+      // this.totalDataTable = Number(this.apiStore.getStore("mainPageTotal"));
+    // loadPage() {
+    //   this.dataSource.paginator = this.paginator;
+    //   this.dataSource.sort = this.sort;
+    //   // setTimeout(() => this.totalDataTable = Number(localStorage.getItem("mainPageTotal")));
+    // }
+
 
     filters = <TepListFilter> <unknown>{
       appz: "null",
@@ -177,36 +187,22 @@ private loadingSubject = new BehaviorSubject<boolean>(false);
         )
         .subscribe(
           (teps) => {
-            // let applicationsByState: { [key: string]: any[] } = {};
             let data = (teps as { [key: string]: any })["data"];
+            let mainUserFilters = (teps as { [key: string]: any })["filters"];
             this.options = (teps as { [key: string]: any })["options"];
             this.dataSource = new MatTableDataSource(data);
-            // localStorage.removeItem("mainPageTableData");
-            localStorage.setItem(
-              "mainPageTableData",
-              JSON.stringify(data)
-            );
-            localStorage.setItem(
-              "mainPageTotal",
-                  String(this.options!['total'])
-            );
-            // this.totalDataTable = this.options!['total'];
-            this.loadPage();
+            this.apiStore.setStore("mainPageUserFilters", mainUserFilters);
+            this.apiStore.setStore("mainPageTableData",data);
+            this.apiStore.setStore("mainPageTotal",String(this.options!['total']));
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.totalDataTable = this.options!['total'];
+            // this.loadPage();
           },
           (error) => {
 
           }
           );
           finalize(() => this.loadingSubject.next(false))
-        // .pipe(
-        //   catchError(() => of([])),
-        //   finalize(() => this.loadingSubject.next(false))
-        // )
-        // .subscribe((teps) => {
-        //   this.tepSubject.next(teps["data"]);
-        //   this.totalSubject.next(teps["data"].length);
-        //   this.total = teps["options"].total;
-        //   // console.log(teps.length);
-        // }
     }
 }

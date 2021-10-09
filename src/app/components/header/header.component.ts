@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { AuthenticationService } from "../../_services";
 import { Observable } from "rxjs";
+import { FiltersComponent } from "../filters/filters.component";
 // import { Message } from "../../_models/message";
 // import { MessagingService } from "../../_services/messaging.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
 // import { TeplistService } from "src/app/_services/teplist.service";
-
 @Component({
   selector: "app-header",
   templateUrl: "./header.component.html",
@@ -19,6 +19,8 @@ export class HeaderComponent implements OnInit {
   userId$!: Observable<string>;
   // messages!: Observable<Message[]>;
   // unreadMessages$!: Observable<Message[]>;
+  // @ViewChild(FiltersComponent, {static: false})
+  // private openFilter: FiltersComponent|undefined;
 
   isConnected = false;
   ws: any;
@@ -53,7 +55,10 @@ export class HeaderComponent implements OnInit {
   //     }
   //   });
   // }
-
+  btnOpen:boolean = false;
+  openFiltersComponent(){
+    this.btnOpen = !this.btnOpen;
+}
   onLogout() {
     this.authService.logout();
   }

@@ -1,30 +1,59 @@
 <mat-toolbar *ngIf="isLoggedIn$ | async" color="primary" class="mai-top-header">
+
   <mat-toolbar-row>
-    <a [routerLink]="['/']" class="navbar-brand"></a>
-    <mat-icon aria-hidden="false" aria-label="Главная">menu</mat-icon>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Меню">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button [routerLink]="['/passport']" mat-button>
+        <mat-icon aria-hidden="false" aria-label="Главная">home</mat-icon>
+        Главная
+      </button>
+      <button mat-button (click)="openFiltersComponent()">
+        <mat-icon aria-hidden="false" aria-label="Фильтр">find_in_page</mat-icon>
+        Фильтр {{ btnOpen }}
+      </button>
+      <button mat-button>
+        <mat-icon aria-hidden="false" aria-label="Отчет">assignment</mat-icon>
+        Отчет
+      </button>
+      <button mat-button [matMenuTriggerFor]="belowMenu">
+        <mat-icon aria-hidden="false" aria-label="Администрирование"
+          >assignment_ind</mat-icon
+        >
+        Администрирование
+      </button>
+      <button mat-button>
+        <mat-icon>insert_drive_file</mat-icon>
+        Создать ТЭП
+      </button>
+    </mat-menu>
+    <!-- <mat-icon aria-hidden="false" aria-label="Главная">menu</mat-icon>
     <button [routerLink]="['/passport']" mat-button>
       <mat-icon aria-hidden="false" aria-label="Главная">home</mat-icon>
-    Главная</button>
-    <button mat-button>
+      Главная
+    </button>
+    <button mat-button (click)="openFiltersComponent()">
       <mat-icon aria-hidden="false" aria-label="Фильтр">find_in_page</mat-icon>
-    Фильтр</button>
+      Фильтр {{ btnOpen }}
+    </button>
     <button mat-button>
       <mat-icon aria-hidden="false" aria-label="Отчет">assignment</mat-icon>
-    Отчет</button>
+      Отчет
+    </button>
     <button mat-button [matMenuTriggerFor]="belowMenu">
-      <mat-icon aria-hidden="false" aria-label="Администрирование">assignment_ind</mat-icon>
+      <mat-icon aria-hidden="false" aria-label="Администрирование"
+        >assignment_ind</mat-icon
+      >
       Администрирование
     </button>
     <button mat-button>
-    <mat-icon>insert_drive_file</mat-icon>
-    Создать ТЭП
-  </button>
+      <mat-icon>insert_drive_file</mat-icon>
+      Создать ТЭП
+    </button> -->
+    <!-- <a [routerLink]="['/']" class="navbar-brand"></a> -->
     <mat-menu #belowMenu="matMenu">
-      <button
-
-        [routerLink]="['/admin']"
-        mat-menu-item
-      >
+      <button [routerLink]="['/admin']" mat-menu-item>
         Управление доступом
       </button>
       <button [routerLink]="['/admin', 'history']" mat-menu-item>
@@ -33,25 +62,13 @@
       <button [routerLink]="['/admin', 'history-user']" mat-menu-item>
         Журнал действий пользователя
       </button>
-      <button
-
-        [routerLink]="['/admin', 'reference']"
-        mat-menu-item
-      >
+      <button [routerLink]="['/admin', 'reference']" mat-menu-item>
         Справочники
       </button>
-      <button
-
-        [routerLink]="['/admin', 'refernce', 'addresses']"
-        mat-menu-item
-      >
+      <button [routerLink]="['/admin', 'refernce', 'addresses']" mat-menu-item>
         Адресный справочник
       </button>
-      <button
-
-        [routerLink]="['/admin', 'import']"
-        mat-menu-item
-      >
+      <button [routerLink]="['/admin', 'import']" mat-menu-item>
         Импорт из Excel
       </button>
       <button [routerLink]="['/admin', 'settings']" mat-menu-item>
@@ -62,62 +79,64 @@
     <span class="example-spacer"></span>
 
     <!-- <button mat-button [matMenuTriggerFor]="beforeMenu">
-      <ng-container *ngIf="!(this.unreadMessages$ | async)?.length; else badge">
-        <mat-icon>email</mat-icon>
-      </ng-container>
-      <ng-template #badge>
-        <mat-icon
-          [matBadge]="(this.unreadMessages$ | async)?.length"
-          matBadgeColor="accent"
-          >email</mat-icon
-        >
-      </ng-template>
-    </button> -->
-    <!-- <mat-menu #beforeMenu="matMenu">
-      <div class="content">
-        <ul>
-          <li *ngFor="let message of this.messages | async; let i = index">
-            <mat-divider></mat-divider>
-            <a
-              mat-button
-              [routerLink]="['/mail', message.message_id]"
-              *ngIf="i < 5"
-            >
-              <div class="content">
-                <div class="row">
-                  <div class="col-md-6">
-                    <span class="name"
-                      ><p>{{ message.user_name }}</p></span
-                    >
-                  </div>
-                  <div class="col-md-6">
-                    <span class="date"
-                      ><p>{{ message.message_date | date }}</p></span
-                    >
-                  </div>
-                  <div class="col-md-12">
-                    <span class="desc"
-                      ><p>{{ message.message_subj }}</p></span
-                    >
-                  </div>
-                </div>
-              </div>
-            </a>
-            <mat-divider></mat-divider>
-          </li>
-        </ul>
-      </div>
-      <button
-        [routerLink]="['/mail']"
-        style="background: #3f50b4; color: white"
-        mat-menu-item
+    <ng-container *ngIf="!(this.unreadMessages$ | async)?.length; else badge">
+      <mat-icon>email</mat-icon>
+    </ng-container>
+    <ng-template #badge>
+      <mat-icon
+      [matBadge]="(this.unreadMessages$ | async)?.length"
+      matBadgeColor="accent"
+      >email</mat-icon
       >
-        Смотреть все сообщения
-      </button>
-    </mat-menu> -->
+    </ng-template>
+  </button> -->
+    <!-- <mat-menu #beforeMenu="matMenu">
+    <div class="content">
+      <ul>
+        <li *ngFor="let message of this.messages | async; let i = index">
+          <mat-divider></mat-divider>
+          <a
+          mat-button
+          [routerLink]="['/mail', message.message_id]"
+          *ngIf="i < 5"
+          >
+          <div class="content">
+            <div class="row">
+              <div class="col-md-6">
+                <span class="name"
+                ><p>{{ message.user_name }}</p></span
+                >
+              </div>
+              <div class="col-md-6">
+                <span class="date"
+                ><p>{{ message.message_date | date }}</p></span
+                >
+              </div>
+              <div class="col-md-12">
+                <span class="desc"
+                ><p>{{ message.message_subj }}</p></span
+                >
+              </div>
+            </div>
+          </div>
+        </a>
+        <mat-divider></mat-divider>
+      </li>
+    </ul>
+  </div>
+  <button
+  [routerLink]="['/mail']"
+  style="background: #3f50b4; color: white"
+  mat-menu-item
+  >
+  Смотреть все сообщения
+</button>
+</mat-menu> -->
 
     <button mat-button [matMenuTriggerFor]="afterMenu">
-      <mat-icon>account_circle</mat-icon>Мануйлов Алексей Маркович{{ this.userFullName$ | async }}
+      <mat-icon>account_circle</mat-icon>Мануйлов Алексей Маркович{{
+        this.userFullName$ | async
+      }}
     </button>
     <mat-menu #afterMenu="matMenu">
       <button [routerLink]="['/admin', 'profile']" mat-menu-item>
@@ -133,3 +152,4 @@
     </mat-menu>
   </mat-toolbar-row>
 </mat-toolbar>
+<app-filters *ngIf="btnOpen"> </app-filters>
