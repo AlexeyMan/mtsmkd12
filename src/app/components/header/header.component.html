@@ -4,6 +4,7 @@
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Меню">
       <mat-icon>menu</mat-icon>
     </button>
+    <a [routerLink]="['/']" class="navbar-brand"></a>
     <mat-menu #menu="matMenu">
       <button [routerLink]="['/passport']" mat-button>
         <mat-icon aria-hidden="false" aria-label="Главная">home</mat-icon>
@@ -51,7 +52,6 @@
       <mat-icon>insert_drive_file</mat-icon>
       Создать ТЭП
     </button> -->
-    <!-- <a [routerLink]="['/']" class="navbar-brand"></a> -->
     <mat-menu #belowMenu="matMenu">
       <button [routerLink]="['/admin']" mat-menu-item>
         Управление доступом

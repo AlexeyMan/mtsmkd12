@@ -1,11 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../src/assets/style/styles.scss";
-// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 // @import "~@ng-select/ng-select/themes/default.theme.css";
 // @import "~perfect-scrollbar/css/perfect-scrollbar.css";
 // @import "~material-design-icons/iconfont/material-icons.css";
 // @import " ~@ng-select/ng-select/themes/material.theme.css";
-
+.snackbar-success {
+  background: #69f0ae;
+  color: black;
+  button {
+    color: black;
+  }
+}
 .mat-row:hover {
   background-color: lightgray;
 }

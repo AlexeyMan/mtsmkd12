@@ -8,7 +8,7 @@ import { ConsoleLoggerService } from "./console-logger.service";
 // import { DepartmentListEntry, UserDetail } from "../_models/admin";
 import { UserDetail } from "../_models/admin";
 import { SettingsService } from "./settings.service";
-
+import { LocalStorageService } from "./store";
 @Injectable({ providedIn: "root" })
 export class AuthenticationService {
   private _loggedIn = new BehaviorSubject<boolean>(false);
@@ -51,7 +51,8 @@ export class AuthenticationService {
     private http: HttpClient,
     private router: Router,
     private log: ConsoleLoggerService,
-    private settings: SettingsService
+    private settings: SettingsService,
+    private apiStore: LocalStorageService,
   ) {}
 
   login(username: string, password: string) {
@@ -77,6 +78,8 @@ export class AuthenticationService {
             this.getUser().subscribe((p:any) => {
               localStorage.setItem("userid", String(p["id"]));
               localStorage.setItem("userFullName", String(p["user_full_name"]));
+              p.settings.filters.columns = [0,"favorite",1,"house_id",2,"district_name",3,"address",4,"category_name",5,"total_damage"]
+              this.apiStore.setStore("userFilters", p.settings.filters);
               // this._loggedIn.next(true);
               this.log.info("were started!");
             });

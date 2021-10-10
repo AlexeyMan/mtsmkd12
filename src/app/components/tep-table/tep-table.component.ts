@@ -35,6 +35,7 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource <Mkdlistitem> ([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  // filters!: TepListFilter;
   // @ViewChild(FiltersComponent)
   // private counterComponent: FiltersComponent|undefined;
   openCloseFilter: boolean = false;
@@ -70,11 +71,16 @@ export class TepTableComponent implements AfterViewInit, OnInit {
       }
     }
     ngOnInit() {
+      // this.apiStore.setStore("mainPageUserFilters", mainUserFilters);
       if(this.apiStore.checkStore("mainPageTableData")){
+        this.filters = this.apiStore.getStore("mainPageUserFilters");
         let tableStore = this.apiStore.getStore("mainPageTableData");
         this.dataSource = new MatTableDataSource(tableStore);
-      }else
-      this.loadMkdListItems(this.filters);
+      }else{
+        //TODO
+        // this.filters = this.apiStore.getStore("userFilters");
+        this.loadMkdListItems(this.filters);
+      }
 
       // if(!this.reconnectTableData){
         // this.reconnectTableData = true;
@@ -96,72 +102,120 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     //   // setTimeout(() => this.totalDataTable = Number(localStorage.getItem("mainPageTotal")));
     // }
 
-
-    filters = <TepListFilter> <unknown>{
-      appz: "null",
-      archive: false,
-      cap_repair: "null",
-      category: [],
-      coldwater: "null",
-      columns: [
-        0, "favorite",
-    1, "house_id",
-    2, "district_name",
-    3, "address",
-    4, "category_name",
-    5, "total_damage",
-    6, "status_name",
-    7, "total_building_area",
-    8, "living_building_area",
-  ],
-  culture: "null",
-  curr_repair: "null",
-  district: [],
-  failure: "null",
-  gas_name: [],
-  heating: [],
-  hot_water: [],
-  lifts: "null",
-  limit: 100,
-  management_company: [],
-  management_form: [],
-  materials: [],
-  ownership: [],
-  pageIndex: 1,
-  power: "null",
-  pzu: "null",
-  sewer: "null",
-  sortDirection: "address",
-  statuses: [],
-  statusesDR: [],
-  street: [],
-  // district = [],
-  // street: string[];
-  house_number: "",
-  house_building: "",
-  house_letter: "",
-  house_construction: '',
-  selectedStreet: [],
-  project_type: "",
-  storeys_from: 1,
-  storeys_to: 0,
-  bdate_from: 0,
-  bdate_to: 0,
-  rdate_to: 0,
-  rdate_from: 0,
-  damage_from: 0,
-  damage_to: 0,
-  defect_element_name: 0,
-  disabled_people_lifts_count: "null",
-  capital_repair_to: "",
-  capital_repair_from: 0,
-
-  current_repair_to: 0,
-  current_repair_from: 0,
-
-  capital_repair: '',
-  current_repair: '',
+    filters =  <TepListFilter> {
+      "appz":"null",
+"archive":false,
+"cap_repair":"null",
+"category":[],
+"coldwater":"null",
+"columns":[0,"favorite",1,"house_id",2,"district_name",3,"address",4,"category_name",5,"total_damage",6,"status_name",7,"total_building_area",8,"living_building_area"],
+"culture":"null",
+"curr_repair":"null",
+"district":[],
+"failure":"null",
+"gas_name":[],
+"heating":[],
+"hot_water":[],
+"lifts":"null",
+"limit":100,
+"management_company":[],
+"management_form":[],
+"materials":[],
+"ownership":[],
+"pageIndex":1,
+"power":"null",
+"pzu":"null",
+"sewer":"null",
+"sortDirection":"address",
+"statuses":[],
+"statusesDR":[],
+"street":[],
+"house_number":"",
+"house_building":"",
+"house_letter":"",
+"house_construction":"",
+"selectedStreet":[],
+"project_type":"",
+"storeys_from":1,
+"storeys_to":0,
+"bdate_from":0,
+"bdate_to":0,
+"rdate_to":0,
+"rdate_from":0,
+"damage_from":0,
+"damage_to":0,"defect_element_name":0,"disabled_people_lifts_count":"null",
+"capital_repair_to":0,
+"capital_repair_from":0,
+"current_repair_to":0,
+"current_repair_from":0,
+"capital_repair":"","current_repair":""
 }
+
+//     filters = <TepListFilter> <unknown>{
+//       appz: "null",
+//       archive: false,
+//       cap_repair: "null",
+//       category: [],
+//       coldwater: "null",
+//       columns: [
+//         0, "favorite",
+//     1, "house_id",
+//     2, "district_name",
+//     3, "address",
+//     4, "category_name",
+//     5, "total_damage",
+//     6, "status_name",
+//     7, "total_building_area",
+//     8, "living_building_area",
+//   ],
+//   culture: "null",
+//   curr_repair: "null",
+//   district: [],
+//   failure: "null",
+//   gas_name: [],
+//   heating: [],
+//   hot_water: [],
+//   lifts: "null",
+//   limit: 100,
+//   management_company: [],
+//   management_form: [],
+//   materials: [],
+//   ownership: [],
+//   pageIndex: 1,
+//   power: "null",
+//   pzu: "null",
+//   sewer: "null",
+//   sortDirection: "address",
+//   statuses: [],
+//   statusesDR: [],
+//   street: [],
+//   // district = [],
+//   // street: string[];
+//   house_number: "",
+//   house_building: "",
+//   house_letter: "",
+//   house_construction: '',
+//   selectedStreet: [],
+//   project_type: "",
+//   storeys_from: 1,
+//   storeys_to: 0,
+//   bdate_from: 0,
+//   bdate_to: 0,
+//   rdate_to: 0,
+//   rdate_from: 0,
+//   damage_from: 0,
+//   damage_to: 0,
+//   defect_element_name: 0,
+//   disabled_people_lifts_count: "null",
+//   capital_repair_to: "",
+//   capital_repair_from: 0,
+
+//   current_repair_to: 0,
+//   current_repair_from: 0,
+
+//   capital_repair: '',
+//   current_repair: '',
+// }
 private loadingSubject = new BehaviorSubject<boolean>(false);
 
   // loadTepPage() {
