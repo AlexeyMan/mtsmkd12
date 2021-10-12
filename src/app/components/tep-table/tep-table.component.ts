@@ -233,6 +233,7 @@ private loadingSubject = new BehaviorSubject<boolean>(false);
     living_building_area:"11",
   }]
   loadMkdListItems(filter: TepListFilter) {
+    // let filters = this.apiStore.getStore("userFilters");
       this.loadingSubject.next(true);
       this.api
         .getTepListEntries(filter)
@@ -247,7 +248,7 @@ private loadingSubject = new BehaviorSubject<boolean>(false);
             this.dataSource = new MatTableDataSource(data);
             this.apiStore.setStore("mainPageUserFilters", mainUserFilters);
             this.apiStore.setStore("mainPageTableData",data);
-            this.apiStore.setStore("mainPageTotal",String(this.options!['total']));
+            this.apiStore.setStore("mainPageTotal", this.options?.total);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.totalDataTable = this.options!['total'];

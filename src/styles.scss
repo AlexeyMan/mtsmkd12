@@ -1,10 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
-@import "../src/assets/style/styles.scss";
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+// @import "../src/assets/style/styles.scss";
+// @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 // @import "~@ng-select/ng-select/themes/default.theme.css";
 // @import "~perfect-scrollbar/css/perfect-scrollbar.css";
 // @import "~material-design-icons/iconfont/material-icons.css";
 // @import " ~@ng-select/ng-select/themes/material.theme.css";
+
+// .mat-expansion-panel{
+//   box-shadow: none !important;
+// }
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: 0.7692rem; }
+
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  padding: .5em 0 .5em 0 !important;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  border-radius: 4px 4px 0 0;
+  padding: .30em .75em 0 .75em !important;
+}
+.mat-form-field-label-wrapper {
+  top: -0.54375em !important;
+  padding-top: .84375em;
+}
+// .mat-form-field-infix {
+//   border-top: 0.54375em !important;
+// }
 .snackbar-success {
   background: #69f0ae;
   color: black;

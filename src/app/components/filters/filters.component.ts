@@ -17,16 +17,24 @@ import { ListFilter, RefItem } from 'src/app/_models/filters';
 import { SelectAutocompleteComponent } from 'mat-select-autocomplete';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TepTableComponent } from '../tep-table/tep-table.component';
-
+import {
+  map,
+  startWith,
+} from "rxjs/operators";
 
 const ownership_types: Ownershipform[] = [
   { id: 1, name: 'Государственная' },
   { id: 2, name: 'Частная' },
 ];
 const demage_types = [
-  { value: 'null', name: 'Выключить' },
-  { value: true, name: 'Да' },
-  { value: false, name: 'Нет' },
+  { value: "null", name: 'Выкл' },
+  { value: "true", name: 'Да' },
+  { value: "false", name: 'Нет' },
+];
+const cap_repair_type = [
+  { value: "null", name: 'Выкл' },
+  { value: "'rp', 'kp'", name: 'План' },
+  { value: "'fact'", name: 'Факт' },
 ];
 @Component({
   selector: 'app-filters',
@@ -56,6 +64,9 @@ export class FiltersComponent implements OnInit {
   culture: string = 'null';
   failure: string = 'null';
   demageType = demage_types;
+  repairType = cap_repair_type;
+  capType: RefItem[] = []; //список вид работ капитального ремонта
+  currType: RefItem[] = [];
   //////////////////////////////////////////////////////////
   selectedDistricts = [];
   selectedStreet = [];
@@ -63,6 +74,13 @@ export class FiltersComponent implements OnInit {
 
   showError = false; // показывать ли сообщение об ошибке или нет. По умолчанию: false;
   errorMessage = ''; // настраиваемое сообщение об ошибке. По умолчанию: «Поле обязательно для заполнения».
+
+  allmtypes: RefItem[] = [];
+  outstreets: Street[] = [
+    { id: 1, name: 'Все', street_name_old: '' },
+  ];
+  allstreets: Street[] = this.outstreets;
+  // yearMask = [/[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/];
 
   constructor(
     private api: TeplistService,
@@ -73,49 +91,31 @@ export class FiltersComponent implements OnInit {
     private loadMkd: TepTableComponent,
   ) {
   }
-
+ // Развернуть меню
   onToggleDropdown() {
     this.multiSelect.toggleDropdown();
   }
 
-  // this.selectedCategories = selected;
-  selectDistrict(selected: any) {
-    if(this.selectedDistricts !== selected){
-      this.selectedDistricts = selected;
-      this.districtChange(this.selectedDistricts);
-      this.setChangeFilters();
+  // Сравниваем два объекта на идентичность
+  deepEqual (obj1:any, obj2:any){
+    return JSON.stringify(obj1)===JSON.stringify(obj2);
+  }
+  //Обновление данных таблицы после изменений фильтра
+  getNewFilteredData(){
+    if(!this.deepEqual(this.filterRequest, this.apiStore.getStore("mainPageUserFilters")))
+    {
+      this.apiStore.setStore("mainPageUserFilters", this.filterRequest);
+      this.loadMkd.loadMkdListItems(this.filterRequest);
+      this._snackBar.open("Данные обновленны", undefined, {
+        duration: 2000,
+        verticalPosition: "top",
+        panelClass: "snackbar-success",
+      });
     }
   }
-  selectStreet(selected: any) {
-    this.selectedStreet = selected;
-    this.setChangeFilters();
-  }
-  selectUO(selected: any) {
-    this.selectedUO = selected;
-    this.setChangeFilters();
-  }
-  clearFilter() {
-    this.selectedDistricts = [];
-    this.selectedStreet = [];
-    this.selectedUO = [];
-  }
-  timerOn:any = -1;
-deepEqual (obj1:any, obj2:any){
-    return JSON.stringify(obj1)===JSON.stringify(obj2);
- }
- getNewFilteredData(){
-   if(!this.deepEqual(this.filterRequest, this.apiStore.getStore("mainPageUserFilters")))
-   {
-     this.apiStore.setStore("mainPageUserFilters", this.filterRequest);
-     this.loadMkd.loadMkdListItems(this.filterRequest);
-     this._snackBar.open("Данные обновленны", undefined, {
-      duration: 2000,
-      verticalPosition: "top",
-      panelClass: "snackbar-success",
-    });
-   }
- }
 
+  //Отслеживаем изменения
+  timerOn:any = -1;
 setChangeFilters(){
   if(this.timerOn){
   clearTimeout(this.timerOn);
@@ -138,49 +138,96 @@ setChangeFilters(){
         this.allstreets = data[0];
         this.filters = data[1];
         this.allmtypes = (data[2] as { [key: string]: any })['data'];
+        this.currType = (data[3] as { [key: string]: any })['data'];
+        this.capType = data[4];
         this.filterBindValues();
         // this.apiStore.setStore("mainPageFilters", results)
       } else this.loadAllFilters();
     });
-
   }
-  allmtypes: RefItem[] = [];
-  _streetFilter: any;
-  streetControl: any;
-  // filteredOptions4: Observable<string[]>;
-  filteredOptions4: any;
-  outstreets: Street[] = [
-    { id: 1, name: 'Все', street_name_old: '' },
-  ];
-  allstreets: Street[] = this.outstreets;
+
+
+//запрос улиц по району
   districtChange(dist: any) {
-    // this.selectedDistricts = [];
     this.common.getStreetsByDistrict(dist).subscribe((p) => {
       this.allstreets = p;
     });
+  }
 
-    // this.loadTepPage();
+// Выбор района
+selectDistrict(selected: any) {
+  if(this.selectedDistricts !== selected){
+    this.selectedDistricts = selected;
+    this.districtChange(this.selectedDistricts);
+    this.setChangeFilters();
   }
-  catyChange($event: any) {
-    this.filterRequest.category = $event.value;
-  }
+}
+// Выбор улицы
+selectStreet(selected: any) {
+  this.selectedStreet = selected;
+  this.setChangeFilters();
+}
+// Выбор уо
+selectUO(selected: any) {
+  this.selectedUO = selected;
+  this.setChangeFilters();
+}
+// workControl2 = new FormControl();
+// filteredOptions2: Observable<string[]> | undefined;
+// crepChange($event:any) {
+//   this.crep = $event.value;
+//   this.setChangeFilters();
+// }
+// private _filterWorkListCapRep(value: string): string[] {
+//   const filterValue = value ? value.toLowerCase() : "";
+//   // @ts-ignore
+//   return this.workCapRepList.filter(
+//     (option:any) => option.name.toLowerCase().search(filterValue) != -1
+//   );
+// }
+// crepView=["4"]
+// setCapFilters(selected: any) {
+//   this.crep = selected;
+//   this.crepView = selected;
+//   this.setChangeFilters();
+// }
+// Очистить фильтр
+clearFilter() {
+  this.selectedDistricts = [];
+  this.selectedStreet = [];
+  this.selectedUO = [];
+}
+
+//изменение катигорий
+// catyChange($event: any) {
+//     this.filterRequest.category = $event.value;
+//   }
+
   otypeChange($event: any) {}
   mtypeChange($event: any) {}
   failureChange($event: any) {}
   oknChange($event: any) {}
   liftChange($event: any) {}
+
   loadAllFilters() {
     forkJoin([
       this.common.getStreetsByDistrict([]),
       this.api.getFilters(),
       this.refApi.getRefList(AppSettings.MC_TYPE_ID),
+      this.refApi.getCurrRepairApiRefList("workType&per_page=-1"),
+      this.refApi.getCapRepairApiRefList(),
     ]).subscribe((results) => {
       this.allstreets = results[0];
       this.filters = results[1];
       this.allmtypes = (results[2] as { [key: string]: any })['data'];
+      this.currType = (results[3] as { [key: string]: any })['data'];
+      this.capType = results[4];
       this.apiStore.setStore("mainPageFilters", results)
-      // this.filteredOptions4 = results[1];
       this.filterBindValues()
+      // this.filteredOptions2 = this.workControl2.valueChanges.pipe(
+      //   startWith(""),
+      //   map((value) => this._filterWorkListCapRep(value))
+      // );
     });
   }
   saveFilter() {}

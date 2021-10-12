@@ -5,9 +5,22 @@
   padding-right: var(--bs-gutter-x, 0.75rem);
   padding-left: var(--bs-gutter-x, 0.75rem);
 }
-
+// .mat-form-field-label-wrapper {
+//   top: -0.54375em;
+//   padding-top: .84375em;
+// }
+// .mat-form-field-flex {
+//   border-radius: 4px 4px 0 0;
+//   padding: .30em .75em 0 .75em !important;
+//   padding: 0 !important;;
+// }
   // .mat-form-field{
     // display: grid !important;
     // width: 100% !important;;
   // }
-
+.labelSpo{
+  position: absolute;
+  margin-top: -40px;
+  margin-left: -9px;
+  white-space: nowrap;
+}

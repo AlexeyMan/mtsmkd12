@@ -1,10 +1,11 @@
 <mat-toolbar *ngIf="isLoggedIn$ | async" color="primary" class="mai-top-header">
 
-  <mat-toolbar-row>
+  <mat-toolbar-row style="max-width: 100rem">
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Меню">
       <mat-icon>menu</mat-icon>
     </button>
     <a [routerLink]="['/']" class="navbar-brand"></a>
+    <h1>Учет жилого фонда</h1>
     <mat-menu #menu="matMenu">
       <button [routerLink]="['/passport']" mat-button>
         <mat-icon aria-hidden="false" aria-label="Главная">home</mat-icon>
