@@ -21,6 +21,7 @@ import {
   map,
   startWith,
 } from "rxjs/operators";
+import { HeaderComponent } from '../header/header.component';
 
 const ownership_types: Ownershipform[] = [
   { id: 1, name: 'Государственная' },
@@ -35,6 +36,51 @@ const cap_repair_type = [
   { value: "null", name: 'Выкл' },
   { value: "'rp', 'kp'", name: 'План' },
   { value: "'fact'", name: 'Факт' },
+];
+const colViewer = [
+  { value: "Район", id: "show_district_name" },
+  { value: "Адрес", id: "show_address" },
+  { value: "Категория", id: "show_category_name" },
+  { value: "Износ", id: "show_total_damage" },
+  { value: "Статус", id: "show_status_name" },
+  { value: "Общая площадь", id: "show_total_building_area" },
+  {
+    value: "Площадь жилых помещений",
+    id: "show_living_building_area",
+  },
+  {
+    value: "Нежилая площадь функциональная",
+    id: "show_non_living_building_area",
+  },
+  {
+    value: "Нежилая площадь общего имущества",
+    id: "show_room_service_area",
+  },
+  { value: "Площадь л/кл и коридоров", id: "show_stairs_hall_area" },
+  { value: "Строительный объем", id: "show_total_building_volume" },
+  { value: "Количество квартир", id: "show_flat_count" },
+  { value: "Количество проживающих", id: "show_residents_count" },
+  { value: "Управляющая организация", id: "show_management_company" },
+  { value: "Год постройки", id: "show_bdate" },
+  { value: "Год реконструкции", id: "show_reconstruction_year" },
+  { value: "Лифты", id: "show_lifts" },
+  { value: "ОКН", id: "show_culture" },
+  { value: "Аварийность", id: "show_failure" },
+  { value: "Этажность", id: "show_storeys" },
+  { value: "Серия, тип проекта", id: "show_project_type" },
+  { value: "Отопление", id: "show_heating_name" },
+  { value: "ГВС", id: "show_hot_water_name" },
+  { value: "ХВС", id: "show_coldwater" },
+  { value: "Газоснабжение", id: "show_gas_name" },
+  { value: "ПЗУ", id: "show_pzu" },
+  { value: "АППЗ", id: "show_appz" },
+  { value: "Эл-во", id: "show_electro" },
+  // { value: "Водоотв", id: "show_sewer" },
+  {
+    value: "Количество подъемников",
+    id: "show_disabled_people_lifts_count",
+  },
+  // { value: "Архив МКД", id: "show_archive" },
 ];
 @Component({
   selector: 'app-filters',
@@ -67,7 +113,9 @@ export class FiltersComponent implements OnInit {
   repairType = cap_repair_type;
   capType: RefItem[] = []; //список вид работ капитального ремонта
   currType: RefItem[] = [];
+  columsListView = colViewer; // все колонки таблицы
   //////////////////////////////////////////////////////////
+  columsSelectView: string[] = []; // выбранные для отображения колонки
   selectedDistricts = [];
   selectedStreet = [];
   selectedUO = [];
@@ -89,13 +137,16 @@ export class FiltersComponent implements OnInit {
     private apiStore: LocalStorageService,
     private _snackBar: MatSnackBar,
     private loadMkd: TepTableComponent,
+    private apiHeader: HeaderComponent
   ) {
   }
  // Развернуть меню
   onToggleDropdown() {
     this.multiSelect.toggleDropdown();
   }
-
+  closeFilters(){
+    this.apiHeader.openFiltersComponent();
+  }
   // Сравниваем два объекта на идентичность
   deepEqual (obj1:any, obj2:any){
     return JSON.stringify(obj1)===JSON.stringify(obj2);
@@ -140,6 +191,8 @@ setChangeFilters(){
         this.allmtypes = (data[2] as { [key: string]: any })['data'];
         this.currType = (data[3] as { [key: string]: any })['data'];
         this.capType = data[4];
+        this.columsSelectView = this.filterRequest.columns;
+        //  this.columsSelectView = ["show_district_name","show_address"];
         this.filterBindValues();
         // this.apiStore.setStore("mainPageFilters", results)
       } else this.loadAllFilters();
@@ -172,6 +225,10 @@ selectUO(selected: any) {
   this.selectedUO = selected;
   this.setChangeFilters();
 }
+setColumsView(selected: any) {
+  this.columsSelectView = selected;
+  this.setChangeFilters()
+}
 // workControl2 = new FormControl();
 // filteredOptions2: Observable<string[]> | undefined;
 // crepChange($event:any) {
@@ -196,6 +253,7 @@ clearFilter() {
   this.selectedDistricts = [];
   this.selectedStreet = [];
   this.selectedUO = [];
+  this.columsSelectView = [];
 }
 
 //изменение катигорий
@@ -224,6 +282,8 @@ clearFilter() {
       this.capType = results[4];
       this.apiStore.setStore("mainPageFilters", results)
       this.filterBindValues()
+     // this.columsSelectView = []; // выбранные для отображения колонки
+
       // this.filteredOptions2 = this.workControl2.valueChanges.pipe(
       //   startWith(""),
       //   map((value) => this._filterWorkListCapRep(value))

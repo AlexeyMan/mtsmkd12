@@ -4,11 +4,15 @@
     <button mat-button (click)="accordion.closeAll()">Свернуть все</button>
     <button mat-button (click)="loadTepPage()">Сохранить фильтр</button>
     <button mat-button (click)="clearFilter()">Сброс поисковых значений</button>
-    <button mat-button (click)="clearFilter()">
-      Очистить поисковые значения
-    </button>
+    <button mat-button (click)="clearFilter()">Очистить поисковые значения</button>
+    <button mat-button (click)="closeFilters()">Закрыть</button>
   </div>
-  <mat-accordion class="example-headers-align" multi displayMode="flat">
+  <mat-accordion
+    class="example-headers-align"
+    multi
+    displayMode="flat"
+    togglePosition="before"
+  >
     <mat-expansion-panel style="box-shadow: none">
       <mat-expansion-panel-header>
         <mat-panel-title> Основной фильтр </mat-panel-title>
@@ -18,42 +22,42 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
       <div class="container">
-      <mat-select-autocomplete
-        class="grid-7-11 col-md-12"
-        [selectPlaceholder]="'поиск...'"
-        [appearance]="'fill'"
-        [placeholder]="'Район'"
-        [errorMsg]="errorMessage"
-        [showErrorMsg]="showError"
-        [options]="this.filters?.districts"
-        [display]="'districtName'"
-        [value]="'districtId'"
-        [multiple]="true"
-        [labelCount]="6"
-        [selectedOptions]="selectedDistricts"
-        (selectionChange)="selectDistrict($event)"
-        style="display: inline-grid; padding-right: 20px"
-      >
-      </mat-select-autocomplete>
-      <div class="row col-md-12" style="padding-right: 0">
         <mat-select-autocomplete
-          class="grid-7-11 col-md-6"
+          class="grid-7-11 col-md-12"
           [selectPlaceholder]="'поиск...'"
           [appearance]="'fill'"
-          [placeholder]="'Улица'"
+          [placeholder]="'Район'"
           [errorMsg]="errorMessage"
           [showErrorMsg]="showError"
-          [options]="this.allstreets"
-          [display]="'name'"
-          [value]="'id'"
+          [options]="this.filters?.districts"
+          [display]="'districtName'"
+          [value]="'districtId'"
           [multiple]="true"
-          [labelCount]="2"
-          [selectedOptions]="selectedStreet"
-          (selectionChange)="selectStreet($event)"
-          style="display: inline-grid"
+          [labelCount]="6"
+          [selectedOptions]="selectedDistricts"
+          (selectionChange)="selectDistrict($event)"
+          style="display: inline-grid; padding-right: 20px"
         >
         </mat-select-autocomplete>
-        <!-- <mat-form-field appearance="fill" class="col-md-6">
+        <div class="row col-md-12" style="padding-right: 0">
+          <mat-select-autocomplete
+            class="grid-7-11 col-md-6"
+            [selectPlaceholder]="'поиск...'"
+            [appearance]="'fill'"
+            [placeholder]="'Улица'"
+            [errorMsg]="errorMessage"
+            [showErrorMsg]="showError"
+            [options]="this.allstreets"
+            [display]="'name'"
+            [value]="'id'"
+            [multiple]="true"
+            [labelCount]="2"
+            [selectedOptions]="selectedStreet"
+            (selectionChange)="selectStreet($event)"
+            style="display: inline-grid"
+          >
+          </mat-select-autocomplete>
+          <!-- <mat-form-field appearance="fill" class="col-md-6">
           <mat-label>Улица</mat-label>
           <mat-select [formControl]="streets" multiple>
             <mat-option
@@ -65,194 +69,193 @@
           </mat-select>
         </mat-form-field> -->
 
-        <div class="col-md-6">
-          <mat-form-field appearance="fill" style="max-width: 25%">
-            <mat-label>Номер</mat-label>
-            <input
-              matInput
-              id="number"
-              (change)="setChangeFilters()"
-              name="number"
-              [(ngModel)]="number"
-            />
-          </mat-form-field>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" style="max-width: 25%">
+              <mat-label>Номер</mat-label>
+              <input
+                matInput
+                id="number"
+                (change)="setChangeFilters()"
+                name="number"
+                [(ngModel)]="number"
+              />
+            </mat-form-field>
 
-          <mat-form-field appearance="fill" style="max-width: 25%">
-            <mat-label>Корпус</mat-label>
-            <input
-              matInput
-              id="building"
-              name="building"
-              (change)="setChangeFilters()"
-              [(ngModel)]="building"
-            />
-          </mat-form-field>
+            <mat-form-field appearance="fill" style="max-width: 25%">
+              <mat-label>Корпус</mat-label>
+              <input
+                matInput
+                id="building"
+                name="building"
+                (change)="setChangeFilters()"
+                [(ngModel)]="building"
+              />
+            </mat-form-field>
 
-          <mat-form-field appearance="fill" style="max-width: 25%">
-            <mat-label>Литера</mat-label>
-            <input
-              matInput
-              id="letter"
-              name="letter"
-              (change)="setChangeFilters()"
-              [(ngModel)]="letter"
-            />
-          </mat-form-field>
+            <mat-form-field appearance="fill" style="max-width: 25%">
+              <mat-label>Литера</mat-label>
+              <input
+                matInput
+                id="letter"
+                name="letter"
+                (change)="setChangeFilters()"
+                [(ngModel)]="letter"
+              />
+            </mat-form-field>
 
-          <mat-form-field appearance="fill" style="max-width: 25%">
-            <mat-label>Строение</mat-label>
-            <input
-              matInput
-              id="contruction"
-              name="contruction"
-              (change)="setChangeFilters()"
-              [(ngModel)]="house_construction"
-            />
-          </mat-form-field>
-        </div>
-        <h4 style="text-align: center">Общие параметры</h4>
-        <!-- <mat-divider></mat-divider> -->
-        <div class="row col-md-12" style="padding-right: 0">
-          <!-- <div class="col-md-8"> -->
-          <mat-form-field appearance="fill" class="col-md-5">
-            <mat-label>Категория</mat-label>
-            <mat-select
-              [multiple]="true"
-              (selectionChange)="setChangeFilters()"
-              name="categories"
-              [(ngModel)]="selectedCategories"
-            >
-              <mat-option
-                *ngFor="let category of this.filters?.categories"
-                [value]="category.id"
-              >
-                {{ category.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <!-- </div> -->
-
-          <!-- <div class="col-md-4"> -->
-          <mat-form-field appearance="fill" class="col-md-3">
-            <mat-label>Вид собственности</mat-label>
-            <mat-select
-              [multiple]="true"
-              (selectionChange)="setChangeFilters()"
-              name="otype"
-              [(ngModel)]="selectedOtypes"
-            >
-              <mat-option
-                *ngFor="let owntype of this.allowntypes"
-                [value]="owntype.id"
-              >
-                {{ owntype.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <!-- </div> -->
-          <mat-form-field
-            appearance="fill"
-            class="col-md-4"
-            style="padding-right: 0"
-          >
-            <mat-label>Аварийность</mat-label>
-            <mat-select
-              matNativeControl
-              (selectionChange)="setChangeFilters()"
-              name="failure"
-              [(ngModel)]="failure"
-            >
-              <mat-option
-                *ngFor="let type of this.demageType"
-                [value]="type.value"
-              >
-                {{ type.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="row col-md-12" style="padding-right: 0">
-          <mat-select-autocomplete
-            class="grid-7-11 col-md-5"
-            [selectPlaceholder]="'поиск...'"
-            [appearance]="'fill'"
-            [placeholder]="'Управляющая компания'"
-            [errorMsg]="errorMessage"
-            [showErrorMsg]="showError"
-            [options]="this.filters?.management_company"
-            [display]="'name'"
-            [value]="'id'"
-            [multiple]="true"
-            [labelCount]="2"
-            [selectedOptions]="selectedUO"
-            (selectionChange)="setChangeFilters()"
-            style="display: inline-grid"
-          >
-          </mat-select-autocomplete>
-          <div class="col-md-3">
-            <mat-form-field appearance="fill" style="width: 100%">
-              <mat-label>Тип управляющей организации</mat-label>
+            <mat-form-field appearance="fill" style="max-width: 25%">
+              <mat-label>Строение</mat-label>
+              <input
+                matInput
+                id="contruction"
+                name="contruction"
+                (change)="setChangeFilters()"
+                [(ngModel)]="house_construction"
+              />
+            </mat-form-field>
+          </div>
+          <h4 style="text-align: center">Общие параметры</h4>
+          <!-- <mat-divider></mat-divider> -->
+          <div class="row col-md-12" style="padding-right: 0">
+            <!-- <div class="col-md-8"> -->
+            <mat-form-field appearance="fill" class="col-md-5">
+              <mat-label>Категория</mat-label>
               <mat-select
                 [multiple]="true"
                 (selectionChange)="setChangeFilters()"
-                name="mtype"
-                [(ngModel)]="selectedMtypes"
+                name="categories"
+                [(ngModel)]="selectedCategories"
               >
                 <mat-option
-                  *ngFor="let mtype of this.allmtypes"
-                  [value]="mtype.id"
+                  *ngFor="let category of this.filters?.categories"
+                  [value]="category.id"
                 >
-                  {{ mtype.name }}
+                  {{ category.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <!-- </div> -->
+
+            <!-- <div class="col-md-4"> -->
+            <mat-form-field appearance="fill" class="col-md-3">
+              <mat-label>Вид собственности</mat-label>
+              <mat-select
+                [multiple]="true"
+                (selectionChange)="setChangeFilters()"
+                name="otype"
+                [(ngModel)]="selectedOtypes"
+              >
+                <mat-option
+                  *ngFor="let owntype of this.allowntypes"
+                  [value]="owntype.id"
+                >
+                  {{ owntype.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <!-- </div> -->
+            <mat-form-field
+              appearance="fill"
+              class="col-md-4"
+              style="padding-right: 0"
+            >
+              <mat-label>Аварийность</mat-label>
+              <mat-select
+                matNativeControl
+                (selectionChange)="setChangeFilters()"
+                name="failure"
+                [(ngModel)]="failure"
+              >
+                <mat-option
+                  *ngFor="let type of this.demageType"
+                  [value]="type.value"
+                >
+                  {{ type.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-          <mat-form-field
-            appearance="fill"
-            class="col-md-2"
-            style="padding-right: 0"
-          >
-            <mat-label>ОКН</mat-label>
-            <mat-select
-              matNativeControl
-              [(ngModel)]="culture"
-              name="okn"
-              (selectionChange)="setChangeFilters()"
-              [value]="culture"
+          <div class="row col-md-12" style="padding-right: 0">
+            <mat-select-autocomplete
+              class="grid-7-11 col-md-5"
+              [selectPlaceholder]="'поиск...'"
+              [appearance]="'fill'"
+              [placeholder]="'Управляющая компания'"
+              [errorMsg]="errorMessage"
+              [showErrorMsg]="showError"
+              [options]="this.filters?.management_company"
+              [display]="'name'"
+              [value]="'id'"
+              [multiple]="true"
+              [labelCount]="2"
+              [selectedOptions]="selectedUO"
+              (selectionChange)="selectUO($event)"
+              style="display: inline-grid"
             >
-              <mat-option
-                *ngFor="let type of this.demageType"
-                [value]="type.value"
-              >
-                {{ type.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field
-            appearance="fill"
-            class="col-md-2"
-            style="padding-right: 0"
-          >
-            <mat-label>Лифты</mat-label>
-            <mat-select
-              matNativeControl
-              name="lift"
-              (selectionChange)="liftChange($event)"
-              [value]="lifts"
-              [(ngModel)]="lifts"
+            </mat-select-autocomplete>
+            <div class="col-md-3">
+              <mat-form-field appearance="fill" style="width: 100%">
+                <mat-label>Тип управляющей организации</mat-label>
+                <mat-select
+                  [multiple]="true"
+                  (selectionChange)="setChangeFilters()"
+                  name="mtype"
+                  [(ngModel)]="selectedMtypes"
+                >
+                  <mat-option
+                    *ngFor="let mtype of this.allmtypes"
+                    [value]="mtype.id"
+                  >
+                    {{ mtype.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <mat-form-field
+              appearance="fill"
+              class="col-md-2"
+              style="padding-right: 0"
             >
-              <mat-option
-                *ngFor="let type of this.demageType"
-                [value]="type.value"
+              <mat-label>ОКН</mat-label>
+              <mat-select
+                matNativeControl
+                [(ngModel)]="culture"
+                name="okn"
+                (selectionChange)="setChangeFilters()"
+                [value]="culture"
               >
-                {{ type.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+                <mat-option
+                  *ngFor="let type of this.demageType"
+                  [value]="type.value"
+                >
+                  {{ type.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field
+              appearance="fill"
+              class="col-md-2"
+              style="padding-right: 0"
+            >
+              <mat-label>Лифты</mat-label>
+              <mat-select
+                matNativeControl
+                name="lift"
+                (selectionChange)="liftChange($event)"
+                [value]="lifts"
+                [(ngModel)]="lifts"
+              >
+                <mat-option
+                  *ngFor="let type of this.demageType"
+                  [value]="type.value"
+                >
+                  {{ type.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
       </div>
-      </div>
-
     </mat-expansion-panel>
     <mat-expansion-panel style="box-shadow: none">
       <mat-expansion-panel-header>
@@ -509,55 +512,54 @@
               </mat-select>
             </mat-form-field>
             <!-- </div> -->
-
           </div>
           <div class="col-sm-4">
             <div class="col-sm-12">
               <h4>Специальные инженерные системы</h4>
               <!-- <mat-divider></mat-divider> -->
-          <div class="row">
+              <div class="row">
                 <mat-form-field
-                appearance="fill"
-                class="col-md-6"
-                style="padding-right: 0"
-              >
-                <mat-label>АППЗ</mat-label>
-                <mat-select
-                  matNativeControl
-                  [(ngModel)]="appz"
-                  name="appz"
-                  (selectionChange)="setChangeFilters()"
-                  [value]="appz"
+                  appearance="fill"
+                  class="col-md-6"
+                  style="padding-right: 0"
                 >
-                  <mat-option
-                    *ngFor="let type of this.demageType"
-                    [value]="type.value"
+                  <mat-label>АППЗ</mat-label>
+                  <mat-select
+                    matNativeControl
+                    [(ngModel)]="appz"
+                    name="appz"
+                    (selectionChange)="setChangeFilters()"
+                    [value]="appz"
                   >
-                    {{ type.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <mat-form-field
-                appearance="fill"
-                class="col-md-6"
-                style="padding-right: 0"
-              >
-                <mat-label>Лифты</mat-label>
-                <mat-select
-                  matNativeControl
-                  name="pzu"
-                  (selectionChange)="setChangeFilters()"
-                  [value]="pzu"
-                  [(ngModel)]="pzu"
+                    <mat-option
+                      *ngFor="let type of this.demageType"
+                      [value]="type.value"
+                    >
+                      {{ type.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                  appearance="fill"
+                  class="col-md-6"
+                  style="padding-right: 0"
                 >
-                  <mat-option
-                    *ngFor="let type of this.demageType"
-                    [value]="type.value"
+                  <mat-label>Лифты</mat-label>
+                  <mat-select
+                    matNativeControl
+                    name="pzu"
+                    (selectionChange)="setChangeFilters()"
+                    [value]="pzu"
+                    [(ngModel)]="pzu"
                   >
-                    {{ type.name }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+                    <mat-option
+                      *ngFor="let type of this.demageType"
+                      [value]="type.value"
+                    >
+                      {{ type.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
 
                 <!-- <div class="row" style="text-align: end">
                   <div class="col-sm-4">АППЗ</div>
@@ -588,7 +590,7 @@
                   </div>
                 </div> -->
               </div>
-              <div style="text-align: center;">
+              <div style="text-align: center">
                 <mat-checkbox name="archive" (change)="setChangeFilters()"
                   >Архив МКД</mat-checkbox
                 >
@@ -680,11 +682,9 @@
               </div>
             </div> -->
 
-
-
             <!-- <div class="row"> -->
-            </div>
-          <div class="col-sm-6" style="padding-top: 18px;">
+          </div>
+          <div class="col-sm-6" style="padding-top: 18px">
             <div class="row">
               <h4 class="col-sm-9" style="padding-right: 0">
                 Капитальный ремонт
@@ -753,13 +753,11 @@
                   matInput
                 />
               </mat-form-field>
-
             </div>
           </div>
-            <div class="col-sm-6" style="padding-top: 18px;">
-              <div class="row">
-              <h4 class="col-sm-9" style="padding-right: 0" >
-                Текущий ремонт</h4>
+          <div class="col-sm-6" style="padding-top: 18px">
+            <div class="row">
+              <h4 class="col-sm-9" style="padding-right: 0">Текущий ремонт</h4>
               <div class="col-sm-3" style="padding: 2px 6px 0 0">
                 <mat-select
                   matNativeControl
@@ -775,54 +773,54 @@
                   </mat-option>
                 </mat-select>
               </div>
-              </div>
-              <!-- <mat-divider></mat-divider> -->
-              <mat-form-field appearance="fill" class="col-md-12">
-                <mat-label>Вид работ</mat-label>
-                <mat-select
-                  matNativeControl
-                  (selectionChange)="setChangeFilters()"
-                  name="crep"
-                  [(ngModel)]="crep"
+            </div>
+            <!-- <mat-divider></mat-divider> -->
+            <mat-form-field appearance="fill" class="col-md-12">
+              <mat-label>Вид работ</mat-label>
+              <mat-select
+                matNativeControl
+                (selectionChange)="setChangeFilters()"
+                name="crep"
+                [(ngModel)]="crep"
+              >
+                <mat-option
+                  *ngFor="let type of this.currType"
+                  [value]="type.id"
                 >
-                  <mat-option
-                    *ngFor="let type of this.currType"
-                    [value]="type.id"
-                  >
-                    {{ type.name }}
-                  </mat-option>
-                </mat-select>
+                  {{ type.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <div class="row">
+              <!-- <div class="col-sm-6"> -->
+              <mat-form-field appearance="fill" class="col-sm-6">
+                <mat-label>с</mat-label>
+                <input
+                  name="filter"
+                  placeholder="0"
+                  (change)="this.loadTepPage()"
+                  [(ngModel)]="trepFrom"
+                  id="trepFrom"
+                  type="number"
+                  matInput
+                />
               </mat-form-field>
-              <div class="row">
-                <!-- <div class="col-sm-6"> -->
-                  <mat-form-field appearance="fill" class="col-sm-6">
-                    <mat-label>с</mat-label>
-                    <input
-                      name="filter"
-                      placeholder="0"
-                      (change)="this.loadTepPage()"
-                      [(ngModel)]="trepFrom"
-                      id="trepFrom"
-                      type="number"
-                      matInput
-                    />
-                  </mat-form-field>
-                <!-- <div class="col-sm-6"> -->
-                  <mat-form-field appearance="fill" class="col-sm-6">
-                    <mat-label>по</mat-label>
-                    <input
-                      name="filter"
-                      placeholder="100"
-                      (change)="this.loadTepPage()"
-                      [(ngModel)]="trepTo"
-                      id="trepTo"
-                      type="number"
-                      matInput
-                    />
-                  </mat-form-field>
-                <!-- </div> -->
-              </div>
-              <!-- <div class="col-sm-12">
+              <!-- <div class="col-sm-6"> -->
+              <mat-form-field appearance="fill" class="col-sm-6">
+                <mat-label>по</mat-label>
+                <input
+                  name="filter"
+                  placeholder="100"
+                  (change)="this.loadTepPage()"
+                  [(ngModel)]="trepTo"
+                  id="trepTo"
+                  type="number"
+                  matInput
+                />
+              </mat-form-field>
+              <!-- </div> -->
+            </div>
+            <!-- <div class="col-sm-12">
                 <mat-radio-group
                   name="curr_repair"
                   (change)="setChangeFilters()"
@@ -834,24 +832,23 @@
                   <mat-radio-button value="f">Факт</mat-radio-button>
                 </mat-radio-group>
               </div> -->
-            </div>
+          </div>
 
-
-          <div class="col-sm-12" style="padding-top: 18px;">
+          <div class="col-sm-12" style="padding-top: 18px">
             <h4>Общие</h4>
             <!-- <mat-divider></mat-divider> -->
             <div class="row">
               <!-- <div class="col-sm-4"> -->
-                <mat-form-field appearance="fill" class="col-sm-4">
-                  <mat-label>Серия, тип проекта</mat-label>
-                  <input
-                    matInput
-                    id="series"
-                    name="series"
-                    [(ngModel)]="series"
-                    (change)="this.loadTepPage()"
-                  />
-                </mat-form-field>
+              <mat-form-field appearance="fill" class="col-sm-4">
+                <mat-label>Серия, тип проекта</mat-label>
+                <input
+                  matInput
+                  id="series"
+                  name="series"
+                  [(ngModel)]="series"
+                  (change)="this.loadTepPage()"
+                />
+              </mat-form-field>
               <!-- </div> -->
               <mat-form-field appearance="fill" class="col-sm-2">
                 <label class="labelSpo">Этажность</label>
@@ -878,8 +875,6 @@
                   matInput
                 />
               </mat-form-field>
-
-
             </div>
             <!-- <div class="row">
               <div class="col-sm-6">
@@ -887,52 +882,52 @@
               <div class="col-sm-6">
               </div>
             </div> -->
-            <div class="row" style="padding-top: 15px;">
+            <div class="row" style="padding-top: 15px">
               <!-- <div class="col-sm-2"> -->
               <mat-form-field appearance="fill" class="col-sm-2">
-                  <label class="labelSpo">Год постройки </label>
-                  <mat-label>с</mat-label>
-                  <input
-                    (change)="this.loadTepPage()"
-                    name="filter"
-                    [(ngModel)]="buildFrom"
-                    id="buildFrom"
-                    matInput
-                  />
-                </mat-form-field>
+                <label class="labelSpo">Год постройки </label>
+                <mat-label>с</mat-label>
+                <input
+                  (change)="this.loadTepPage()"
+                  name="filter"
+                  [(ngModel)]="buildFrom"
+                  id="buildFrom"
+                  matInput
+                />
+              </mat-form-field>
               <!-- </div> -->
               <!-- <div class="col-sm-6"> -->
-                <mat-form-field appearance="fill" class="col-sm-2">
-                  <mat-label>по</mat-label>
-                  <input
-                    name="filter"
-                    [(ngModel)]="buildTo"
-                    (change)="this.loadTepPage()"
-                    id="buildTo"
-                    matInput
-                  />
-                </mat-form-field>
-                <mat-form-field appearance="fill" class="col-sm-2">
-                  <label class="labelSpo">Год реконструкции </label>
-                  <mat-label>с</mat-label>
-                  <input
-                    (change)="this.loadTepPage()"
-                    name="filter"
-                    [(ngModel)]="rbuildFrom"
-                    id="rbuildFrom"
-                    matInput
-                  />
-                </mat-form-field>
-                <mat-form-field appearance="fill" class="col-sm-2">
-                  <mat-label>по</mat-label>
-                  <input
-                    (change)="this.loadTepPage()"
-                    name="filter"
-                    [(ngModel)]="rbuildTo"
-                    id="rbuildTo"
-                    matInput
-                  />
-                </mat-form-field>
+              <mat-form-field appearance="fill" class="col-sm-2">
+                <mat-label>по</mat-label>
+                <input
+                  name="filter"
+                  [(ngModel)]="buildTo"
+                  (change)="this.loadTepPage()"
+                  id="buildTo"
+                  matInput
+                />
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="col-sm-2">
+                <label class="labelSpo">Год реконструкции </label>
+                <mat-label>с</mat-label>
+                <input
+                  (change)="this.loadTepPage()"
+                  name="filter"
+                  [(ngModel)]="rbuildFrom"
+                  id="rbuildFrom"
+                  matInput
+                />
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="col-sm-2">
+                <mat-label>по</mat-label>
+                <input
+                  (change)="this.loadTepPage()"
+                  name="filter"
+                  [(ngModel)]="rbuildTo"
+                  id="rbuildTo"
+                  matInput
+                />
+              </mat-form-field>
               <!-- </div> -->
             </div>
             <!-- <div class="row">
@@ -992,17 +987,39 @@
           <!-- <mat-icon>date_range</mat-icon> -->
         </mat-panel-description>
       </mat-expansion-panel-header>
-
-      <mat-form-field appearance="fill">
-        <mat-label>Date</mat-label>
-        <input
-          matInput
-          [matDatepicker]="picker"
-          (focus)="picker.open()"
-          readonly
-        />
-      </mat-form-field>
-      <mat-datepicker #picker></mat-datepicker>
+      <div class="container">
+        <!-- <div class="row"> -->
+          <mat-select-autocomplete
+            class="grid-7-11 col-md-12"
+            [selectPlaceholder]="'поиск...'"
+            [appearance]="'fill'"
+            [placeholder]="'Отображаемые колонки'"
+            [errorMsg]="errorMessage"
+            [showErrorMsg]="showError"
+            [options]="this.columsListView"
+            [display]="'value'"
+            [value]="'id'"
+            [multiple]="true"
+            [labelCount]="10"
+            [selectedOptions]="columsSelectView"
+            (selectionChange)="setColumsView($event)"
+            style="display: inline-grid; padding-right: 20px"
+          >
+          </mat-select-autocomplete>
+          <!-- <mat-form-field appearance="fill" class="col-sm-12">
+            <mat-label>Отображаемые колонки</mat-label>
+            <mat-select
+            [(ngModel)]="columsSelectView" multiple>
+              <mat-option *ngFor="let col of columsListView" [value]="col.id">{{
+                col.value
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          {{columsSelectView}} -->
+        <!-- </div> -->
+        {{columsSelectView}}
+      </div>
+      <!-- <mat-datepicker #picker></mat-datepicker> -->
     </mat-expansion-panel>
   </mat-accordion>
 </div>
