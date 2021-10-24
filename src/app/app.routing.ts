@@ -12,7 +12,7 @@ import { TepTableComponent } from "./components/tep-table/tep-table.component";
 // } from "./_resolvers/teplist.resolver";
 
 const routes: Routes = [
-  { path: "", redirectTo: "/passport", pathMatch: "full" },
+  { path: "", redirectTo: "/login", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   {
     path: "passport",

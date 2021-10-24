@@ -44,7 +44,10 @@
                   class="tools"
                   style="font-size: 20px; padding-left: 0px; cursor: pointer"
                 >
-                  <button mat-icon-button>
+                  <button mat-icon-button (click)="
+                  addToFavourites(row.house_id, row.favorite);
+                  $event.stopPropagation()
+                ">
                     <mat-icon
                       [ngStyle]="{ color: row.favorite ? '#ffbc00' : '' }"
                       >star</mat-icon

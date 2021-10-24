@@ -20,8 +20,10 @@ export interface GeneralSettings {
   showDebugPanel: Boolean;
   visible_columns: string[];
 }
-
-export interface TepListFilter {
+interface IObjectKeys {
+  [key: string]: string | number | any;
+}
+export interface TepListFilter extends IObjectKeys {
   district: number[];
   street: string[];
   house_number: string;

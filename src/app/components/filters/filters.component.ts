@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { forkJoin, Observable } from 'rxjs';
+import { forkJoin, from, fromEvent, Observable, Subject } from 'rxjs';
 import { TeplistService } from '../../_services/teplist.service';
 import { LocalStorageService } from '../../_services/store';
 import { CommonService } from 'src/app/_services/common.service';
@@ -18,6 +18,8 @@ import { SelectAutocompleteComponent } from 'mat-select-autocomplete';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TepTableComponent } from '../tep-table/tep-table.component';
 import {
+  debounceTime,
+  distinctUntilChanged,
   map,
   startWith,
 } from "rxjs/operators";
@@ -38,49 +40,49 @@ const cap_repair_type = [
   { value: "'fact'", name: 'Факт' },
 ];
 const colViewer = [
-  { value: "Район", id: "show_district_name" },
-  { value: "Адрес", id: "show_address" },
-  { value: "Категория", id: "show_category_name" },
-  { value: "Износ", id: "show_total_damage" },
-  { value: "Статус", id: "show_status_name" },
-  { value: "Общая площадь", id: "show_total_building_area" },
+  { value: "Район", id: "district_name" },
+  { value: "Адрес", id: "address" },
+  { value: "Категория", id: "category_name" },
+  { value: "Износ", id: "total_damage" },
+  { value: "Статус", id: "status_name" },
+  { value: "Общая площадь", id: "total_building_area" },
   {
     value: "Площадь жилых помещений",
-    id: "show_living_building_area",
+    id: "living_building_area",
   },
   {
     value: "Нежилая площадь функциональная",
-    id: "show_non_living_building_area",
+    id: "non_living_building_area",
   },
   {
     value: "Нежилая площадь общего имущества",
-    id: "show_room_service_area",
+    id: "room_service_area",
   },
-  { value: "Площадь л/кл и коридоров", id: "show_stairs_hall_area" },
-  { value: "Строительный объем", id: "show_total_building_volume" },
-  { value: "Количество квартир", id: "show_flat_count" },
-  { value: "Количество проживающих", id: "show_residents_count" },
-  { value: "Управляющая организация", id: "show_management_company" },
-  { value: "Год постройки", id: "show_bdate" },
-  { value: "Год реконструкции", id: "show_reconstruction_year" },
-  { value: "Лифты", id: "show_lifts" },
-  { value: "ОКН", id: "show_culture" },
-  { value: "Аварийность", id: "show_failure" },
-  { value: "Этажность", id: "show_storeys" },
-  { value: "Серия, тип проекта", id: "show_project_type" },
-  { value: "Отопление", id: "show_heating_name" },
-  { value: "ГВС", id: "show_hot_water_name" },
-  { value: "ХВС", id: "show_coldwater" },
-  { value: "Газоснабжение", id: "show_gas_name" },
-  { value: "ПЗУ", id: "show_pzu" },
-  { value: "АППЗ", id: "show_appz" },
-  { value: "Эл-во", id: "show_electro" },
-  // { value: "Водоотв", id: "show_sewer" },
+  { value: "Площадь л/кл и коридоров", id: "stairs_hall_area" },
+  { value: "Строительный объем", id: "total_building_volume" },
+  { value: "Количество квартир", id: "flat_count" },
+  { value: "Количество проживающих", id: "residents_count" },
+  { value: "Управляющая организация", id: "management_company" },
+  { value: "Год постройки", id: "bdate" },
+  { value: "Год реконструкции", id: "reconstruction_year" },
+  { value: "Лифты", id: "lifts" },
+  { value: "ОКН", id: "culture" },
+  { value: "Аварийность", id: "failure" },
+  { value: "Этажность", id: "storeys" },
+  { value: "Серия, тип проекта", id: "project_type" },
+  { value: "Отопление", id: "heating_name" },
+  { value: "ГВС", id: "hot_water_name" },
+  { value: "ХВС", id: "coldwater" },
+  { value: "Газоснабжение", id: "gas_name" },
+  { value: "ПЗУ", id: "pzu" },
+  { value: "АППЗ", id: "appz" },
+  { value: "Эл-во", id: "electro" },
+  // { value: "Водоотв", id: "sewer" },
   {
     value: "Количество подъемников",
-    id: "show_disabled_people_lifts_count",
+    id: "disabled_people_lifts_count",
   },
-  // { value: "Архив МКД", id: "show_archive" },
+  // { value: "Архив МКД", id: "archive" },
 ];
 @Component({
   selector: 'app-filters',
@@ -167,21 +169,22 @@ export class FiltersComponent implements OnInit {
 
   //Отслеживаем изменения
   timerOn:any = -1;
-setChangeFilters(){
-  if(this.timerOn){
-  clearTimeout(this.timerOn);
-  this.timerOn = setTimeout(()=>{
-    this.timerOn=null;
-    this.loadTepPage();
-     this.getNewFilteredData()
-    // clearTimeout(this.timerOn);
-  },2000);
+  setChangeFilters(){
+    if(this.timerOn){
+      clearTimeout(this.timerOn);
+      this.timerOn = setTimeout(()=>{
+        this.timerOn=null;
+        this.loadTepPage();
+        this.getNewFilteredData()
+        // clearTimeout(this.timerOn);
+      },2000);
 }else{
   this.timerOn = -1;
 }
 }
-  ///////////////////////////////////////////////
-  ngOnInit(): void {
+
+///////////////////////////////////////////////
+ngOnInit(): void {
     setTimeout(()=>{
       this.filterRequest = this.apiStore.getStore("mainPageUserFilters");
       if (this.apiStore.checkStore('mainPageFilters')) {
@@ -282,6 +285,7 @@ clearFilter() {
       this.capType = results[4];
       this.apiStore.setStore("mainPageFilters", results)
       this.filterBindValues()
+      this.columsSelectView = this.filterRequest.columns;
      // this.columsSelectView = []; // выбранные для отображения колонки
 
       // this.filteredOptions2 = this.workControl2.valueChanges.pipe(
@@ -516,6 +520,6 @@ clearFilter() {
 
     this.filterRequest.coldwater = this.coldWater;
 
-    this.filterRequest.columns = this.displayedColumns;
+    this.filterRequest.columns = this.columsSelectView;
   }
 }

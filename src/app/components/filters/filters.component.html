@@ -1,11 +1,11 @@
 <div class="conteiner filtersAcordion">
   <div class="example-action-buttons">
-    <button mat-button (click)="accordion.openAll()">Развернуть все</button>
-    <button mat-button (click)="accordion.closeAll()">Свернуть все</button>
-    <button mat-button (click)="loadTepPage()">Сохранить фильтр</button>
-    <button mat-button (click)="clearFilter()">Сброс поисковых значений</button>
-    <button mat-button (click)="clearFilter()">Очистить поисковые значения</button>
-    <button mat-button (click)="closeFilters()">Закрыть</button>
+    <button mat-button class="chDt" (click)="accordion.openAll()">Развернуть все</button>
+    <button mat-button class="chDt" (click)="accordion.closeAll()">Свернуть все</button>
+    <button mat-button class="chDt" (click)="loadTepPage()">Сохранить фильтр</button>
+    <button mat-button class="chDt" (click)="clearFilter()">Сброс поисковых значений</button>
+    <button mat-button class="chDt" (click)="clearFilter()">Очистить поисковые значения</button>
+    <button mat-button (click)="closeFilters()">Закрыть <mat-icon>clear</mat-icon></button>
   </div>
   <mat-accordion
     class="example-headers-align"
@@ -23,6 +23,7 @@
       </mat-expansion-panel-header>
       <div class="container">
         <mat-select-autocomplete
+          id="chDt2"
           class="grid-7-11 col-md-12"
           [selectPlaceholder]="'поиск...'"
           [appearance]="'fill'"
@@ -1017,7 +1018,7 @@
           </mat-form-field>
           {{columsSelectView}} -->
         <!-- </div> -->
-        {{columsSelectView}}
+        <!-- {{columsSelectView}} -->
       </div>
       <!-- <mat-datepicker #picker></mat-datepicker> -->
     </mat-expansion-panel>

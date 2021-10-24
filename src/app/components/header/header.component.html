@@ -15,7 +15,7 @@
         <mat-icon aria-hidden="false" aria-label="Фильтр">find_in_page</mat-icon>
         Фильтр {{ btnOpen }}
       </button>
-      <button mat-button>
+      <button mat-button  (click)="openReportsComponent()">
         <mat-icon aria-hidden="false" aria-label="Отчет">assignment</mat-icon>
         Отчет
       </button>
@@ -154,3 +154,4 @@
   </mat-toolbar-row>
 </mat-toolbar>
 <app-filters *ngIf="btnOpen"> </app-filters>
+<app-reports *ngIf="btnOpenExel"> </app-reports>

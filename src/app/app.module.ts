@@ -17,14 +17,16 @@ import { TepTableComponent } from "./components/tep-table/tep-table.component";
 import { MaterialModule } from "./material-module";
 import { FiltersComponent } from './components/filters/filters.component';
 import { SelectAutocompleteModule } from 'mat-select-autocomplete';
-// import {MatButtonModule, MatCheckboxModule} from '@angular/material';
+import { ReportsComponent } from './components/reports/reports.component'
+
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     TepTableComponent,
     HeaderComponent,
-    FiltersComponent
+    FiltersComponent,
+    ReportsComponent
   ],
   imports: [
     BrowserModule,

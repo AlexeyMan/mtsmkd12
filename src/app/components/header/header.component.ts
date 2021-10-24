@@ -59,6 +59,10 @@ export class HeaderComponent implements OnInit {
   openFiltersComponent(){
     this.btnOpen = !this.btnOpen;
 }
+btnOpenExel:boolean = false;
+openReportsComponent(){
+  this.btnOpenExel = !this.btnOpenExel;
+}
   onLogout() {
     this.authService.logout();
   }
