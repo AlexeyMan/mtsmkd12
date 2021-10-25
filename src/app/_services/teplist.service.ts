@@ -288,6 +288,25 @@ export class TeplistService {
       );
   }
 
+  getTepListFavorite(filter: any): Observable<Mkdlistitem[]> {
+    const httpHeaders = new HttpHeaders().set("Accept", "application/json");
+    const httpParams = new HttpParams().set("filter", JSON.stringify(filter));
+
+    return this.http
+      .get<Mkdlistitem[]>(AppSettings.API_ENDPOINT + "houses", {
+        headers: httpHeaders,
+        params: httpParams,
+        responseType: "json",
+      })
+      .pipe(
+        map((res) => {
+          return res;
+        }),
+        catchError((error) => {
+          return throwError("Something went wrong!");
+        })
+      );
+  }
   getTepListEntriesExcel(filter: TepListFilter) {
     const httpHeaders = new HttpHeaders().set("Accept", "application/json");
     const httpParams = new HttpParams()

@@ -75,5 +75,9 @@ export interface ListFilter {
     districts: Districts[];
     categories: Categories[];
     statuses: Statuses[];
+    construction_elements: any;
+    heating_types: any;
+    hot_water_types: any;
+    gas_supply_types:any;
 }
 

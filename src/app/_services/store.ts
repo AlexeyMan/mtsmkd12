@@ -11,10 +11,12 @@ export class LocalStorageService {
   }
   //Добавить в стор
   setStore(name:string, data:any){
-    localStorage.setItem(
-      name,
-      JSON.stringify(data)
-    );
+    if(data){
+      localStorage.setItem(
+        name,
+        JSON.stringify(data)
+      );
+    }
   }
 //Запрос из стор
   getStore(name:string){

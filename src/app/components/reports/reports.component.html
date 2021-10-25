@@ -1,0 +1,495 @@
+<div class="conteiner filtersAcordion">
+  <mat-tab-group dynamicHeight color="primary" mat-align-tabs = "center" style="margin-top: 2px;">
+    <!-- Статистическая информация -->
+    <mat-tab label="Статистическая информация">
+      <div id="accordionStatInfo">
+        <div class="card">
+          <div id="headingStatInfo" class="card-header" style="text-align: right;">
+              <button
+                (click)="this.exportExcel()"
+                mat-raised-button
+                color="primary"
+              >
+                Экспорт в Excel
+              </button>
+          </div>
+          <!-- <div
+            id="collapseStatInfo"
+            aria-labelledby="headingOne"
+            data-parent="#accordionStatInfo"
+            class="collapse"
+          > -->
+            <!--  -->
+            <div class="row" style="margin: 10px;">
+              <div class="col-md-4">
+                <div class="panel panel-default panel-nomargin">
+                  <div class="panel-heading">
+                    <span class="panel panel-subtitle">Группировки:</span>
+                  </div>
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <mat-selection-list
+                          [ngModelOptions]="{ standalone: true }"
+                          [(ngModel)]="selectedGroupings"
+                          (ngModelChange)="onNgModelChange($event)"
+                          cdkDropList
+                          (cdkDropListDropped)="drop($event)"
+                        >
+                          <mat-list-option
+                            [value]="group.value"
+                            *ngFor="let group of this.groupings"
+                            cdkDrag
+                          >
+                            {{ group.name }}
+                          </mat-list-option>
+                        </mat-selection-list>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-8">
+                <div class="panel panel-default panel-nomargin">
+                  <div class="panel-heading">
+                    <span class="panel panel-subtitle">Итоги:</span>
+                  </div>
+                  <div class="panel-body">
+                    <div class="row">
+                      <!-- <div class="col-md-12"> -->
+
+                      <mat-form-field
+                        appearance="fill"
+                        class="col-md-6"
+                        style="padding-right: 0"
+                      >
+                        <!-- <mat-label>Аварийность</mat-label> -->
+                        <mat-select
+                          matNativeControl
+                          name="failure"
+                          [(ngModel)]="resultsFieldsSelected"
+                        >
+                          <mat-option
+                          *ngFor="let resultsFields of this.resultsFields"
+                          [value]="resultsFields.value"
+                          >
+                            {{ resultsFields.name }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                      <div style="text-align: center;" class="col-md-6">
+                        <mat-checkbox
+                          (change)="changeEvent($event)"
+                          class="example-margin"
+                          >Адрес</mat-checkbox
+                        >
+                      </div>
+                        <!-- <mat-radio-group
+                          [(ngModel)]="resultsFieldsSelected"
+                          [ngModelOptions]="{ standalone: true }"
+                          aria-labelledby="rf-radio-group-label"
+                          class="rf-radio-group"
+                        >
+                          <mat-radio-button
+                            class="rf-radio-button"
+                            *ngFor="let resultsFields of this.resultsFields"
+                            [value]="resultsFields.value"
+                          >
+                            {{ resultsFields.name }}
+                          </mat-radio-button>
+                        </mat-radio-group> -->
+                      <!-- </div> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!-- </div> -->
+        </div>
+      </div>
+    </mat-tab>
+    <!-- Текущий ремонт -->
+    <mat-tab label="Текущий ремонт">
+      <div id="accordionCurrentRepair">
+        <div class="card">
+          <div id="headingCurrentRepair" class="card-header"  style="text-align: right;">
+              <button
+                (click)="this.exportExcelTR()"
+                mat-raised-button
+                color="primary"
+              >
+                Загрузить печатную форму программы текущего ремонта
+              </button>
+          </div>
+            <!--  -->
+            <div class="row">
+              <div class="col-md-8">
+                <div
+                  style="padding: 20px; box-shadow: none"
+                  class="panel panel-default panel-nomargin"
+                >
+                  <!-- <div class="panel-body"> -->
+                    <!-- <div class="com-md-12"> -->
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div style="margin-top: 1.7rem">
+                            Период проведения осмотра:
+                          </div>
+                        </div>
+                        <div class="col-md-8">
+                          <div class="row">
+                            <!-- <div class="col-sm-6"> -->
+                              <mat-form-field appearance="fill" class="col-sm-6">
+                                <mat-label>c</mat-label>
+                                <input
+                                  [ngModelOptions]="{ standalone: true }"
+                                  [(ngModel)]="periodStartTR"
+                                  matInput
+                                  (click)="pickerFrom.open()"
+                                  [matDatepicker]="pickerFrom"
+                                  readonly
+                                />
+                                <mat-datepicker-toggle
+                                  matSuffix
+                                  [for]="pickerFrom"
+                                ></mat-datepicker-toggle>
+                                <mat-datepicker #pickerFrom></mat-datepicker>
+                              </mat-form-field>
+                            <!-- </div> -->
+                            <!-- <div class="col-sm-6"> -->
+                              <mat-form-field appearance="fill" class="col-sm-6">
+                                <mat-label>по</mat-label>
+                                <input
+                                  [ngModelOptions]="{ standalone: true }"
+                                  [(ngModel)]="periodEndTR"
+                                  matInput
+                                  [matDatepicker]="pickerTo"
+                                  (click)="pickerTo.open()"
+                                  readonly
+                                />
+                                <mat-datepicker-toggle
+                                  matSuffix
+                                  [for]="pickerTo"
+                                ></mat-datepicker-toggle>
+                                <mat-datepicker #pickerTo></mat-datepicker>
+                              </mat-form-field>
+                            <!-- </div> -->
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div style="margin-top: 1.7rem">
+                            Конструктивный элемент:
+                          </div>
+                        </div>
+                        <!-- <div class="col-md-8"> -->
+                          <mat-form-field appearance="fill" class="col-md-8">
+                            <mat-select
+                              [ngModelOptions]="{ standalone: true }"
+                              [(ngModel)]="structureElementIdTR"
+                            >
+                              <mat-option
+                                [value]="construction.id"
+                                *ngFor="
+                                  let construction of this.constructionList
+                                "
+                              >
+                                {{ construction.name }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        <!-- </div> -->
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div style="margin-top: 1.7rem">Вид работ</div>
+                        </div>
+                        <!-- <div class="col-md-8"> -->
+                          <mat-form-field appearance="fill" class="col-md-8">
+                            <mat-select
+                              [ngModelOptions]="{ standalone: true }"
+                              [(ngModel)]="typeWorkIdTR"
+                            >
+                              <mat-option
+                                *ngFor="let work of this.workList"
+                                [value]="work.id"
+                                [matTooltip]="work.name"
+                                matTooltipShowDelay="1000"
+                              >
+                                {{ work.name }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        <!-- </div> -->
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">Поля</div>
+                        <!-- <div class="col-md-8"> -->
+                          <section class="checkbox-group col-md-8 section-check">
+                            <mat-checkbox
+                              class="checkbox-group-item"
+                              [checked]="actTR"
+                              name="actTR"
+                              [(ngModel)]="actTR"
+                              >Акт</mat-checkbox
+                            >
+                            <mat-checkbox
+                              class="checkbox-group-item"
+                              [checked]="planTR"
+                              name="planTR"
+                              [(ngModel)]="planTR"
+                              >План</mat-checkbox
+                            >
+                            <mat-checkbox
+                              class="checkbox-group-item"
+                              [checked]="factTR"
+                              name="factTR"
+                              [(ngModel)]="factTR"
+                              >Факт</mat-checkbox
+                            >
+                          </section>
+                        <!-- </div> -->
+                      </div>
+                    <!-- </div> -->
+                  <!-- </div> -->
+                </div>
+              </div>
+
+              <div class="col-md-4" style="padding: 20px;">
+                <div class="panel panel-default panel-nomargin">
+                  <div class="panel-heading">
+                    <span class="panel panel-subtitle">Группировки:</span>
+                  </div>
+                  <div class="panel-body">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <mat-selection-list
+                          [ngModelOptions]="{ standalone: true }"
+                          [(ngModel)]="selectedGroupingsTR"
+                          name="groupingsTR"
+                          (ngModelChange)="onNgModelChangeTR($event)"
+                          cdkDropList
+                          (cdkDropListDropped)="dropTR($event)"
+                        >
+                          <mat-list-option
+                            [value]="groupTR.value"
+                            *ngFor="let groupTR of this.groupingsTR"
+                            cdkDrag
+                          >
+                            {{ groupTR.name }}
+                          </mat-list-option>
+                        </mat-selection-list>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div style="margin-left: 15px" class="panel-body">
+                  <mat-checkbox
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="showByWorksTR"
+                    (change)="changeEventShowByWorksTR($event)"
+                    class="example-margin"
+                    >По работам</mat-checkbox
+                  >
+                </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+    </mat-tab>
+            <!-- Капитальный ремонт -->
+    <mat-tab label="Капитальный ремонт">
+      <div id="accordionCapitalRepair">
+        <div class="card">
+          <div id="headingCapitalRepair" class="card-header" style="text-align: right;">
+              <button
+                (click)="this.reportKP()"
+                mat-raised-button
+                color="primary"
+              >
+                Отчет
+              </button>
+          </div>
+            <div class="row">
+              <div class="col-md-8">
+                <div
+                  style="padding: 10px; box-shadow: none"
+                  class="panel panel-default panel-nomargin"
+                >
+                  <div class="panel-body">
+                    <div class="com-md-12">
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div style="margin-top: 1.7rem">
+                            Год проведения КР:
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <yearpicker
+                            mode="YEAR"
+                            [ngModelOptions]="{ standalone: true }"
+                            [(ngModel)]="dataYearKP"
+
+                          ></yearpicker>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div style="margin-top: 1.7rem">
+                            Конструктивный элемент:
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <mat-form-field
+                            class="example-full-width"
+                            appearance="fill"
+                          >
+                            <mat-select
+                              [ngModelOptions]="{ standalone: true }"
+                              [(ngModel)]="elementKP"
+                            >
+                              <mat-option value="''"></mat-option>
+                              <mat-option
+                                [value]="construction.id"
+                                *ngFor="
+                                  let construction of this.constructionList
+                                "
+                              >
+                                {{ construction.name }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                          <div class="panel-body">
+                            <mat-checkbox
+                              [(ngModel)]="byDistrictsKP"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="eventByDistrictsKP($event)"
+                              class="example-margin"
+                              >По районам</mat-checkbox
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                          <div class="panel-body">
+                            <mat-checkbox
+                              [(ngModel)]="executionKP"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="eventExecutionKP($event)"
+                              class="example-margin"
+                              >Исполнение КП</mat-checkbox
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-4">
+                          <div class="panel-body">
+                            <mat-checkbox
+                              [(ngModel)]="KP"
+                              [ngModelOptions]="{ standalone: true }"
+                              (change)="eventKP($event)"
+                              class="example-margin"
+                              >КП</mat-checkbox
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-4"></div>
+            </div>
+        </div>
+      </div>
+    </mat-tab>
+    <!-- Износ конструктивных элементов -->
+    <mat-tab label="Износ конструктивных элементов">
+      <div id="accordionDepreciation">
+        <div class="card">
+          <div id="headingCapitalRepair" class="card-header" style="text-align: right;">
+              <button
+                (click)="this.reportDep()"
+                mat-raised-button
+                color="primary"
+              >
+                Отчет
+              </button>
+          </div>
+
+            <div
+              style="padding: 10px; box-shadow: none"
+              class="panel panel-default panel-nomargin"
+            >
+              <div class="panel-body">
+                <div class="row col-md-10">
+                  <div class="col-md-3">
+                    <mat-checkbox
+                      [(ngModel)]="byDistrictsDep"
+                      [ngModelOptions]="{ standalone: true }"
+                      (change)="eventByDistrictsDep($event)"
+                      class="example-margin"
+                      style="font-size: 15px"
+                      >По районам
+                    </mat-checkbox>
+                  </div>
+                  <div class="col-md-6">
+                    <h4>Конструктивный элемент</h4>
+                  </div>
+                  <div class="col-md-3" style="font-size: large">
+                    Выбор: {{ constructions.selectedOptions.selected.length }}
+                  </div>
+                  <!-- <div class="row col-md-12"> -->
+                    <!-- <div class="col-md-3"></div> -->
+
+                    <div
+                      class="col-md-8"
+                      style="max-height: 400px; overflow: auto"
+                    >
+                      <mat-selection-list
+                        [ngModelOptions]="{ standalone: true }"
+                        [(ngModel)]="selectedGroupings"
+                        (ngModelChange)="onNgModelChangeDep($event)"
+                        #constructions
+                      >
+                        <mat-list-option
+                          [value]="construction.name"
+                          *ngFor="let construction of this.constructionList"
+                          style="font-size: 14px"
+                        >
+                          {{ construction.name }}
+                        </mat-list-option>
+                      </mat-selection-list>
+                    </div>
+                  <!-- </div> -->
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </mat-tab>
+    <mat-tab >
+      <ng-template mat-tab-label>
+        <button mat-button (click)="closeReports()">Закрыть <mat-icon style="color: red;">clear</mat-icon></button>
+        <!-- <button (click)="closeReports()">
+          Закрыть
+          <mat-icon class="example-tab-icon">clear</mat-icon>
+        </button> -->
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

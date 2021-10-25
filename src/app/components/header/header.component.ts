@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
 import { AuthenticationService } from "../../_services";
 import { Observable } from "rxjs";
 import { FiltersComponent } from "../filters/filters.component";
@@ -12,6 +12,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   styleUrls: ["./header.component.scss"],
 })
 export class HeaderComponent implements OnInit {
+  @Output() openFav = new EventEmitter<boolean>();
+
   isLoggedIn$!: Observable<boolean>;
   isEnabledRole$!: Observable<boolean>;
   userName$!: Observable<string>;
@@ -27,6 +29,7 @@ export class HeaderComponent implements OnInit {
   retryCount = -1;
   reconnectInterval = 5;
   reconnectTimeoutId: any;
+
 
   constructor(
     private authService: AuthenticationService,
@@ -59,6 +62,17 @@ export class HeaderComponent implements OnInit {
   openFiltersComponent(){
     this.btnOpen = !this.btnOpen;
 }
+btnOpenExel:boolean = false;
+openReportsComponent(){
+  this.btnOpenExel = !this.btnOpenExel;
+}
+
+btnOpenFav:boolean = true;
+openFavoriteComponent(){
+  this.openFav.emit(this.btnOpenFav = !this.btnOpenFav);
+  // this.btnOpenFav = !this.btnOpenFav;
+}
+
   onLogout() {
     this.authService.logout();
   }
