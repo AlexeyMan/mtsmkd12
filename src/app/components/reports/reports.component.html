@@ -1,5 +1,5 @@
 <div class="conteiner filtersAcordion">
-  <mat-tab-group dynamicHeight color="primary" backgroundColor="primary" style="margin-top: 2px;">
+  <mat-tab-group dynamicHeight color="primary" mat-align-tabs = "center" style="margin-top: 2px;">
     <!-- Статистическая информация -->
     <mat-tab label="Статистическая информация">
       <div id="accordionStatInfo">
@@ -484,7 +484,7 @@
     </mat-tab>
     <mat-tab >
       <ng-template mat-tab-label>
-        <button mat-button (click)="closeReports()">Закрыть <mat-icon>clear</mat-icon></button>
+        <button mat-button (click)="closeReports()">Закрыть <mat-icon style="color: red;">clear</mat-icon></button>
         <!-- <button (click)="closeReports()">
           Закрыть
           <mat-icon class="example-tab-icon">clear</mat-icon>

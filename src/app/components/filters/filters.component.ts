@@ -522,4 +522,12 @@ clearFilter() {
 
     this.filterRequest.columns = this.columsSelectView;
   }
+  cBtn:boolean = true;
+  checkBtn(){
+    return this.cBtn=!this.cBtn;
+  }
+  btnOpenExel:boolean = false; // показать заголовок Фильтр
+  btnOE(e:any){
+    return this.btnOpenExel=e;
+  }
 }

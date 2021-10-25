@@ -38,6 +38,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { FavoritTabsComponent } from '../favorit-tabs/favorit-tabs.component';
 
 @Component({
   templateUrl: 'tep-table.component.html',
@@ -47,6 +48,11 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource<Mkdlistitem>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(FavoritTabsComponent, {static: false})
+
+  private favoriteComp: FavoritTabsComponent|undefined;
+
+
   // filters!: TepListFilter;
   // @ViewChild(FiltersComponent)
   // private counterComponent: FiltersComponent|undefined;
@@ -87,12 +93,14 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     if (this.apiStore.checkStore('userFilters')) {
       this.filters = this.apiStore.getStore('userFilters');
 
+      //TODO заменить после исправления бэк
       // let key: string;
       for (let key in this.filters) {
         if (this.filters[key] === -1) {
           this.filters[key] = 'null';
         }
       }
+      this.filters.columns = ["favorite","house_id",...this.filters.columns]
     }
     if (this.apiStore.checkStore('mainPageTableData')) {
       this.filters = this.apiStore.getStore('mainPageUserFilters');
@@ -121,14 +129,38 @@ export class TepTableComponent implements AfterViewInit, OnInit {
       );
     }
   }
+// открываем избранные
+btnOpenFav:boolean = true;
+  openFav(event:any){
+    this.btnOpenFav = event;
+  }
+
+  // Добавляем в избранные дом
+  addTochild(event:any){
+    let id: number = event.id;
+    let isFavorite: boolean = event.isFavorite;
+    this.addToFavourites(id, isFavorite );
+    console.log(event);
+  }
+  load = false;
   addToFavourites(id: number, isFavorite: boolean) {
+    if(!this.load){
+      let favEl = this.dataSource.data.find(el => el.house_id == id)
+      if(favEl)
+      favEl.favorite = !isFavorite
+      this.load = true;
+    }
+
     this.api.toFavorite(id, !isFavorite).subscribe(
       (res) => {
-        let favEl = this.dataSource.data.find(el => el.house_id == id)
-        if(favEl)
-        favEl.favorite = !isFavorite
+        this.favoriteComp?.getFavoriteList();
+        this.load = false;
       },
       (error) => {
+        let favEl = this.dataSource.data.find(el => el.house_id == id)
+        if(favEl)
+          favEl.favorite = isFavorite
+          this.load = false;
         // this._snackBar.open(JSON.stringify(error), undefined, {
         //   panelClass: "snackbar-error",
         // });

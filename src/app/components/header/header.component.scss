@@ -1,3 +1,12 @@
+.btn-header{
+  width: 100%;
+  text-align: start;
+}
+.tab-name{
+  margin: 0;
+  text-align: center;
+  padding: 10px;
+}
 .big {
   font-size: 40px;
   vertical-align: middle;
@@ -55,16 +64,16 @@ button {
   outline: none;
 }
 
-mat-toolbar-row >>> .mat-button-base {
-  border-radius: 0;
-  padding: 10px;
-}
+// mat-toolbar-row >>> .mat-button-base {
+//   border-radius: 0;
+//   padding: 10px;
+// }
 
-mat-toolbar-row >>> mat-icon {
-  font-size: 40px;
-  height: auto;
-  width: auto;
-}
+// mat-toolbar-row >>> mat-icon {
+//   font-size: 40px;
+//   height: auto;
+//   width: auto;
+// }
 
 .mat-list-item-content {
   padding: 0;
@@ -75,46 +84,46 @@ mat-toolbar-row >>> mat-icon {
   color: black;
 }
 
-.desc {
-  text-align: left;
-}
+// .desc {
+//   text-align: left;
+// }
 
-.date {
-  text-align: right;
-}
+// .date {
+//   text-align: right;
+// }
 
-.name {
-  text-align: left;
-}
+// .name {
+//   text-align: left;
+// }
 
-.content >>> .col-md-6 {
-  height: 30px;
-}
+// .content >>> .col-md-6 {
+//   height: 30px;
+// }
 
-.content >>> .col-md-12 {
-  height: 30px;
-}
+// .content >>> .col-md-12 {
+//   height: 30px;
+// }
 
-.col-md-6 >>> p {
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
+// .col-md-6 >>> p {
+//   text-overflow: ellipsis;
+//   overflow: hidden;
+// }
 
-.col-md-12 >>> p {
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.row {
-  padding-bottom: 5px;
-}
+// .col-md-12 >>> p {
+//   text-overflow: ellipsis;
+//   overflow: hidden;
+// }
+// .row {
+//   padding-bottom: 5px;
+// }
 
-ul {
-  margin: 0;
-}
+// ul {
+//   margin: 0;
+// }
 
-.mat-badge-medium.mat-badge-above .mat-badge-content {
-  top: -2px;
-}
-.navbar-brand{
-  background-image: url("../../../assets/img/logo2.svg");
-}
+// .mat-badge-medium.mat-badge-above .mat-badge-content {
+//   top: -2px;
+// }
+// .navbar-brand{
+//   background-image: url("../../../assets/img/logo2.svg");
+// }

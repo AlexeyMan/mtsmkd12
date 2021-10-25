@@ -17,7 +17,8 @@ import { TepTableComponent } from "./components/tep-table/tep-table.component";
 import { MaterialModule } from "./material-module";
 import { FiltersComponent } from './components/filters/filters.component';
 import { SelectAutocompleteModule } from 'mat-select-autocomplete';
-import { ReportsComponent } from './components/reports/reports.component'
+import { ReportsComponent } from './components/reports/reports.component';
+import { FavoritTabsComponent } from './components/favorit-tabs/favorit-tabs.component'
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ReportsComponent } from './components/reports/reports.component'
     TepTableComponent,
     HeaderComponent,
     FiltersComponent,
-    ReportsComponent
+    ReportsComponent,
+    FavoritTabsComponent
   ],
   imports: [
     BrowserModule,

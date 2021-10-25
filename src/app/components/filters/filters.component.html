@@ -1,11 +1,12 @@
+<h1 *ngIf = "btnOpenExel" >Фильтр</h1>
 <div class="conteiner filtersAcordion">
-  <div class="example-action-buttons">
-    <button mat-button class="chDt" (click)="accordion.openAll()">Развернуть все</button>
-    <button mat-button class="chDt" (click)="accordion.closeAll()">Свернуть все</button>
-    <button mat-button class="chDt" (click)="loadTepPage()">Сохранить фильтр</button>
-    <button mat-button class="chDt" (click)="clearFilter()">Сброс поисковых значений</button>
-    <button mat-button class="chDt" (click)="clearFilter()">Очистить поисковые значения</button>
-    <button mat-button (click)="closeFilters()">Закрыть <mat-icon>clear</mat-icon></button>
+  <div class="topBtnFilter">
+    <button *ngIf = "cBtn" mat-stroked-button class="chDt " color="primary" (click)="accordion.openAll(); checkBtn();">Развернуть все</button>
+    <button *ngIf = "!cBtn" mat-stroked-button class="chDt" color="primary" (click)="accordion.closeAll(); checkBtn();">Свернуть все</button>
+    <button mat-stroked-button class="chDt" color="primary" (click)="loadTepPage()">Сохранить фильтр</button>
+    <button mat-stroked-button class="chDt" color="primary" (click)="clearFilter()">Сброс поисковых значений</button>
+    <button mat-stroked-button class="chDt" color="primary" (click)="clearFilter()">Очистить поисковые значения</button>
+    <button mat-stroked-button (click)="closeFilters()">Закрыть <mat-icon style="color: red;">clear</mat-icon></button>
   </div>
   <mat-accordion
     class="example-headers-align"
