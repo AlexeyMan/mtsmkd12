@@ -89,6 +89,7 @@ export interface Ownershipform {
 
 export interface Street {
   id: number;
+  districts_ids: [];
   name: string;
   street_name_old: string;
 }

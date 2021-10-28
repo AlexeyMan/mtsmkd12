@@ -35,7 +35,11 @@ export class FavoritTabsComponent implements OnInit,AfterViewInit {
 changeFavorite(id: number, isFavorite: boolean){
   this.onChanged.emit({id, isFavorite});
 }
-
+  // открываем колонку удалить
+  tabDel: boolean = false;
+  openDel() {
+    this.tabDel = !this.tabDel;
+  }
   // displayedColumns = [
   //   'favorite',
   //   'house_id',

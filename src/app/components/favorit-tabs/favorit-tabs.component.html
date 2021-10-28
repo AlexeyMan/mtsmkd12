@@ -1,11 +1,11 @@
-  <h1 class="tab-name">Избранные карточки МКД</h1>
-  <!-- Таблица -->
-  <div class="container">
-    <ng-container>
-      <!-- <div class="panel panel-border-color panel-border-color-info"> -->
-        <div class="panel-body table-container">
-          <!-- спинер -->
-          <!-- <div
+<h1 class="tab-name">Избранные карточки МКД</h1>
+<!-- Таблица -->
+<div class="container">
+  <ng-container>
+    <!-- <div class="panel panel-border-color panel-border-color-info"> -->
+    <div class="panel-body table-container">
+      <!-- спинер -->
+      <!-- <div
             class="row justify-content-center"
             *ngIf="dataSource.loading$ | async"
           >
@@ -14,285 +14,276 @@
             </div>
           </div> -->
 
-          <table
-            mat-table
-            #table
-            [dataSource]="dataSource"
-            matSort
-          >
-            <!-- Столбец любимых -->
-            <ng-container matColumnDef="favorite">
-              <th mat-header-cell *matHeaderCellDef>
-                <mat-icon>star</mat-icon>
-              </th>
-              <td mat-cell *matCellDef="let row">
-                <div
-                  class="tools"
-                  style="font-size: 20px; padding-left: 0px; cursor: pointer"
-                >
-                  <button mat-icon-button (click)="
+      <table mat-table #table [dataSource]="dataSource" matSort>
+        <!-- Столбец любимых -->
+        <ng-container matColumnDef="favorite">
+          <th mat-header-cell *matHeaderCellDef>
+            <button mat-icon-button (click)="openDel()">
+              <mat-icon>star</mat-icon>
+            </button>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <div
+              class="tools"
+              style="font-size: 20px; padding-left: 0px; cursor: pointer"
+            >
+              <button
+                mat-icon-button
+                (click)="
                   changeFavorite(row.house_id, row.favorite);
                   $event.stopPropagation()
-                ">
-                    <mat-icon
-                      [ngStyle]="{ color: row.favorite ? '#ffbc00' : '' }"
-                      >star</mat-icon
-                    >
-                  </button>
-                </div>
-              </td>
-            </ng-container>
-            <!-- Столбец удалить -->
-            <ng-container matColumnDef="house_id">
-              <th mat-header-cell *matHeaderCellDef>
-                <mat-icon>delete</mat-icon>
-              </th>
-              <td mat-cell *matCellDef="let row">
-                <div
-
-                  class="tools"
-                  style="font-size: 20px; padding-left: 0px; cursor: pointer"
+                "
+              >
+                <mat-icon [ngStyle]="{ color: row.favorite ? '#ffbc00' : '' }"
+                  >star</mat-icon
                 >
-                  <button data-target="#md-tep-danger" mat-icon-button>
-                    <mat-icon color="warn">delete</mat-icon>
-                  </button>
-                </div>
-              </td>
-            </ng-container>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        <!-- Столбец удалить -->
+        <ng-container matColumnDef="house_id">
+          <th mat-header-cell *matHeaderCellDef>
+            <button *ngIf="tabDel" mat-icon-button (click)="openDel()">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <div
+              *ngIf="tabDel"
+              class="tools"
+              style="font-size: 20px; padding-left: 0px; cursor: pointer"
+            >
+              <button data-target="#md-tep-danger" mat-icon-button>
+                <mat-icon color="warn">delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="district_name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Район</th>
-              <td mat-cell *matCellDef="let row">{{ row.district_name }}</td>
-            </ng-container>
+        <ng-container matColumnDef="district_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Район</th>
+          <td mat-cell *matCellDef="let row">{{ row.district_name }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="address">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Адрес</th>
-              <td mat-cell *matCellDef="let row">{{ row.address }}</td>
-            </ng-container>
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Адрес</th>
+          <td mat-cell *matCellDef="let row">{{ row.address }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="category_name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Категория
-              </th>
-              <td mat-cell *matCellDef="let row">{{ row.category_name }}</td>
-            </ng-container>
+        <ng-container matColumnDef="category_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Категория</th>
+          <td mat-cell *matCellDef="let row">{{ row.category_name }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="total_damage">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Износ</th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.actual_defect_status === 6 ? row.total_damage : "" }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="total_damage">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Износ</th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.actual_defect_status === 6 ? row.total_damage : "" }}
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="status_name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Статус</th>
-              <td mat-cell *matCellDef="let row">{{ row.status_name }}</td>
-            </ng-container>
+        <ng-container matColumnDef="status_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Статус</th>
+          <td mat-cell *matCellDef="let row">{{ row.status_name }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="total_building_area">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Общая площадь
-              </th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.total_building_area }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="total_building_area">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Общая площадь
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.total_building_area }}
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="non_living_building_area">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Нежилая площадь функциональная
-              </th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.non_living_building_area }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="non_living_building_area">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Нежилая площадь функциональная
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.non_living_building_area }}
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="room_service_area">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Нежилая площадь общего имущества (уборочная площадь служебных
-                помещений)
-              </th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.room_service_area }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="room_service_area">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Нежилая площадь общего имущества (уборочная площадь служебных
+            помещений)
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.room_service_area }}
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="stairs_hall_area">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Площадь л/кл и коридоров
-              </th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.stairs_hall_area }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="stairs_hall_area">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Площадь л/кл и коридоров
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.stairs_hall_area }}
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="living_building_area">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Площадь жилых помещений
-              </th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.living_building_area }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="living_building_area">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Площадь жилых помещений
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.living_building_area }}
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="failure">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Аварийность
-              </th>
-              <td mat-cell *matCellDef="let row">
-                <!-- {{ boolStatus(row.failure) }} -->
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="failure">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Аварийность</th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{ boolStatus(row.failure) }} -->
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="management_company">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Управляющая организация
-              </th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.management_company }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="management_company">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Управляющая организация
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.management_company }}
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="residents_count">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Количество проживающих
-              </th>
-              <td mat-cell *matCellDef="let row">{{ row.residents_count }}</td>
-            </ng-container>
+        <ng-container matColumnDef="residents_count">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Количество проживающих
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.residents_count }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="flat_count">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Количество квартир
-              </th>
-              <td mat-cell *matCellDef="let row">{{ row.flat_count }}</td>
-            </ng-container>
+        <ng-container matColumnDef="flat_count">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Количество квартир
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.flat_count }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="culture">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>ОКН</th>
-              <td mat-cell *matCellDef="let row">
-                <!-- {{ boolStatus(row.culture) }} -->
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="culture">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ОКН</th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{ boolStatus(row.culture) }} -->
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="lifts">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Лифты</th>
-              <td mat-cell *matCellDef="let row">
-                <!-- {{ boolStatus(row.lifts) }} -->
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="lifts">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Лифты</th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{ boolStatus(row.lifts) }} -->
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="bdate">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Год постройки
-              </th>
-              <td mat-cell *matCellDef="let row">{{ row.bdate }}</td>
-            </ng-container>
+        <ng-container matColumnDef="bdate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Год постройки
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.bdate }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="storeys">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Этажность
-              </th>
-              <td mat-cell *matCellDef="let row">{{ row.storeys }}</td>
-            </ng-container>
+        <ng-container matColumnDef="storeys">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Этажность</th>
+          <td mat-cell *matCellDef="let row">{{ row.storeys }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="project_type">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Серия, тип проекта
-              </th>
-              <td mat-cell *matCellDef="let row">{{ row.project_type }}</td>
-            </ng-container>
+        <ng-container matColumnDef="project_type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Серия, тип проекта
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.project_type }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="heating_name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Отопление
-              </th>
-              <td mat-cell *matCellDef="let row">{{ row.heating_name }}</td>
-            </ng-container>
+        <ng-container matColumnDef="heating_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Отопление</th>
+          <td mat-cell *matCellDef="let row">{{ row.heating_name }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="hot_water_name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>ГВС</th>
-              <td mat-cell *matCellDef="let row">{{ row.hot_water_name }}</td>
-            </ng-container>
+        <ng-container matColumnDef="hot_water_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ГВС</th>
+          <td mat-cell *matCellDef="let row">{{ row.hot_water_name }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="coldwater">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>ХВС</th>
-              <td mat-cell *matCellDef="let row">
-                <!-- {{ boolStatus(row.coldwater) }} -->
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="coldwater">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ХВС</th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{ boolStatus(row.coldwater) }} -->
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="reconstruction_year">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Год реконструкции
-              </th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.reconstruction_year }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="reconstruction_year">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Год реконструкции
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.reconstruction_year }}
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="total_building_volume">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Строительный объем
-              </th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.total_building_volume }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="total_building_volume">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Строительный объем
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.total_building_volume }}
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="electro">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Эл-во</th>
-              <td mat-cell *matCellDef="let row">
-                <!-- {{ boolStatus(row.electro) }} -->
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="electro">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Эл-во</th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{ boolStatus(row.electro) }} -->
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="sewer">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Водоотв</th>
-              <td mat-cell *matCellDef="let row">
-                <!-- {{ boolStatus(row.sewer) }} -->
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="sewer">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Водоотв</th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{ boolStatus(row.sewer) }} -->
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="gas_name">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Газоснабжение
-              </th>
-              <td mat-cell *matCellDef="let row">{{ row.gas_name }}</td>
-            </ng-container>
+        <ng-container matColumnDef="gas_name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Газоснабжение
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.gas_name }}</td>
+        </ng-container>
 
-            <ng-container matColumnDef="pzu">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>ПЗУ</th>
-              <td mat-cell *matCellDef="let row">
-                <!-- {{ boolStatus(row.pzu) }} -->
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="pzu">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ПЗУ</th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{ boolStatus(row.pzu) }} -->
+          </td>
+        </ng-container>
 
-            <ng-container matColumnDef="appz">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>АППЗ</th>
-              <td mat-cell *matCellDef="let row">
-                <!-- {{ boolStatus(row.appz) }} -->
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="archive">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Архив МКД
-              </th>
-              <td mat-cell *matCellDef="let row">
-                <!-- {{ boolStatus(row.archive) }} -->
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="disabled_people_lifts_count">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                Количество подъемников для инвалидов
-              </th>
-              <td mat-cell *matCellDef="let row">
-                {{ row.disabled_people_lifts_count }}
-              </td>
-            </ng-container>
+        <ng-container matColumnDef="appz">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>АППЗ</th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{ boolStatus(row.appz) }} -->
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="archive">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Архив МКД</th>
+          <td mat-cell *matCellDef="let row">
+            <!-- {{ boolStatus(row.archive) }} -->
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="disabled_people_lifts_count">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            Количество подъемников для инвалидов
+          </th>
+          <td mat-cell *matCellDef="let row">
+            {{ row.disabled_people_lifts_count }}
+          </td>
+        </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-            <!-- <ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <!-- <ng-container>
               <tr
                 [ngStyle]="{
                   background:
@@ -310,16 +301,16 @@
                 [ngClass]="{ highlight: selectedRowIndex == row.house_id }"
               ></tr>
             </ng-template> -->
-          </table>
+      </table>
 
-          <mat-paginator
-            #paginator
-            [length]="totalNitem"
-            [pageSize]="10"
-            [pageSizeOptions]="[10, 25, 50, 100]"
-          >
-          </mat-paginator>
-        </div>
-      <!-- </div> -->
-    </ng-container>
-  </div>
+      <mat-paginator
+        #paginator
+        [length]="totalNitem"
+        [pageSize]="10"
+        [pageSizeOptions]="[10, 25, 50, 100]"
+      >
+      </mat-paginator>
+    </div>
+    <!-- </div> -->
+  </ng-container>
+</div>

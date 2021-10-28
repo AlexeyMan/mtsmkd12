@@ -5,6 +5,46 @@
   padding-right: var(--bs-gutter-x, 0.75rem);
   padding-left: var(--bs-gutter-x, 0.75rem);
 }
+.custom{
+  // background-color:whitesmoke;
+  padding-left: 0;
+}
+// .ng-select.custom {
+//   border:0px;
+//   min-height: 0px;
+//   border-radius: 0;
+// }
+.ng-select.custom ::ng-deep .ng-select-container {
+  // min-height: 0px;
+  border-radius: 3px;
+  padding-left: 10px;
+  // overflow: auto;
+  // margin-top: 2px;
+  min-height: 47px;
+  padding-right: 10px;
+  background-color: whitesmoke;
+}
+.ng-select.custom2 ::ng-deep .ng-select-container {
+  overflow: auto;
+}
+.ng-select.custom.ng-select-multiple::ng-deep .ng-select-container .ng-value-container .ng-value{
+  background-color: whitesmoke;
+  color: black;
+  padding: 0%;
+  // font-weight: 300;
+}
+.ng-select.custom.ng-select-multiple::ng-deep .ng-select-container .ng-value-container .ng-value .ng-value-icon{
+  color: rgb(255, 5, 5);
+  // background-color: whitesmoke;
+}
+.ng-select.custom.ng-select-multiple::ng-deep .ng-select-container .ng-value-container .ng-value .ng-value-label{
+  font-weight: initial;
+  // background-color: whitesmoke;
+}
+.ng-select.custom ::ng-deep .ng-select-container .ng-placeholder{
+  margin-top: 2px;
+  // background-color: antiquewhite;
+}
 // .mat-form-field-label-wrapper {
 //   top: -0.54375em;
 //   padding-top: .84375em;

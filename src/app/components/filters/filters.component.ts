@@ -24,6 +24,7 @@ import {
   startWith,
 } from "rxjs/operators";
 import { HeaderComponent } from '../header/header.component';
+import { NgSelectConfig } from '@ng-select/ng-select';
 
 const ownership_types: Ownershipform[] = [
   { id: 1, name: 'Государственная' },
@@ -120,16 +121,17 @@ export class FiltersComponent implements OnInit {
   columsSelectView: string[] = []; // выбранные для отображения колонки
   selectedDistricts = [];
   selectedStreet = [];
-  selectedUO = [];
+  selectedCompany = [];
 
   showError = false; // показывать ли сообщение об ошибке или нет. По умолчанию: false;
   errorMessage = ''; // настраиваемое сообщение об ошибке. По умолчанию: «Поле обязательно для заполнения».
 
   allmtypes: RefItem[] = [];
   outstreets: Street[] = [
-    { id: 1, name: 'Все', street_name_old: '' },
+    { id: 1, name: 'Все', street_name_old: '' , districts_ids: []}
   ];
-  allstreets: Street[] = this.outstreets;
+  // allstreets: Street[] =[];
+  // allstreets: Street[] = this.outstreets;
   // yearMask = [/[0-9]/, /[0-9]/, /[0-9]/, /[0-9]/];
 
   constructor(
@@ -139,8 +141,11 @@ export class FiltersComponent implements OnInit {
     private apiStore: LocalStorageService,
     private _snackBar: MatSnackBar,
     private loadMkd: TepTableComponent,
-    private apiHeader: HeaderComponent
+    private apiHeader: HeaderComponent,
+    private config: NgSelectConfig
   ) {
+    this.config.notFoundText = 'Запись не найдена';
+    this.config.appendTo = 'body';
   }
  // Развернуть меню
   onToggleDropdown() {
@@ -185,36 +190,55 @@ export class FiltersComponent implements OnInit {
 
 ///////////////////////////////////////////////
 ngOnInit(): void {
-    setTimeout(()=>{
-      this.filterRequest = this.apiStore.getStore("mainPageUserFilters");
-      if (this.apiStore.checkStore('mainPageFilters')) {
-        let data = this.apiStore.getStore("mainPageFilters")
-        this.allstreets = data[0];
-        this.filters = data[1];
-        this.allmtypes = (data[2] as { [key: string]: any })['data'];
-        this.currType = (data[3] as { [key: string]: any })['data'];
-        this.capType = data[4];
-        this.columsSelectView = this.filterRequest.columns;
+  this.filterRequest = this.apiStore.getStore("mainPageUserFilters");
+  // this.filterBindValues();
+  setTimeout(()=>{
+  if (this.apiStore.checkStore('mainPageFilters')) {
+    let data = this.apiStore.getStore("mainPageFilters")
+    // this.allstreets = data[0];
+    this.filters = data[1];
+    this.allmtypes = (data[2] as { [key: string]: any })['data'];
+    this.currType = (data[3] as { [key: string]: any })['data'];
+    this.capType = data[4];
+    this.columsSelectView = this.filterRequest.columns;
+    this.outstreets = this.apiStore.getDistrictStreets(this.filterRequest.district);
+    //  this.districtChange(this.filterRequest.district);
         //  this.columsSelectView = ["show_district_name","show_address"];
         this.filterBindValues();
+
         // this.apiStore.setStore("mainPageFilters", results)
       } else this.loadAllFilters();
     });
   }
 
-
+  // distStreets!: string[];
 //запрос улиц по району
-  districtChange(dist: any) {
-    this.common.getStreetsByDistrict(dist).subscribe((p) => {
-      this.allstreets = p;
-    });
-  }
+  // districtChange(dist: any) {
+  //   this.outstreets = [];
+  //   if(dist.length){
+  //     dist.forEach((el:any) => {
+  //       this.allstreets.forEach(st=>{
+  //         if(st.districts_ids.find(st=>st==el)){
+  //           if(!this.outstreets.find(os=>os.id == st.id)){
+  //             this.outstreets.push(st)
+  //           }
+  //         }
+  //       })
+  //     });
+  //   } else {
+  //     this.outstreets = this.allstreets
+  //   }
+  //   // this.outstreets = this.allstreets
+  //   // this.common.getStreetsByDistrict(dist).subscribe((p) => {
+  //   //   this.allstreets = p;
+  //   // });
+  // }
 
 // Выбор района
 selectDistrict(selected: any) {
   if(this.selectedDistricts !== selected){
-    this.selectedDistricts = selected;
-    this.districtChange(this.selectedDistricts);
+    // this.selectedDistricts = selected;
+    this.outstreets = this.apiStore.getDistrictStreets(selected.value);
     this.setChangeFilters();
   }
 }
@@ -225,11 +249,11 @@ selectStreet(selected: any) {
 }
 // Выбор уо
 selectUO(selected: any) {
-  this.selectedUO = selected;
+  // this.selectedCompany = selected;
   this.setChangeFilters();
 }
 setColumsView(selected: any) {
-  this.columsSelectView = selected;
+  // this.columsSelectView = selected;
   this.setChangeFilters()
 }
 // workControl2 = new FormControl();
@@ -251,12 +275,16 @@ setColumsView(selected: any) {
 //   this.crepView = selected;
 //   this.setChangeFilters();
 // }
+
 // Очистить фильтр
+unselectAll() {
+  this.selectedStreet = [];
+}
 clearFilter() {
   this.selectedDistricts = [];
   this.selectedStreet = [];
-  this.selectedUO = [];
-  this.columsSelectView = [];
+  this.selectedCompany = [];
+  // this.columsSelectView = [];
 }
 
 //изменение катигорий
@@ -278,14 +306,17 @@ clearFilter() {
       this.refApi.getCurrRepairApiRefList("workType&per_page=-1"),
       this.refApi.getCapRepairApiRefList(),
     ]).subscribe((results) => {
-      this.allstreets = results[0];
+      // this.outstreets = results[0];
       this.filters = results[1];
       this.allmtypes = (results[2] as { [key: string]: any })['data'];
       this.currType = (results[3] as { [key: string]: any })['data'];
       this.capType = results[4];
       this.apiStore.setStore("mainPageFilters", results)
+      // this.apiStore.getDistrictStreets([]);
       this.filterBindValues()
       this.columsSelectView = this.filterRequest.columns;
+      this.outstreets = this.apiStore.getDistrictStreets(this.filterRequest.district);
+      // this.districtChange([]);
      // this.columsSelectView = []; // выбранные для отображения колонки
 
       // this.filteredOptions2 = this.workControl2.valueChanges.pipe(
@@ -318,7 +349,7 @@ clearFilter() {
   selectedHeating = [];
   selectedHotWater = [];
   selectedGas = [];
-  selectedCompany = [];
+  // selectedCompany = [];
   selectedMaterials = [];
   selectedStatuses = [];
   selectedDefectRegister = [];
@@ -522,6 +553,7 @@ clearFilter() {
 
     this.filterRequest.columns = this.columsSelectView;
   }
+  // свернуть развернуть
   cBtn:boolean = true;
   checkBtn(){
     return this.cBtn=!this.cBtn;

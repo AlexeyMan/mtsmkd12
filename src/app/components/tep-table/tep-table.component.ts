@@ -39,6 +39,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FavoritTabsComponent } from '../favorit-tabs/favorit-tabs.component';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   templateUrl: 'tep-table.component.html',
@@ -48,10 +49,8 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource<Mkdlistitem>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  @ViewChild(FavoritTabsComponent, {static: false})
-
-  private favoriteComp: FavoritTabsComponent|undefined;
-
+  @ViewChild(FavoritTabsComponent, { static: false })
+  private favoriteComp: FavoritTabsComponent | undefined;
 
   // filters!: TepListFilter;
   // @ViewChild(FiltersComponent)
@@ -62,20 +61,23 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   options: Options | undefined;
   reconnectTableData: boolean = false;
   // filters: ListFilter;
-  displayedColumns = [
-    'favorite',
-    'house_id',
-    'district_name',
-    'address',
-    'category_name',
-    'total_damage',
-    'status_name',
-    'total_building_area',
-    'living_building_area',
-    'management_company',
-    'heating_name',
-    'bdate',
+  displayedColumns:string[] = [
+    // 'favorite',
+    // 'house_id',
+    // 'district_name',
+    // 'address',
+    // 'category_name',
+    // 'total_damage',
+    // 'status_name',
+    // 'total_building_area',
+    // 'living_building_area',
+    // 'management_company',
+    // 'heating_name',
+    // 'bdate',
   ];
+  drop(event: CdkDragDrop<Mkdlistitem>) {
+    moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
+  }
   totalDataTable: number = 0;
   tableLocal: any = [];
 
@@ -95,12 +97,12 @@ export class TepTableComponent implements AfterViewInit, OnInit {
 
       //TODO заменить после исправления бэк
       // let key: string;
-      for (let key in this.filters) {
-        if (this.filters[key] === -1) {
-          this.filters[key] = 'null';
-        }
-      }
-      this.filters.columns = ["favorite","house_id",...this.filters.columns]
+      // for (let key in this.filters) {
+      //   if (this.filters[key] === -1) {
+      //     this.filters[key] = 'null';
+      //   }
+      // }
+      // this.filters.columns = ["favorite","house_id",...this.filters.columns]
     }
     if (this.apiStore.checkStore('mainPageTableData')) {
       this.filters = this.apiStore.getStore('mainPageUserFilters');
@@ -108,8 +110,6 @@ export class TepTableComponent implements AfterViewInit, OnInit {
       this.dataSource = new MatTableDataSource(tableStore);
       this.displayedColumns = this.filters.columns;
     } else {
-      //TODO
-      // this.filters = this.apiStore.getStore("userFilters");
       this.loadMkdListItems(this.filters);
     }
 
@@ -129,25 +129,33 @@ export class TepTableComponent implements AfterViewInit, OnInit {
       );
     }
   }
-// открываем избранные
-btnOpenFav:boolean = true;
-  openFav(event:any){
+  // на полный экран таблицу
+  resTabs: boolean = false;
+  resizeTable(){
+    this.resTabs = !this.resTabs;
+  }
+  // открываем избранные
+  btnOpenFav: boolean = true;
+  openFav(event: any) {
     this.btnOpenFav = event;
   }
-
+  // открываем колонку удалить
+  tabDel: boolean = false;
+  openDel() {
+    this.tabDel = !this.tabDel;
+  }
   // Добавляем в избранные дом
-  addTochild(event:any){
+  addTochild(event: any) {
     let id: number = event.id;
     let isFavorite: boolean = event.isFavorite;
-    this.addToFavourites(id, isFavorite );
+    this.addToFavourites(id, isFavorite);
     console.log(event);
   }
   load = false;
   addToFavourites(id: number, isFavorite: boolean) {
-    if(!this.load){
-      let favEl = this.dataSource.data.find(el => el.house_id == id)
-      if(favEl)
-      favEl.favorite = !isFavorite
+    if (!this.load) {
+      let favEl = this.dataSource.data.find((el) => el.house_id == id);
+      if (favEl) favEl.favorite = !isFavorite;
       this.load = true;
     }
 
@@ -157,10 +165,9 @@ btnOpenFav:boolean = true;
         this.load = false;
       },
       (error) => {
-        let favEl = this.dataSource.data.find(el => el.house_id == id)
-        if(favEl)
-          favEl.favorite = isFavorite
-          this.load = false;
+        let favEl = this.dataSource.data.find((el) => el.house_id == id);
+        if (favEl) favEl.favorite = isFavorite;
+        this.load = false;
         // this._snackBar.open(JSON.stringify(error), undefined, {
         //   panelClass: "snackbar-error",
         // });

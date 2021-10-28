@@ -16,10 +16,11 @@ import { TepTableComponent } from "./components/tep-table/tep-table.component";
 // material
 import { MaterialModule } from "./material-module";
 import { FiltersComponent } from './components/filters/filters.component';
-import { SelectAutocompleteModule } from 'mat-select-autocomplete';
 import { ReportsComponent } from './components/reports/reports.component';
-import { FavoritTabsComponent } from './components/favorit-tabs/favorit-tabs.component'
-
+import { FavoritTabsComponent } from './components/favorit-tabs/favorit-tabs.component';
+import {MatPaginatorIntl} from "@angular/material/paginator";
+import { getRussianPaginatorIntl } from "./_helpers/russian-paginator";
+import { NgSelectModule } from '@ng-select/ng-select';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,13 +39,14 @@ import { FavoritTabsComponent } from './components/favorit-tabs/favorit-tabs.com
     HttpClientModule,
     BrowserAnimationsModule,
     MaterialModule,
-    SelectAutocompleteModule,
+    NgSelectModule,
   ],
   providers: [
     AuthGuard,
     { provide: LOCALE_ID, useValue: "ru-Ru" }, // replace "en-US" with your locale
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+    { provide: MatPaginatorIntl, useValue: getRussianPaginatorIntl() },
   ],
   exports: [ FiltersComponent],
   bootstrap: [AppComponent]

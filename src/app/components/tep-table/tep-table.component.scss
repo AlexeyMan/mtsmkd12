@@ -2,6 +2,12 @@
 .mat-column {
 height: 30px;
 }
+// td.mat-cell{
+//   text-align: center;
+// }
+// th.mat-header-cell{
+//   text-align: center;
+// }
 .mat-column-category_name {
   max-width: 250px;
   min-width: 215px;
@@ -9,17 +15,20 @@ height: 30px;
 .mat-column-address{
   min-width: 250px;
 }
+.mat-column-non_living_building_area td{
+  text-align: center;
+}
 .mat-column-management_company{
-  min-width: 180px;
+  min-width: 210px;
 }
 .mat-column-status_name{
-  min-width: 180px;
+  min-width: 120px;
 }
 .mat-cell {
   font-family: auto;
 }
 .tab-name{
-  margin: 0;
+  // margin: 0;
   text-align: center;
   padding-top: 20px;
 }
