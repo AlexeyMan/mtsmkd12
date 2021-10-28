@@ -14,7 +14,6 @@ import {
 import { MatAccordion } from '@angular/material/expansion';
 import { FormControl } from '@angular/forms';
 import { ListFilter, RefItem } from 'src/app/_models/filters';
-import { SelectAutocompleteComponent } from 'mat-select-autocomplete';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TepTableComponent } from '../tep-table/tep-table.component';
 import {
@@ -101,8 +100,6 @@ export class FiltersComponent implements OnInit {
   letter: any;
   house_construction: any;
   @ViewChild(MatAccordion) accordion!: MatAccordion;
-  @ViewChild(SelectAutocompleteComponent)
-  multiSelect!: SelectAutocompleteComponent;
   districts = new FormControl();
   streets = new FormControl();
   selectedCategories = [];
@@ -149,7 +146,7 @@ export class FiltersComponent implements OnInit {
   }
  // Развернуть меню
   onToggleDropdown() {
-    this.multiSelect.toggleDropdown();
+    // this.multiSelect.toggleDropdown();
   }
   closeFilters(){
     this.apiHeader.openFiltersComponent();
