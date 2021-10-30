@@ -1,5 +1,6 @@
+<div class="row col-md-12" style="height: 60px;"></div>
 <mat-toolbar *ngIf="isLoggedIn$ | async" color="primary" class="mai-top-header">
-    <mat-toolbar-row style="max-width: 83rem">
+    <mat-toolbar-row style="max-width: 80rem">
       <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Меню">
         <mat-icon>menu</mat-icon>
       </button>
@@ -12,7 +13,7 @@
         </button>
       <button mat-menu-item (click)="openFiltersComponent()">
         <mat-icon style="color: cadetblue" aria-hidden="false" aria-label="Фильтр">find_in_page</mat-icon>
-        Фильтр {{ btnOpen }}
+        Фильтр
       </button>
       <button mat-menu-item  (click)="openReportsComponent();">
         <mat-icon style="color: darkslateblue;" aria-hidden="false" aria-label="Отчет">assignment</mat-icon>

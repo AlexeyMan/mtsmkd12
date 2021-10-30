@@ -129,7 +129,7 @@ export interface UserInfo {
   roles: string[];
   departments: UserInfoDepartment[];
   groups: UserInfoGroups[];
-
+  settings: any;
   username: string;
   phone: string;
   avatar: string;

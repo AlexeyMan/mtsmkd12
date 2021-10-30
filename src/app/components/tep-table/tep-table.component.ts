@@ -9,6 +9,7 @@ import {
   Observable,
   of,
   of as observableOf,
+  forkJoin,
 } from 'rxjs';
 import {
   catchError,
@@ -40,6 +41,8 @@ import {
 } from '@angular/core';
 import { FavoritTabsComponent } from '../favorit-tabs/favorit-tabs.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CommonService } from 'src/app/_services/common.service';
+import { RefserviceService } from 'src/app/_services/refservice.service';
 
 @Component({
   templateUrl: 'tep-table.component.html',
@@ -83,7 +86,9 @@ export class TepTableComponent implements AfterViewInit, OnInit {
 
   constructor(
     private api: TeplistService,
-    private apiStore: LocalStorageService
+    private apiStore: LocalStorageService,
+    private common: CommonService,
+    private refApi: RefserviceService,
   ) {
     if (localStorage.mainPageTableData) {
       this.reconnectTableData = true;
@@ -122,11 +127,18 @@ export class TepTableComponent implements AfterViewInit, OnInit {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       setTimeout(
-        () =>
-          (this.totalDataTable = Number(
-            this.apiStore.getStore('mainPageTotal')
-          ))
+        () => {
+          if (this.apiStore.checkStore('mainPageTotal')) {
+            this.totalDataTable = Number(this.apiStore.getStore('mainPageTotal'))
+          }else{
+            this.totalDataTable = 0;
+          }
+
+        }
       );
+    }
+    if (!this.apiStore.checkStore("mainPageFilters")){
+      this.loadAllFilters();
     }
   }
   // на полный экран таблицу
@@ -149,7 +161,7 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     let id: number = event.id;
     let isFavorite: boolean = event.isFavorite;
     this.addToFavourites(id, isFavorite);
-    console.log(event);
+    // console.log(event);
   }
   load = false;
   addToFavourites(id: number, isFavorite: boolean) {
@@ -174,14 +186,6 @@ export class TepTableComponent implements AfterViewInit, OnInit {
       }
     );
   }
-  // }
-  // if(this.reconnectTableData){
-  // this.totalDataTable = Number(this.apiStore.getStore("mainPageTotal"));
-  // loadPage() {
-  //   this.dataSource.paginator = this.paginator;
-  //   this.dataSource.sort = this.sort;
-  //   // setTimeout(() => this.totalDataTable = Number(localStorage.getItem("mainPageTotal")));
-  // }
 
   filters: TepListFilter = {
     appz: 'null',
@@ -245,92 +249,11 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     current_repair: '',
   };
 
-  //     filters = <TepListFilter> <unknown>{
-  //       appz: "null",
-  //       archive: false,
-  //       cap_repair: "null",
-  //       category: [],
-  //       coldwater: "null",
-  //       columns: [
-  //         0, "favorite",
-  //     1, "house_id",
-  //     2, "district_name",
-  //     3, "address",
-  //     4, "category_name",
-  //     5, "total_damage",
-  //     6, "status_name",
-  //     7, "total_building_area",
-  //     8, "living_building_area",
-  //   ],
-  //   culture: "null",
-  //   curr_repair: "null",
-  //   district: [],
-  //   failure: "null",
-  //   gas_name: [],
-  //   heating: [],
-  //   hot_water: [],
-  //   lifts: "null",
-  //   limit: 100,
-  //   management_company: [],
-  //   management_form: [],
-  //   materials: [],
-  //   ownership: [],
-  //   pageIndex: 1,
-  //   power: "null",
-  //   pzu: "null",
-  //   sewer: "null",
-  //   sortDirection: "address",
-  //   statuses: [],
-  //   statusesDR: [],
-  //   street: [],
-  //   // district = [],
-  //   // street: string[];
-  //   house_number: "",
-  //   house_building: "",
-  //   house_letter: "",
-  //   house_construction: '',
-  //   selectedStreet: [],
-  //   project_type: "",
-  //   storeys_from: 1,
-  //   storeys_to: 0,
-  //   bdate_from: 0,
-  //   bdate_to: 0,
-  //   rdate_to: 0,
-  //   rdate_from: 0,
-  //   damage_from: 0,
-  //   damage_to: 0,
-  //   defect_element_name: 0,
-  //   disabled_people_lifts_count: "null",
-  //   capital_repair_to: "",
-  //   capital_repair_from: 0,
-
-  //   current_repair_to: 0,
-  //   current_repair_from: 0,
-
-  //   capital_repair: '',
-  //   current_repair: '',
-  // }
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
-  // loadTepPage() {
-  //   this.loadMkdListItems(this.filters);
-  // }
-  aaa = [
-    {
-      favorite: false,
-      house_id: 667098,
-      district_name: 'Адмиралтейский',
-      address: 'qqqqqq',
-      category_name: 'Дореволюционной постройки, прошедшие кап',
-      total_damage: 1,
-      status_name: 'утвержден',
-      total_building_area: '21',
-      living_building_area: '11',
-    },
-  ];
   loadMkdListItems(filter: TepListFilter) {
     // let filters = this.apiStore.getStore("userFilters");
-    this.loadingSubject.next(true);
+    // this.loadingSubject.next(true);
     this.api
       .getTepListEntries(filter)
       .pipe(catchError(() => of([])))
@@ -348,9 +271,26 @@ export class TepTableComponent implements AfterViewInit, OnInit {
           this.totalDataTable = this.options!['total'];
           this.displayedColumns = mainUserFilters.columns;
           // this.loadPage();
+          // this.loadAllFilters();
         },
         (error) => {}
       );
-    finalize(() => this.loadingSubject.next(false));
+    // finalize(() => {  this.loadingSubject.next(false);});
   }
+
+  loadAllFilters() {
+    setTimeout(()=>{
+      forkJoin([
+        this.common.getStreetsByDistrict([]),
+        this.api.getFilters(),
+        this.refApi.getRefList("5"),
+        this.refApi.getCurrRepairApiRefList("workType&per_page=-1"),
+        this.refApi.getCapRepairApiRefList(),
+        this.refApi.getConstructionList(),
+        this.refApi.getRefList("12"),
+      ]).subscribe((results) => {
+        this.apiStore.setStore("mainPageFilters", results)
+      });
+    },1000)
+    }
 }

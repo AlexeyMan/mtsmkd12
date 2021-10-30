@@ -10,9 +10,26 @@
   padding-left: 0;
 }
 // .ng-select.custom {
-//   border:0px;
-//   min-height: 0px;
-//   border-radius: 0;
+  //   border:0px;
+  //   min-height: 0px;
+  //   border-radius: 0;
+  // }
+//   .ng-select
+//   .ng-dropdown-panel
+//   .ng-dropdown-panel-items
+//   .ng-option.ng-option-marked {
+//   padding-left: 100px;
+//   height: 700px;
+// }
+// .custom .ng-dropdown-panel  .ng-dropdown-panel-items{
+//   max-height: 350px;
+// }
+// .ng-dropdown-panel .scroll-host ::ng-deep{
+//   min-height: 255px;
+// }
+// .ng-dropdown-panel .ng-select-multiple .custom .custom2 .ng-star-inserted .ng-select-bottom ::ng-deep {
+//     min-width: min-content;
+//     min-width: min-content !important;
 // }
 .ng-select.custom ::ng-deep .ng-select-container {
   // min-height: 0px;

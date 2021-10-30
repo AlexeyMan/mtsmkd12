@@ -1,6 +1,10 @@
 <h1 class="tab-name">Избранные карточки МКД</h1>
 <!-- Таблица -->
-<div class="container">
+<div
+  class="container"
+  style="position: relative; padding-bottom: 58px"
+  [style.maxWidth]="resTabs ? '98%' : ''"
+>
   <ng-container>
     <!-- <div class="panel panel-border-color panel-border-color-info"> -->
     <div class="panel-body table-container">
@@ -14,10 +18,18 @@
             </div>
           </div> -->
 
-      <table mat-table #table [dataSource]="dataSource" matSort>
+      <table
+        mat-table
+        #table
+        [dataSource]="dataSource"
+        cdkDropList
+        cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="drop($event)"
+        matSort
+      >
         <!-- Столбец любимых -->
         <ng-container matColumnDef="favorite">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-header-cell cdkDrag *matHeaderCellDef>
             <button mat-icon-button (click)="openDel()">
               <mat-icon>star</mat-icon>
             </button>
@@ -43,7 +55,7 @@
         </ng-container>
         <!-- Столбец удалить -->
         <ng-container matColumnDef="house_id">
-          <th mat-header-cell *matHeaderCellDef>
+          <th mat-header-cell cdkDrag *matHeaderCellDef>
             <button *ngIf="tabDel" mat-icon-button (click)="openDel()">
               <mat-icon>delete</mat-icon>
             </button>
@@ -62,34 +74,44 @@
         </ng-container>
 
         <ng-container matColumnDef="district_name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Район</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Район
+          </th>
           <td mat-cell *matCellDef="let row">{{ row.district_name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="address">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Адрес</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Адрес
+          </th>
           <td mat-cell *matCellDef="let row">{{ row.address }}</td>
         </ng-container>
 
         <ng-container matColumnDef="category_name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Категория</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Категория
+          </th>
           <td mat-cell *matCellDef="let row">{{ row.category_name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="total_damage">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Износ</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Износ
+          </th>
           <td mat-cell *matCellDef="let row">
             {{ row.actual_defect_status === 6 ? row.total_damage : "" }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="status_name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Статус</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Статус
+          </th>
           <td mat-cell *matCellDef="let row">{{ row.status_name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="total_building_area">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Общая площадь
           </th>
           <td mat-cell *matCellDef="let row">
@@ -98,7 +120,7 @@
         </ng-container>
 
         <ng-container matColumnDef="non_living_building_area">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Нежилая площадь функциональная
           </th>
           <td mat-cell *matCellDef="let row">
@@ -107,7 +129,7 @@
         </ng-container>
 
         <ng-container matColumnDef="room_service_area">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Нежилая площадь общего имущества (уборочная площадь служебных
             помещений)
           </th>
@@ -117,7 +139,7 @@
         </ng-container>
 
         <ng-container matColumnDef="stairs_hall_area">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Площадь л/кл и коридоров
           </th>
           <td mat-cell *matCellDef="let row">
@@ -126,7 +148,7 @@
         </ng-container>
 
         <ng-container matColumnDef="living_building_area">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Площадь жилых помещений
           </th>
           <td mat-cell *matCellDef="let row">
@@ -135,14 +157,16 @@
         </ng-container>
 
         <ng-container matColumnDef="failure">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Аварийность</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Аварийность
+          </th>
           <td mat-cell *matCellDef="let row">
             <!-- {{ boolStatus(row.failure) }} -->
           </td>
         </ng-container>
 
         <ng-container matColumnDef="management_company">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Управляющая организация
           </th>
           <td mat-cell *matCellDef="let row">
@@ -151,71 +175,77 @@
         </ng-container>
 
         <ng-container matColumnDef="residents_count">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Количество проживающих
           </th>
           <td mat-cell *matCellDef="let row">{{ row.residents_count }}</td>
         </ng-container>
 
         <ng-container matColumnDef="flat_count">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Количество квартир
           </th>
           <td mat-cell *matCellDef="let row">{{ row.flat_count }}</td>
         </ng-container>
 
         <ng-container matColumnDef="culture">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>ОКН</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>ОКН</th>
           <td mat-cell *matCellDef="let row">
             <!-- {{ boolStatus(row.culture) }} -->
           </td>
         </ng-container>
 
         <ng-container matColumnDef="lifts">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Лифты</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Лифты
+          </th>
           <td mat-cell *matCellDef="let row">
             <!-- {{ boolStatus(row.lifts) }} -->
           </td>
         </ng-container>
 
         <ng-container matColumnDef="bdate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Год постройки
           </th>
           <td mat-cell *matCellDef="let row">{{ row.bdate }}</td>
         </ng-container>
 
         <ng-container matColumnDef="storeys">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Этажность</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Этажность
+          </th>
           <td mat-cell *matCellDef="let row">{{ row.storeys }}</td>
         </ng-container>
 
         <ng-container matColumnDef="project_type">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Серия, тип проекта
           </th>
           <td mat-cell *matCellDef="let row">{{ row.project_type }}</td>
         </ng-container>
 
         <ng-container matColumnDef="heating_name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Отопление</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Отопление
+          </th>
           <td mat-cell *matCellDef="let row">{{ row.heating_name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="hot_water_name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>ГВС</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>ГВС</th>
           <td mat-cell *matCellDef="let row">{{ row.hot_water_name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="coldwater">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>ХВС</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>ХВС</th>
           <td mat-cell *matCellDef="let row">
             <!-- {{ boolStatus(row.coldwater) }} -->
           </td>
         </ng-container>
 
         <ng-container matColumnDef="reconstruction_year">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Год реконструкции
           </th>
           <td mat-cell *matCellDef="let row">
@@ -224,7 +254,7 @@
         </ng-container>
 
         <ng-container matColumnDef="total_building_volume">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Строительный объем
           </th>
           <td mat-cell *matCellDef="let row">
@@ -233,47 +263,55 @@
         </ng-container>
 
         <ng-container matColumnDef="electro">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Эл-во</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Эл-во
+          </th>
           <td mat-cell *matCellDef="let row">
             <!-- {{ boolStatus(row.electro) }} -->
           </td>
         </ng-container>
 
         <ng-container matColumnDef="sewer">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Водоотв</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Водоотв
+          </th>
           <td mat-cell *matCellDef="let row">
             <!-- {{ boolStatus(row.sewer) }} -->
           </td>
         </ng-container>
 
         <ng-container matColumnDef="gas_name">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Газоснабжение
           </th>
           <td mat-cell *matCellDef="let row">{{ row.gas_name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="pzu">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>ПЗУ</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>ПЗУ</th>
           <td mat-cell *matCellDef="let row">
             <!-- {{ boolStatus(row.pzu) }} -->
           </td>
         </ng-container>
 
         <ng-container matColumnDef="appz">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>АППЗ</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            АППЗ
+          </th>
           <td mat-cell *matCellDef="let row">
             <!-- {{ boolStatus(row.appz) }} -->
           </td>
         </ng-container>
         <ng-container matColumnDef="archive">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Архив МКД</th>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
+            Архив МКД
+          </th>
           <td mat-cell *matCellDef="let row">
             <!-- {{ boolStatus(row.archive) }} -->
           </td>
         </ng-container>
         <ng-container matColumnDef="disabled_people_lifts_count">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header>
             Количество подъемников для инвалидов
           </th>
           <td mat-cell *matCellDef="let row">
@@ -283,6 +321,11 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" style="text-align: center" colspan="10">
+            Нет избранных карточек
+          </td>
+        </tr>
         <!-- <ng-container>
               <tr
                 [ngStyle]="{
@@ -302,8 +345,15 @@
               ></tr>
             </ng-template> -->
       </table>
-
+      <button
+        (click)="resizeTable()"
+        mat-icon-button
+        style="position: absolute; bottom: 10px; left: 32px"
+      >
+        <mat-icon style="color: cornflowerblue">sync_alt</mat-icon>
+      </button>
       <mat-paginator
+        style="position: absolute; bottom: 0%; right: 3%"
         #paginator
         [length]="totalNitem"
         [pageSize]="10"
@@ -314,3 +364,4 @@
     <!-- </div> -->
   </ng-container>
 </div>
+<div class="row col-md-12" style="height: 100px;"></div>

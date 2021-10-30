@@ -24,6 +24,20 @@ import { Statuses } from "../_models/filters";
 export class CommonService {
   constructor(private http: HttpClient, private log: ConsoleLoggerService) {}
 
+//Сохранение фильтра в базу данных
+saveDbFilters(allFilters:any):Observable<any>{
+    return this.http
+      .post<any>(AppSettings.API_ENDPOINT + "common/user-filters",  { data:{filters: allFilters} } )
+      .pipe(
+         map((res) => {
+          return res;
+        }),
+        catchError((error) => {
+          return throwError("Something went wrong!");
+        })
+      );
+    }
+
   getCommonInfo(house_id: number): Observable<HouseInfo> {
     return this.http
       .get<HouseInfo>(

@@ -65,8 +65,8 @@ export interface Categories {
 }
 
 export interface Statuses {
-    status_id: number;
-    status_name: string;
+    statusId: number;
+    statusName: string;
     alias: string;
 }
 
