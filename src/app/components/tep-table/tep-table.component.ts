@@ -36,6 +36,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Input,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -43,6 +44,9 @@ import { FavoritTabsComponent } from '../favorit-tabs/favorit-tabs.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CommonService } from 'src/app/_services/common.service';
 import { RefserviceService } from 'src/app/_services/refservice.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteDialogComponent } from '../dialog/delete-tep-dialog/delete-tep-dialog.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   templateUrl: 'tep-table.component.html',
@@ -54,7 +58,8 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(FavoritTabsComponent, { static: false })
   private favoriteComp: FavoritTabsComponent | undefined;
-
+  loadData = true;
+  loadFiltrs = true;
   // filters!: TepListFilter;
   // @ViewChild(FiltersComponent)
   // private counterComponent: FiltersComponent|undefined;
@@ -89,13 +94,59 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     private apiStore: LocalStorageService,
     private common: CommonService,
     private refApi: RefserviceService,
+    public dialog: MatDialog,
+    private _snackBar: MatSnackBar
   ) {
     if (localStorage.mainPageTableData) {
       this.reconnectTableData = true;
       // this.totalDataTable = Number(localStorage.getItem("mainPageTotal"));
     }
   }
+  //Износ по сроку
+  demageTime() {
+    let data = {
+      header: "Износ по сроку",
+      message: "Подтвердите пересчет износа по сроку эксплуатации",
+    };
+    if(this.apiStore.checkStore("mainPageUserFilters")) {
+      let filter = this.apiStore.getStore("mainPageUserFilters")
+      let dialogRef = this.dialog.open(DeleteDialogComponent, {
+        data: data,
+        width: "500px",
+      });
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.loadData = true;
+          this.api.setDemageTime(filter).subscribe(
+            (res) => {
+              this.loadData = false;
+              this._snackBar.open(res.message, undefined, {
+                verticalPosition: 'top',
+                duration: 2000,
+                panelClass: "snackbar-success",
+              });
+            },
+            (error) => {
+              this.loadData = false;
+              this._snackBar.open("Ошибка операции износ по сроку", undefined, {
+                verticalPosition: 'top',
+                duration: 2000,
+                panelClass: "snackbar-error",
+              });
+            }
+          );
+        }
+      });
+    } else {
+      this._snackBar.open("Ошибка загрузки фильтра", undefined, {
+        panelClass: "snackbar-error",
+        verticalPosition: 'top',
+                duration: 2000,
+      });
+    }
+  }
   ngOnInit() {
+    this.loadData = true;
     // this.apiStore.setStore("mainPageUserFilters", mainUserFilters);
     if (this.apiStore.checkStore('userFilters')) {
       this.filters = this.apiStore.getStore('userFilters');
@@ -114,6 +165,8 @@ export class TepTableComponent implements AfterViewInit, OnInit {
       let tableStore = this.apiStore.getStore('mainPageTableData');
       this.dataSource = new MatTableDataSource(tableStore);
       this.displayedColumns = this.filters.columns;
+      this.loadData = false;
+      this.loadFiltrs = false;
     } else {
       this.loadMkdListItems(this.filters);
     }
@@ -252,6 +305,7 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   loadMkdListItems(filter: TepListFilter) {
+      this.loadData = true;
     // let filters = this.apiStore.getStore("userFilters");
     // this.loadingSubject.next(true);
     this.api
@@ -270,6 +324,7 @@ export class TepTableComponent implements AfterViewInit, OnInit {
           this.dataSource.sort = this.sort;
           this.totalDataTable = this.options!['total'];
           this.displayedColumns = mainUserFilters.columns;
+          this.loadData = false;
           // this.loadPage();
           // this.loadAllFilters();
         },
@@ -280,17 +335,72 @@ export class TepTableComponent implements AfterViewInit, OnInit {
 
   loadAllFilters() {
     setTimeout(()=>{
+      this.loadFiltrs = true;
       forkJoin([
         this.common.getStreetsByDistrict([]),
         this.api.getFilters(),
         this.refApi.getRefList("5"),
         this.refApi.getCurrRepairApiRefList("workType&per_page=-1"),
         this.refApi.getCapRepairApiRefList(),
-        this.refApi.getConstructionList(),
+        this.refApi.getConstructionList(), //конструктивные элементы
         this.refApi.getRefList("12"),
       ]).subscribe((results) => {
+        this.loadFiltrs = false;
         this.apiStore.setStore("mainPageFilters", results)
       });
     },1000)
+  }
+
+  groupings = [
+    { name: "Район", value: "district", enabled: true },
+    { name: "Категория", value: "category", enabled: true },
+    { name: "Управляющая организация", value: "organization", enabled: true },
+    { name: "Износ", value: "wear", enabled: true },
+  ];
+    exportExcel() {
+      // let data: any = {};
+      // data.sortedGroups = this.groupings
+      //   .map((x) => {
+      //     if (this.selectedGroupings.includes(x.value)) {
+      //       return x.value;
+      //     }
+      //     return 0;
+      //   })
+      //   .filter((f) => f != 0);
+      // if (data.sortedGroups.length > 0 || this.addressGroup) {
+      //   data.filter = this.tfilter;
+      //   data.fields = this.resultsFieldsSelected;
+      //   data.addressGroup = this.addressGroup;
+      //   data.outputType = "xlsx";
+      //   this.api.exportExcel(data).subscribe(
+      //     (res) => {
+      //       if (res.size > 20) {
+      //         console.log("start download:", res);
+      //         const url = window.URL.createObjectURL(res);
+      //         const a = document.createElement("a");
+      //         document.body.appendChild(a);
+      //         a.setAttribute("style", "display: none");
+      //         a.href = url;
+      //         a.download = "stat.xlsx";
+      //         a.click();
+      //         window.URL.revokeObjectURL(url);
+      //         a.remove();
+      //       }
+      //     },
+      //     (error) => {
+      //       this._snackBar.open(JSON.stringify(error), undefined, {
+      //         panelClass: "snackbar-error",
+      //       });
+      //       console.log("download error:");
+      //     }
+      //   );
+      // } else
+      //   this._snackBar.open(
+      //     '"Группировки" либо "Адрес" должны быть заполнены!',
+      //     undefined,
+      //     {
+      //       panelClass: "snackbar-warning",
+      //     }
+      //   );
     }
 }

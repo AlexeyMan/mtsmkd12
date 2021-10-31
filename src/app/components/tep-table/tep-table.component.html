@@ -1,25 +1,27 @@
-  <app-header (openFav)="openFav($event)"></app-header>
+  <app-header [load]="loadFiltrs" (openFav)="openFav($event)"></app-header>
+  <mat-progress-bar *ngIf="loadData" style="margin-top: 2px;" mode="indeterminate"></mat-progress-bar>
+  <!-- <mat-progress-bar *ngIf="loadFiltrs" style="margin-top: 2px;" mode="indeterminate"></mat-progress-bar> -->
   <!-- <app-filters></app-filters> -->
   <!-- <div class="container"> -->
-  <!-- <div class="panel panel-default">
+    <!-- <div class="panel panel-default">
       <div class="button-group">
         <button (click)="saveFilter()" mat-raised-button color="primary">
           Сохранить для пользователя
         </button>
         <button (click)="clearFilter()" mat-raised-button color="primary">
           Сброс поисковых значений
-      </button>
-    </div>
-  </div> -->
-  <!-- <div class="panel-heading panel-heading-divider"></div> -->
-  <div class="col-md-12" style="text-align: center">
+        </button>
+      </div>
+    </div> -->
+    <!-- <div class="panel-heading panel-heading-divider"></div> -->
+    <div class="col-md-12" style="text-align: center">
     <!-- <h1>Карточки МКД согласно фильтра</h1> -->
     <h1 class="tab-name">Карточки МКД согласно фильтра</h1>
     <!-- <button mat-stroked-button color="primary" (click)="resizeTable()">
       Расширить
     </button> -->
-    <button mat-stroked-button color="primary">Экспорт в Excel</button>
-    <button mat-stroked-button style="margin-left: 1%" color="primary">
+    <button mat-stroked-button (click)="this.exportExcel()" color="primary">Экспорт в Excel</button>
+    <button mat-stroked-button (click)="demageTime()" style="margin-left: 1%" color="primary">
       Износ по сроку
     </button>
   </div>

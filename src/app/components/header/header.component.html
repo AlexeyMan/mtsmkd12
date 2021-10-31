@@ -11,9 +11,14 @@
           <mat-icon style="color: cornflowerblue;" aria-hidden="false" aria-label="Главная">home</mat-icon>
           Главная
         </button>
-      <button mat-menu-item (click)="openFiltersComponent()">
-        <mat-icon style="color: cadetblue" aria-hidden="false" aria-label="Фильтр">find_in_page</mat-icon>
+      <button mat-menu-item (click)="openFiltersComponent()" [disabled]="load">
+        <mat-icon [style.color]="load ? 'lightgray':'forestgreen'" aria-hidden="false" aria-label="Фильтр">find_in_page</mat-icon>
         Фильтр
+        <!-- <div class="row justify-content-center"> -->
+          <div *ngIf="load" style="position: absolute; right: 40px; top: 15px;">
+            <mat-spinner [diameter]="20"></mat-spinner>
+          </div>
+        <!-- </div> -->
       </button>
       <button mat-menu-item  (click)="openReportsComponent();">
         <mat-icon style="color: darkslateblue;" aria-hidden="false" aria-label="Отчет">assignment</mat-icon>

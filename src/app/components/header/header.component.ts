@@ -1,10 +1,10 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
 import { AuthenticationService } from "../../_services";
 import { Observable } from "rxjs";
 import { FiltersComponent } from "../filters/filters.component";
 // import { Message } from "../../_models/message";
 // import { MessagingService } from "../../_services/messaging.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+// import { MatSnackBar } from "@angular/material/snack-bar";
 // import { TeplistService } from "src/app/_services/teplist.service";
 @Component({
   selector: "app-header",
@@ -13,6 +13,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 })
 export class HeaderComponent implements OnInit {
   @Output() openFav = new EventEmitter<boolean>();
+  @Input() load: boolean = false;
 
   isLoggedIn$!: Observable<boolean>;
   isEnabledRole$!: Observable<boolean>;
@@ -34,7 +35,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private authService: AuthenticationService,
     // private mservice: MessagingService,
-    private _snackBar: MatSnackBar,
+    // private _snackBar: MatSnackBar,
     // private api: TeplistService
   ) {}
 

@@ -84,7 +84,7 @@ const colViewer = [
   { value: 'ПЗУ', id: 'pzu' },
   { value: 'АППЗ', id: 'appz' },
   { value: 'Эл-во', id: 'electro' },
-  { value: "Водоотв", id: "sewer" },
+  { value: 'Водоотв', id: 'sewer' },
   {
     value: 'Количество подъемников',
     id: 'disabled_people_lifts_count',
@@ -222,11 +222,11 @@ export class FiltersComponent implements OnInit {
   selectedMaterials = []; //Материал
   selectedStatuses = []; //Статус ТЭП
   statuses: Statuses[] = []; //список Статус ТЭП
-  selectedDefectRegister = [];//Статус акта осмотра
-  selectedHeating = [];//Отопление
-  selectedHotWater = [];//ГВС
-  selectedGas = [];//Газоснабжение
-  coldWater: string = 'null';//ХВС
+  selectedDefectRegister = []; //Статус акта осмотра
+  selectedHeating = []; //Отопление
+  selectedHotWater = []; //ГВС
+  selectedGas = []; //Газоснабжение
+  coldWater: string = 'null'; //ХВС
   electro: string = 'null';
   sewer: string = 'null';
   appz: string = 'null';
@@ -236,7 +236,7 @@ export class FiltersComponent implements OnInit {
   crep: string = '';
   crepFrom: any = 0;
   crepTo: any = 0;
-  curr_repair: string = 'null';//Текущий ремонт
+  curr_repair: string = 'null'; //Текущий ремонт
   trep: string = '';
   trepFrom: any = 0;
   trepTo: any = 0;
@@ -250,8 +250,6 @@ export class FiltersComponent implements OnInit {
   columsSelectView: string[] = []; // выбранные для отображения колонки
 
   ////////////////////////////////////////////////////////////////
-
-
 
   filterButtonGroup: boolean = false;
   filtersUser: any;
@@ -282,7 +280,7 @@ export class FiltersComponent implements OnInit {
   // culture: string = "null";
   // failure: string = "null";
   disabled_people_lifts_count: string = '';
-  constructionList: any;
+  // constructionList: any;
   workList: any;
   workCapRepList: any;
   dataYearKP: any = '';
@@ -471,11 +469,15 @@ export class FiltersComponent implements OnInit {
     this.common.saveDbFilters(this.filterRequest).subscribe(
       (res) => {
         this._snackBar.open('Фильтр сохранен!', undefined, {
+          verticalPosition: 'top',
+          duration: 2000,
           panelClass: 'snackbar-success',
         });
       },
       (error) => {
         this._snackBar.open(JSON.stringify(error), undefined, {
+          verticalPosition: 'top',
+          duration: 2000,
           panelClass: 'snackbar-error',
         });
       }
@@ -492,11 +494,15 @@ export class FiltersComponent implements OnInit {
         // this.ngOnInit();
         // this.setChangeFilters();
         this._snackBar.open('Настройки сброшены на сохраненные!', undefined, {
+          verticalPosition: 'top',
+          duration: 2000,
           panelClass: 'snackbar-success',
         });
       },
       (error) => {
         this._snackBar.open(JSON.stringify(error), undefined, {
+          verticalPosition: 'top',
+          duration: 2000,
           panelClass: 'snackbar-error',
         });
       }
@@ -552,62 +558,62 @@ export class FiltersComponent implements OnInit {
     this.selectedStreet = [];
   }
   clearFilter() {
-     //Основной
-  this.selectedDistricts = []; //район
+    //Основной
+    this.selectedDistricts = []; //район
 
-  this.selectedStreet = []; //улица
+    this.selectedStreet = []; //улица
 
-  this.number = ''; //номер
-  this.building = ''; //корпус
-  this.letter = ''; //литера
-  this.house_construction = ''; //строение
-  this.selectedCategories = []; //категория
+    this.number = ''; //номер
+    this.building = ''; //корпус
+    this.letter = ''; //литера
+    this.house_construction = ''; //строение
+    this.selectedCategories = []; //категория
 
-  this.selectedOtypes = []; //Вид собственности
+    this.selectedOtypes = []; //Вид собственности
 
-  this.failure = 'null'; //аварийность
-  this.selectedCompany = []; //Управляющая компания
+    this.failure = 'null'; //аварийность
+    this.selectedCompany = []; //Управляющая компания
 
-  this.selectedMtypes = []; //Тип управляющей организации
+    this.selectedMtypes = []; //Тип управляющей организации
 
-  this.culture = 'null'; //окн
-  this.lifts = 'null'; //лифты
+    this.culture = 'null'; //окн
+    this.lifts = 'null'; //лифты
 
-  //Дополнительный фильтр
-  this.construction_elements = []; //Конструктивный элемент (износ)
-  this.selectedDefectElements = NaN; //Конструктивный элемент
-  this.damageFrom="null";
-  this.damageTo="null";
-  this.materialsForConst=""; //Материал
-  this.selectedMaterials = []; //Материал
-  this.selectedStatuses = []; //Статус ТЭП
+    //Дополнительный фильтр
+    this.construction_elements = []; //Конструктивный элемент (износ)
+    this.selectedDefectElements = NaN; //Конструктивный элемент
+    this.damageFrom = 'null';
+    this.damageTo = 'null';
+    this.materialsForConst = ''; //Материал
+    this.selectedMaterials = []; //Материал
+    this.selectedStatuses = []; //Статус ТЭП
 
-  this.selectedDefectRegister = [];//Статус акта осмотра
-  this.selectedHeating = [];//Отопление
-  this.selectedHotWater = [];//ГВС
-  this.selectedGas = [];//Газоснабжение
-  this.coldWater = 'null';//ХВС
-  this.electro = 'null';
-  this.sewer = 'null';
-  this.appz = 'null';
-  this.pzu = 'null';
-  this.archive = false;
-  this.cap_repair = 'null';
-  this.crep = '';
-  this.crepFrom = "";
-  this.crepTo = "";
-  this.curr_repair = 'null';//Текущий ремонт
-  this.trep = '';
-  this.trepFrom = "";
-  this.trepTo = "";
-  this.series = "";
-  this.storeysFrom = "";
-  this.storeysTo = "";
-  this.buildFrom = "";
-  this.buildTo = "";
-  this.rbuildFrom = "";
-  this.rbuildTo = "";
-  // this.columsSelectView = []; // выбранные для отображения колонки
+    this.selectedDefectRegister = []; //Статус акта осмотра
+    this.selectedHeating = []; //Отопление
+    this.selectedHotWater = []; //ГВС
+    this.selectedGas = []; //Газоснабжение
+    this.coldWater = 'null'; //ХВС
+    this.electro = 'null';
+    this.sewer = 'null';
+    this.appz = 'null';
+    this.pzu = 'null';
+    this.archive = false;
+    this.cap_repair = 'null';
+    this.crep = '';
+    this.crepFrom = '';
+    this.crepTo = '';
+    this.curr_repair = 'null'; //Текущий ремонт
+    this.trep = '';
+    this.trepFrom = '';
+    this.trepTo = '';
+    this.series = '';
+    this.storeysFrom = '';
+    this.storeysTo = '';
+    this.buildFrom = '';
+    this.buildTo = '';
+    this.rbuildFrom = '';
+    this.rbuildTo = '';
+    // this.columsSelectView = []; // выбранные для отображения колонки
   }
 
   //изменение катигорий

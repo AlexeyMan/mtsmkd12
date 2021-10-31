@@ -21,6 +21,7 @@ import { FavoritTabsComponent } from './components/favorit-tabs/favorit-tabs.com
 import {MatPaginatorIntl} from "@angular/material/paginator";
 import { getRussianPaginatorIntl } from "./_helpers/russian-paginator";
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DeleteDialogComponent } from "./components/dialog/delete-tep-dialog/delete-tep-dialog.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     HeaderComponent,
     FiltersComponent,
     ReportsComponent,
-    FavoritTabsComponent
+    FavoritTabsComponent,
+    DeleteDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +42,9 @@ import { NgSelectModule } from '@ng-select/ng-select';
     BrowserAnimationsModule,
     MaterialModule,
     NgSelectModule,
+  ],
+  entryComponents: [
+    DeleteDialogComponent,
   ],
   providers: [
     AuthGuard,

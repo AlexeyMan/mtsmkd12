@@ -3,7 +3,7 @@
     <!-- Статистическая информация -->
     <mat-tab label="Статистическая информация">
       <div id="accordionStatInfo">
-        <div class="card">
+        <div class="card" style="border: 0px">
           <div id="headingStatInfo" class="card-header" style="text-align: right;">
               <button
                 (click)="this.exportExcel()"
@@ -33,13 +33,10 @@
                           [ngModelOptions]="{ standalone: true }"
                           [(ngModel)]="selectedGroupings"
                           (ngModelChange)="onNgModelChange($event)"
-                          cdkDropList
-                          (cdkDropListDropped)="drop($event)"
                         >
                           <mat-list-option
                             [value]="group.value"
                             *ngFor="let group of this.groupings"
-                            cdkDrag
                           >
                             {{ group.name }}
                           </mat-list-option>
@@ -61,7 +58,7 @@
 
                       <mat-form-field
                         appearance="fill"
-                        class="col-md-6"
+                        class="col-md-8"
                         style="padding-right: 0"
                       >
                         <!-- <mat-label>Аварийность</mat-label> -->
@@ -78,7 +75,7 @@
                           </mat-option>
                         </mat-select>
                       </mat-form-field>
-                      <div style="text-align: center;" class="col-md-6">
+                      <div style="text-align: center;" class="col-md-4">
                         <mat-checkbox
                           (change)="changeEvent($event)"
                           class="example-margin"
@@ -112,7 +109,7 @@
     <!-- Текущий ремонт -->
     <mat-tab label="Текущий ремонт">
       <div id="accordionCurrentRepair">
-        <div class="card">
+        <div class="card" style="border: 0px">
           <div id="headingCurrentRepair" class="card-header"  style="text-align: right;">
               <button
                 (click)="this.exportExcelTR()"
@@ -185,10 +182,23 @@
                           </div>
                         </div>
                         <!-- <div class="col-md-8"> -->
-                          <mat-form-field appearance="fill" class="col-md-8">
+                          <ng-select
+                          [items]="constructionList"
+                          class="custom col-md-8"
+                          [multiple]="false"
+                          [closeOnSelect]="true"
+                          bindLabel="name"
+                          bindValue="id"
+                          placeholder="Конструктивный элемент"
+                          [(ngModel)]="structureElementIdTR"
+                          (change)="materialsChangeExel($event)"
+                        >
+                        </ng-select>
+                          <!-- <mat-form-field appearance="fill" class="col-md-8">
                             <mat-select
                               [ngModelOptions]="{ standalone: true }"
                               [(ngModel)]="structureElementIdTR"
+                              (selectionChange)="materialsChangeExel($event)"
                             >
                               <mat-option
                                 [value]="construction.id"
@@ -199,7 +209,7 @@
                                 {{ construction.name }}
                               </mat-option>
                             </mat-select>
-                          </mat-form-field>
+                          </mat-form-field> -->
                         <!-- </div> -->
                       </div>
                       <div class="row">
@@ -207,7 +217,19 @@
                           <div style="margin-top: 1.7rem">Вид работ</div>
                         </div>
                         <!-- <div class="col-md-8"> -->
-                          <mat-form-field appearance="fill" class="col-md-8">
+                          <ng-select
+                          [items]="this.sortWorkList"
+                          class="custom col-md-8"
+                          [multiple]="true"
+                          [closeOnSelect]="false"
+                          bindLabel="name"
+                          bindValue="id"
+                          placeholder="Вид работ"
+                          [(ngModel)]="typeWorkIdTR"
+                          [disabled]="onOffselectEl || !structureElementIdTR"
+                        >
+                        </ng-select>
+                          <!-- <mat-form-field appearance="fill" class="col-md-8">
                             <mat-select
                               [ngModelOptions]="{ standalone: true }"
                               [(ngModel)]="typeWorkIdTR"
@@ -221,7 +243,7 @@
                                 {{ work.name }}
                               </mat-option>
                             </mat-select>
-                          </mat-form-field>
+                          </mat-form-field> -->
                         <!-- </div> -->
                       </div>
                       <div class="row">
@@ -303,7 +325,7 @@
             <!-- Капитальный ремонт -->
     <mat-tab label="Капитальный ремонт">
       <div id="accordionCapitalRepair">
-        <div class="card">
+        <div class="card" style="border: 0px">
           <div id="headingCapitalRepair" class="card-header" style="text-align: right;">
               <button
                 (click)="this.reportKP()"
@@ -421,17 +443,15 @@
     <mat-tab label="Износ конструктивных элементов">
       <div id="accordionDepreciation">
         <div class="card">
-          <div id="headingCapitalRepair" class="card-header" style="text-align: right;">
-              <button
-                (click)="this.reportDep()"
-                mat-raised-button
-                color="primary"
-              >
-                Отчет
-              </button>
-          </div>
 
-            <div
+
+          <!-- <div
+            id="collapseDepreciation"
+            aria-labelledby="headingOne"
+            data-parent="#accordionDepreciation"
+            class="collapse"
+          > -->
+            <!-- <div
               style="padding: 10px; box-shadow: none"
               class="panel panel-default panel-nomargin"
             >
@@ -453,8 +473,8 @@
                   <div class="col-md-3" style="font-size: large">
                     Выбор: {{ constructions.selectedOptions.selected.length }}
                   </div>
-                  <!-- <div class="row col-md-12"> -->
-                    <!-- <div class="col-md-3"></div> -->
+                  <div class="row col-md-12">
+                    <div class="col-md-3"></div>
 
                     <div
                       class="col-md-8"
@@ -475,10 +495,72 @@
                         </mat-list-option>
                       </mat-selection-list>
                     </div>
-                  <!-- </div> -->
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          <!-- </div> -->
+        </div>
+        <div class="card" style="border: 0px">
+          <div id="headingCapitalRepair" class="card-header" style="text-align: right;">
+              <button
+                (click)="this.reportDep()"
+                mat-raised-button
+                color="primary"
+              >
+                Отчет
+              </button>
+          </div>
+
+          <div
+          style="padding: 10px; box-shadow: none"
+          class="panel panel-default panel-nomargin"
+        >
+          <div class="panel-body">
+            <div class="row col-md-10">
+              <div class="col-md-3">
+                <mat-checkbox
+                  [(ngModel)]="byDistrictsDep"
+                  [ngModelOptions]="{ standalone: true }"
+                  (change)="eventByDistrictsDep($event)"
+                  class="example-margin"
+                  style="font-size: 15px"
+                  >По районам
+                </mat-checkbox>
+              </div>
+              <div class="col-md-6">
+                <h4>Конструктивный элемент</h4>
+              </div>
+              <div class="col-md-3" style="font-size: large">
+                Выбор: {{ constructions.selectedOptions.selected.length }}
+              </div>
+              <div class="row col-md-12">
+                <div class="col-md-3"></div>
+
+                <div
+                  class="col-md-8"
+                  style="max-height: 400px; overflow: auto"
+                >
+                  <mat-selection-list
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="selectedGroupings"
+                    (ngModelChange)="onNgModelChangeDep($event)"
+                    #constructions
+                  >
+                    <mat-list-option
+                      color="primary"
+                      [value]="construction.name"
+                      *ngFor="let construction of this.constructionList"
+                      style="font-size: 14px"
+                    >
+                      {{ construction.name }}
+                    </mat-list-option>
+                  </mat-selection-list>
                 </div>
               </div>
             </div>
+          </div>
+        </div>
         </div>
       </div>
     </mat-tab>

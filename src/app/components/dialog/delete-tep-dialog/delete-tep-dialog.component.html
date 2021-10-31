@@ -1,0 +1,8 @@
+<h1 mat-dialog-title style="text-align: center;">{{ data.header }}</h1>
+<div mat-dialog-content style="text-align: center;">
+  <p>{{ data.message }}</p>
+</div>
+<div mat-dialog-actions style="justify-content: center;">
+  <button mat-button style="color: forestgreen" [mat-dialog-close]="true" cdkFocusInitial>Да</button>
+  <button mat-button style="color: darkred;" (click)="onNoClick()">Нет</button>
+</div>

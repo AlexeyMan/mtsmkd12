@@ -71,6 +71,7 @@ export class FavoritTabsComponent implements OnInit, AfterViewInit {
       this.dataSource = new MatTableDataSource(teps.data);
       this.totalNitem = teps.options.total;
       // this.displayedColumns = this.columns;
+      this.getFavoriteList();//TODO сделать перегрузку
     } else {
       this.getFavoriteList();
     }

@@ -1,0 +1,103 @@
+<h2 mat-dialog-title>{{ data.header }} ({{ filter }})</h2>
+<mat-dialog-content class="mat-typography">
+  <form
+    [formGroup]="newForm"
+    (ngSubmit)="onSubmit()"
+    class="form-signin"
+    name="newForm"
+  >
+    <div class="row">
+      <ng-container *ngFor="let elem of data.order">
+        <ng-container
+          *ngFor="let label of data.labels | keyvalue; let i = index"
+        >
+          <ng-container *ngIf="elem == label.key">
+            <ng-container *ngIf="isDisabled(label.value)">
+              <div
+                [ngClass]="fwField(label.key) ? 'col-md-12' : 'col-md-4'"
+                *ngIf="isSelect(label.value); else select"
+              >
+                <mat-form-field appearance="fill">
+                  <mat-label>{{ label.value }}</mat-label>
+                  <ng-container *ngIf="label.key !== 'price' && label.key !== 'volume_cost'; else float">
+                    <input
+                      ngDefaultControl
+                      matInput
+                      [formControlName]="label.key"
+                      [(ngModel)]="data.data[label.key]"
+                    />
+                  </ng-container>
+                  <ng-template #float>
+                    <input
+                    ngDefaultControl
+                    matInput
+                    appFloatnumber
+                    autocomplete="off"
+                    [formControlName]="label.key"
+                    [(ngModel)]="data.data[label.key]"
+                  />
+                  </ng-template>
+                </mat-form-field>
+              </div>
+
+              <ng-template #select>
+                <ng-container *ngIf="isDate(label.value); else date">
+                  <div
+                    [ngClass]="fwField(label.key) ? 'col-md-12' : 'col-md-4'"
+                  >
+                    <mat-form-field appearance="fill">
+                      <mat-label>{{ label.value }}</mat-label>
+                      <mat-select
+                        (selectionChange)="filterData($event, label.key)"
+                        [formControlName]="label.key"
+                        [(ngModel)]="data.data[label.key]"
+                        [multiple]="isMultiselect(label.value)"
+                      >
+                        <mat-option
+                          ngDefaultControl
+                          *ngFor="
+                            let element of data.selectData[label.key].data
+                          "
+                          [value]="element.id"
+                        
+                          data-toggle="tooltip" data-placement="top" [title]="element.name"
+                        >
+                         {{ element.name }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+                </ng-container>
+                <ng-template #date>
+                  <div
+                    [ngClass]="fwField(label.key) ? 'col-md-12' : 'col-md-4'"
+                  >
+                    <yearpicker
+                      ngDefaultControl
+                      [label]="label.value"
+                      mode="YEAR"
+                      [(ngModel)]="data.data[label.key]"
+                      [(date)]="data.data[label.key]"
+                      [formControlName]="label.key"
+                    ></yearpicker>
+                  </div>
+                </ng-template>
+              </ng-template>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button
+    mat-button
+    [disabled]="this.newForm.invalid"
+    [mat-dialog-close]="data"
+    cdkFocusInitial
+  >
+    Ок
+  </button>
+  <button mat-button [mat-dialog-close]="'cancel'">Отмена</button>
+</mat-dialog-actions>
