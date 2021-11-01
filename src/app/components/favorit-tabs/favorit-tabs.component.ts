@@ -15,6 +15,7 @@ import { LocalStorageService } from '../../_services/store';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { AuthenticationService } from 'src/app/_services/authentication.service';
 @Component({
   selector: 'app-favorit-tabs',
   templateUrl: './favorit-tabs.component.html',
@@ -59,22 +60,47 @@ export class FavoritTabsComponent implements OnInit, AfterViewInit {
   // ];
 
   totalNitem: number = 10;
-
+  lastSelectedRowIndex: number = NaN;
+  permission: String = '';
   constructor(
     private api: TeplistService,
-    private apiStore: LocalStorageService
+    private apiStore: LocalStorageService,
+    private authService: AuthenticationService
   ) {}
-
   ngOnInit(): void {
+    //Проверка на роль пользователя
+    if (this.authService.hasRole('ROLE_VIEW_TEP')) {
+      this.permission = 'ROLE_VIEW_TEP';
+    }
+    this.lastSelectedRowIndex = Number(
+      localStorage.getItem('lastSelectedRowIndex')
+    );
     if (this.apiStore.checkStore('favoriteTeps')) {
       let teps = this.apiStore.getStore('favoriteTeps');
       this.dataSource = new MatTableDataSource(teps.data);
       this.totalNitem = teps.options.total;
       // this.displayedColumns = this.columns;
-      this.getFavoriteList();//TODO сделать перегрузку
+      this.getFavoriteList(); //TODO сделать перегрузку
     } else {
       this.getFavoriteList();
     }
+  }
+
+  onRowClicked(row: any, event: any) {
+    this.lastSelectedRowIndex = row.house_id;
+    localStorage.setItem('lastSelectedRowIndex', row.house_id);
+    if (
+      typeof event.target === 'object' &&
+      event.target !== null &&
+      !Array.isArray(event.target)
+    ) {
+      if (Object.keys(event.target.dataset).includes('stopPropagation')) {
+        // Не перенаправляем
+        return;
+      }
+    }
+
+    // this.router.navigate(["mkd", row["house_id"], "common-parameters"]);
   }
   drop(event: CdkDragDrop<Mkdlistitem>) {
     moveItemInArray(
@@ -83,6 +109,7 @@ export class FavoritTabsComponent implements OnInit, AfterViewInit {
       event.currentIndex
     );
   }
+
   // на полный экран таблицу
   resTabs: boolean = false;
   resizeTable() {

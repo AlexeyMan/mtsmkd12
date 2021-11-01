@@ -320,30 +320,26 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr> -->
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell" style="text-align: center" colspan="10">
             Нет избранных карточек
           </td>
         </tr>
-        <!-- <ng-container>
-              <tr
-                [ngStyle]="{
-                  background:
-                    lastSelectedRowIndex == row.house_id ? '#c5cae9' : ''
-                }"
-                mat-row
-                *matRowDef="let row; columns: displayedColumns"
-                [ngClass]="{ highlight: selectedRowIndex == row.house_id }"
-              ></tr>
-            </ng-container>
-            <ng-template #noClickedTEP>
-              <tr
-                mat-row
-                *matRowDef="let row; columns: displayedColumns"
-                [ngClass]="{ highlight: selectedRowIndex == row.house_id }"
-              ></tr>
-            </ng-template> -->
+        <!-- //Подсветка выбранной строки в таблице -->
+        <ng-container *ngIf="permission === 'ROLE_VIEW_TEP'; else noClickedTEP">
+          <tr
+            [ngStyle]="{
+              background: lastSelectedRowIndex == row.house_id ? '#c5cae9' : ''
+            }"
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            (click)="onRowClicked(row, $event)"
+          ></tr>
+        </ng-container>
+        <ng-template #noClickedTEP>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </ng-template>
       </table>
       <button
         (click)="resizeTable()"
@@ -364,4 +360,4 @@
     <!-- </div> -->
   </ng-container>
 </div>
-<div class="row col-md-12" style="height: 100px;"></div>
+<div class="row col-md-12" style="height: 100px"></div>

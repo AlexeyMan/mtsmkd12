@@ -47,6 +47,8 @@ import { RefserviceService } from 'src/app/_services/refservice.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteDialogComponent } from '../dialog/delete-tep-dialog/delete-tep-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthenticationService } from 'src/app/_services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: 'tep-table.component.html',
@@ -54,6 +56,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TepTableComponent implements AfterViewInit, OnInit {
   dataSource = new MatTableDataSource<Mkdlistitem>([]);
+  permission: String = '';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(FavoritTabsComponent, { static: false })
@@ -83,6 +86,10 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     // 'heating_name',
     // 'bdate',
   ];
+
+  lastSelectedRowIndex: number = NaN;
+  // selectedRowIndex: number = -1;
+
   drop(event: CdkDragDrop<Mkdlistitem>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
@@ -95,7 +102,9 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     private common: CommonService,
     private refApi: RefserviceService,
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private authService: AuthenticationService,
+    private router: Router,
   ) {
     if (localStorage.mainPageTableData) {
       this.reconnectTableData = true;
@@ -147,6 +156,13 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   }
   ngOnInit() {
     this.loadData = true;
+    this.lastSelectedRowIndex = Number(
+      localStorage.getItem("lastSelectedRowIndex")
+    );
+    //Проверка на роль пользователя
+    if (this.authService.hasRole('ROLE_VIEW_TEP')) {
+      this.permission = 'ROLE_VIEW_TEP';
+    }
     // this.apiStore.setStore("mainPageUserFilters", mainUserFilters);
     if (this.apiStore.checkStore('userFilters')) {
       this.filters = this.apiStore.getStore('userFilters');
@@ -357,6 +373,23 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     { name: "Управляющая организация", value: "organization", enabled: true },
     { name: "Износ", value: "wear", enabled: true },
   ];
+
+  onRowClicked(row:any, event:any) {
+    this.lastSelectedRowIndex = row.house_id;
+    localStorage.setItem("lastSelectedRowIndex", row.house_id);
+    if (
+      typeof event.target === "object" &&
+      event.target !== null &&
+      !Array.isArray(event.target)
+    ) {
+      if (Object.keys(event.target.dataset).includes("stopPropagation")) {
+        // Не перенаправляем
+        return;
+      }
+    }
+
+    // this.router.navigate(["mkd", row["house_id"], "common-parameters"]);
+  }
     exportExcel() {
       // let data: any = {};
       // data.sortedGroups = this.groupings
