@@ -17,6 +17,7 @@ import {
   map,
   startWith,
   switchMap,
+  tap,
 } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 // import { MatPaginator } from '@angular/material/paginator';
@@ -93,7 +94,7 @@ export class TepTableComponent implements AfterViewInit, OnInit {
   drop(event: CdkDragDrop<Mkdlistitem>) {
     moveItemInArray(this.displayedColumns, event.previousIndex, event.currentIndex);
   }
-  totalDataTable: number = 0;
+  // totalDataTable: number = 0;
   tableLocal: any = [];
 
   constructor(
@@ -192,15 +193,27 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     // }
   }
   ngAfterViewInit() {
+    //переход по страницам
+    let filters = this.apiStore.getStore('mainPageUserFilters')
+    // this.paginator.page.pipe(tap(() => filters)).subscribe();
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    merge(this.sort.sortChange, this.paginator.page)
+    .pipe(tap(() => filters))
+    .subscribe(
+      ()=>this.loadMkdListItems(filters)
+      );
+
     if (this.apiStore.checkStore('mainPageTableData')) {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       setTimeout(
         () => {
           if (this.apiStore.checkStore('mainPageTotal')) {
-            this.totalDataTable = Number(this.apiStore.getStore('mainPageTotal'))
+            this.paginator.length = Number(this.apiStore.getStore('mainPageTotal'))
+            // this.totalDataTable = Number(this.apiStore.getStore('mainPageTotal'))
           }else{
-            this.totalDataTable = 0;
+            // this.totalDataTable = 0;
+            this.paginator.length = 0;
           }
 
         }
@@ -281,7 +294,7 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     heating: [],
     hot_water: [],
     lifts: 'null',
-    limit: 100,
+    limit: 10,
     management_company: [],
     management_form: [],
     materials: [],
@@ -322,6 +335,7 @@ export class TepTableComponent implements AfterViewInit, OnInit {
 
   loadMkdListItems(filter: TepListFilter) {
       this.loadData = true;
+      // this.totalDataTable = 555;
     // let filters = this.apiStore.getStore("userFilters");
     // this.loadingSubject.next(true);
     this.api
@@ -336,11 +350,16 @@ export class TepTableComponent implements AfterViewInit, OnInit {
           this.apiStore.setStore('mainPageUserFilters', mainUserFilters);
           this.apiStore.setStore('mainPageTableData', data);
           this.apiStore.setStore('mainPageTotal', this.options?.total);
-          this.dataSource.paginator = this.paginator;
-          this.dataSource.sort = this.sort;
-          this.totalDataTable = this.options!['total'];
           this.displayedColumns = mainUserFilters.columns;
+          this.dataSource.paginator = this.paginator;
+          setTimeout(() => {this.paginator.length = this.options!.total;})
+          // this.paginator.length = this.options!.total;
+
+          this.dataSource.sort = this.sort;
           this.loadData = false;
+
+
+
           // this.loadPage();
           // this.loadAllFilters();
         },
