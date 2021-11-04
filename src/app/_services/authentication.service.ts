@@ -22,30 +22,30 @@ export class AuthenticationService {
     return this._loggedIn.asObservable(); // {2}
   }
 
-  // get userRole() {
-  //   try {
-  //     this._userRole.next(localStorage.getItem("userRole").split(","));
-  //     return this._userRole.asObservable();
-  //   } catch (e) {
-  //     this._userRole.next([]);
-  //     return this._userRole.asObservable();
-  //   }
-  // }
+  get userRole() {
+    try {
+      this._userRole.next(localStorage.getItem("userRole")?.split(","));
+      return this._userRole.asObservable();
+    } catch (e) {
+      this._userRole.next([]);
+      return this._userRole.asObservable();
+    }
+  }
 
-  // get userFullName() {
-  //   this._userFullName.next(localStorage.getItem("userFullName"));
-  //   return this._userFullName.asObservable();
-  // }
+  get userFullName() {
+    this._userFullName.next(localStorage.getItem("userFullName")!);
+    return this._userFullName.asObservable();
+  }
 
-  // get userName() {
-  //   this._userName.next(localStorage.getItem("username"));
-  //   return this._userName.asObservable();
-  // }
+  get userName() {
+    this._userName.next(localStorage.getItem("username")!);
+    return this._userName.asObservable();
+  }
 
-  // get userId() {
-  //   this._userId.next(localStorage.getItem("userid"));
-  //   return this._userId.asObservable();
-  // }
+  get userId() {
+    this._userId.next(localStorage.getItem("userid")!);
+    return this._userId.asObservable();
+  }
 
   constructor(
     private http: HttpClient,
@@ -91,27 +91,27 @@ export class AuthenticationService {
       );
   }
 
-  // getUserByName(user_name): Observable<UserDetail[]> {
-  //   return this.http
-  //     .get<UserDetail[]>(
-  //       AppSettings.API_ENDPOINT + "admin/users?user_name=" + user_name
-  //     )
-  //     .pipe(
-  //       map((res: any) => {
-  //         console.log(res);
-  //         console.log(user_name);
-  //         // return res["data"].filter(
-  //         //   (message) => message.username === user_name
-  //         // );
-  //         return res;
-  //       }),
-  //       catchError((error) => {
-  //         return throwError(
-  //           "Something went wrong with user detail by name " + error
-  //         );
-  //       })
-  //     );
-  // }
+  getUserByName(user_name): Observable<UserDetail[]> {
+    return this.http
+      .get<UserDetail[]>(
+        AppSettings.API_ENDPOINT + "admin/users?user_name=" + user_name
+      )
+      .pipe(
+        map((res: any) => {
+          console.log(res);
+          console.log(user_name);
+          // return res["data"].filter(
+          //   (message) => message.username === user_name
+          // );
+          return res;
+        }),
+        catchError((error) => {
+          return throwError(
+            "Something went wrong with user detail by name " + error
+          );
+        })
+      );
+  }
 
   getUsers(): Observable<UserDetail[]> {
     return this.http
