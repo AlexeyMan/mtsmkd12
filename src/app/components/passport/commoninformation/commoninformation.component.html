@@ -1,0 +1,136 @@
+<form
+  (ngSubmit)="onSubmit(form.value)"
+  id="ngform01"
+  [formGroup]="form"
+  *ngIf="this.data !== undefined"
+>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <mat-toolbar
+          *ngIf="(this.settings$ | async).canEdit"
+          id="secondToolbar"
+          [ngClass]="{ 'mat-elevation-z5': true, sticky: isSticky }"
+          [ngStyle]="{
+            'box-shadow': isSticky
+              ? '0px 10px 5px -5px rgba(0,0,0,0.35)'
+              : 'none'
+          }"
+        >
+          <button
+            style="margin-left: 67em"
+            mat-raised-button
+            color="primary"
+            form="ngform01"
+          >
+            Сохранить
+          </button>
+        </mat-toolbar>
+        <div class="panel-body">
+          <ng-container *ngFor="let rotate of this.rotation">
+            <ng-container *ngFor="let group of this.data | keyvalue">
+              <ng-container *ngIf="group.key == rotate">
+                <div class="panel-heading panel-heading-divider">
+                  {{ group.value.name }}
+                </div>
+                <div class="panel-body">
+                  <div
+                    *ngFor="let elem of group.value.fields"
+                    class="form-group row"
+                  >
+                    <ng-container
+                      *ngIf="elem.type != 'boolean'; else checkboxLabel"
+                    >
+                      <label
+                        style="transform: translateY(25%)"
+                        class="col-md-4 col-form-label text-sm-right"
+                        >{{ elem.name }}</label
+                      >
+                    </ng-container>
+                    <ng-template #checkboxLabel>
+                      <label
+                        style="transform: translateY(-22%)"
+                        class="col-md-4 col-form-label text-sm-right"
+                        >{{ elem.name }}</label
+                      >
+                    </ng-template>
+                    <div class="col-md-7">
+                      <ng-container
+                        *ngIf="elem.type != 'boolean'; else checkbox"
+                      >
+                        <ng-container *ngIf="isSum(elem.name, elem.key); else notSum">
+                          <mat-form-field appearance="fill">
+                            <input
+                              [readonly]="true"
+                              appFloatnumber
+                              autocomplete="off"
+                              [value]="sum(elem.name, elem.key, rotate)"
+                              matInput
+                              [formControlName]="elem.key"
+                            />
+                          </mat-form-field>
+                        </ng-container>
+                        <ng-template #notSum>
+                          <ng-container
+                            *ngIf="elem.key != 'house_series'; else noFloat"
+                          >
+                            <mat-form-field appearance="fill">
+                              <input
+                                [readonly]="!(this.settings$ | async).canEdit"
+                                appFloatnumber
+                                autocomplete="off"
+                                [(ngModel)]="elem.value"
+                                (input)="changeField(rotate, elem.key)"
+                                matInput
+                                (change)="diffPercent(elem.value, elem.key)"
+                                [formControlName]="elem.key"
+                              />
+                            </mat-form-field>
+                            <div
+                              [id]="elem.key"
+                              style="display: none"
+                              class="equal"
+                            >
+                              Расхождение <strong>10%</strong>
+                            </div>
+                          </ng-container>
+                          <ng-template #noFloat>
+                            <mat-form-field appearance="fill">
+                              <input
+                                [readonly]="!(this.settings$ | async).canEdit"
+                                [(ngModel)]="elem.value"
+                                matInput
+                                [formControlName]="elem.key"
+                              />
+                            </mat-form-field>
+                          </ng-template>
+                        </ng-template>
+                      </ng-container>
+                      <ng-template #checkbox>
+                        <mat-checkbox
+                          [disabled]="!(this.settings$ | async).canEdit"
+                          [value]="elem.value"
+                          [formControlName]="elem.key"
+                        ></mat-checkbox>
+                      </ng-template>
+                    </div>
+                    <label
+                      style="transform: translateY(22%)"
+                      class="col-md-1 col-form-label text-sm-left"
+                      >{{ elem.measure_unit }}</label
+                    >
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <!--  -->
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<app-debugpanel
+  *ngIf="(this.settings$ | async).showDebugPanel"
+  [debugData]="this.printValue() | json"
+></app-debugpanel>

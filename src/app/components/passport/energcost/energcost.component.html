@@ -1,0 +1,79 @@
+<div id="floater" *ngIf="(this.settings$ | async).canEdit">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3" *ngIf="(this.settings$ | async).menuPosition">
+            </div>
+            <div class="col-md-9">
+                <div class="card semitrans">
+                    <button class="btn btn-space btn-primary savebutton" form="ngform01"><i class="icon icon-left s7-config"></i>
+                        Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div role="alert" *ngIf="this.saveSuccess$ | async" class="alert alert-contrast alert-success">
+    <div class="icon"><span class="s7-check"></span></div>
+    <div class="message">
+        <button type="button" (click)="this.clearMessage()" class="close"><span aria-hidden="true" class="s7-close"></span></button><strong>Сохранено</strong>
+        Данные успешно сохранены
+    </div>
+</div>
+
+<div role="alert" *ngIf="this.saveFail$ | async" class="alert alert-contrast alert-danger">
+    <div class="icon"><span class="s7-close"></span></div>
+    <div class="message">
+        <button type="button" (click)="this.clearMessage()" class="close"><span aria-hidden="true" class="s7-close"></span></button><strong>Ошибка!</strong>
+        Не удалось сохранить данные: {{this.error}}
+    </div>
+</div> -->
+
+<form (ngSubmit)="onSubmit(form.value)" id="ngform01" [formGroup]="form" *ngIf="this.explications">
+    <div class="row" *ngIf="this.explications">
+        <ng-template #recursiveList let-explications>
+            <ng-container *ngFor="let item of this.explications">
+                <ng-container *ngIf="item.group_flag === 1; else simplefield;">
+                    <div class="col-md-6">
+                        <div [ngClass]="{'panel panel-default': item.tree_level >= this.mergeLevel, 'panel panel-default': item.parent_id !== null }">
+                            <div class="panel-heading panel-heading-divider"><span class="panel-subtitle">{{item.attr_caption}}</span></div>
+                            <div class="panel-body">
+
+                                <ng-container *ngIf="item.tree_level >= this.mergeLevel; else simplerow;">
+                                    <div class="row">
+                                        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: item.explications }"></ng-container>
+                                    </div>
+                                </ng-container>
+
+                                <ng-template #simplerow>
+                                    <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: item.explications }"></ng-container>
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+
+                <ng-template #simplefield>
+                    <div [ngClass]="{'col-md-6': item.tree_level > this.mergeLevel, 'col-md-12': item.tree_level <= this.mergeLevel }">
+                        <div class="form-group row pl-5">
+                            <label class="col-form-label col-md-12">{{item.attr_caption}}</label>
+                            <div [ngClass]="{'col-md-8 text-sm-right': item.tree_level > 3, 'col-md-3 text-sm-right': item.tree_level <= 3 }">
+                                <input [readonly]="!(this.settings$ | async).canEdit" [formControlName]="'attr_id' + item.attr_id" name="attr_id{{item.attr_id}}"
+                                    type="text" id="attr_id{{item.attr_id}}" [value]="item.attr_value" class="form-control text-sm-right"
+                                />
+                                <ng-container *ngIf="(this.settings$ | async).canEdit && item.attr_value !== 0 && item.attr_value">
+                                    <span *ngIf="this.form.controls['attr_id' + item.attr_id].value / item.attr_value < 0.9 || this.form.controls['attr_id' + item.attr_id].value / item.attr_value > 1.1"
+                                        class="badge badge-pill badge-warning">10%</span>
+                                </ng-container>
+                            </div>
+                            <label class="col-md-3 col-form-label text-sm-left">{{item.measure_unit}}</label>
+                        </div>
+                    </div>
+                </ng-template>
+            </ng-container>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: this.explications }"></ng-container>
+    </div>
+</form>
+
+<app-debugpanel *ngIf="(this.settings$ | async).showDebugPanel" [debugData]="this.printValue() | json"></app-debugpanel>

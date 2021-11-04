@@ -68,6 +68,7 @@ export interface Statuses {
     statusId: number;
     statusName: string;
     alias: string;
+    actual_defect_status:number;
 }
 
 export interface ListFilter {

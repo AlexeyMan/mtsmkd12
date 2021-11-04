@@ -1,0 +1,272 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+        <div [className]="imageObject.length != 0 ? 'col-md-9' : 'col-md-12'">
+          <div class="row">
+            <div class="col-md-9">
+              <span>ТЭП МКД</span>
+              <div class="form-group" *ngIf="this.house_info">
+                <div class="dropdown status-mkd">
+                  <!-- <button
+                    type="button"
+                    class="btn btn-space btn-secondary btn-xs dropdown-toggle"
+                    data-toggle="dropdown"
+                  >
+                    <i class="icon icon-left s7-config"></i>
+                    Текущий статус ТЭП:
+                    {{ this.house_info.current_status.status_name }}
+                  </button> -->
+                  <!-- <div class="dropdown-menu">
+                    <a
+                      class="dropdown-item"
+                      [routerLink]=""
+                      (click)="setStatus(status.status_id, status.status_name)"
+                      *ngFor="let status of this.statuses"
+                    >
+                      {{ status.status_name }}
+                    </a>
+                  </div> -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>Текущий статус ТЭП</mat-label>
+                    <mat-select
+                      [disabled]="permission1"
+                      [value]="this.house_info.current_status.status_id"
+                      (selectionChange)="setStatus($event.value)"
+                    >
+                      <mat-option
+                        *ngFor="let status of this.statuses"
+                        [value]="status.status_id"
+                      >
+                        {{ status.status_name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3" *ngIf="this.house_info">
+              <span
+                *ngIf="
+                  this.house_info.current_status.actual_defect_status === 6
+                "
+                class="title"
+                [ngStyle]="{ float: imageObject.length > 0 ? 'left' : 'right' }"
+                >Износ: {{ this.house_info.total_damage }} %</span
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-9">
+              <ng-container *ngIf="this.house_info">
+                <span>
+                  <strong>Адрес МКД:</strong>
+                  {{ this.house_info.district_name }} район,
+                  {{ this.house_info.address }}</span
+                >
+              </ng-container>
+            </div>
+            <div class="col-md-3">
+              <mat-slide-toggle
+                *ngIf="this.defectStatusUnderSave !== 6"
+                [ngStyle]="{ float: imageObject.length > 0 ? 'left' : 'right' }"
+                labelPosition="before"
+                (change)="OnChange($event)"
+                [checked]="(this.settings$ | async).canEdit"
+                >Режим правки</mat-slide-toggle
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12" *ngIf="this.defectStatusUnderSave">
+              <ng-container *ngIf="this.defectStatusUnderSave !== 6">
+                <button
+                  *ngIf="(this.settings$ | async).canEdit"
+                  (click)="saveAct()"
+                  mat-raised-button
+                  color="primary"
+                >
+                  Сохранить
+                </button>
+              </ng-container>
+              <!-- <ng-template #showBtnWithStatus>
+                <ng-container *ngIf="this.defectStatusUnderSave != 6">
+                  <button
+                    *ngIf="(this.settings$ | async).canEdit"
+                    (click)="saveAct()"
+                    mat-raised-button
+                    color="primary"
+                  >
+                    Сохранить
+                  </button>
+                </ng-container>
+              </ng-template> -->
+            </div>
+          </div>
+        </div>
+        <div *ngIf="imageObject.length > 0" class="col-md-3">
+          <ng-image-slider
+            style="width: 100%"
+            [images]="imageObject"
+            [animationSpeed]="0.3"
+            [imageSize]="{ height: 140, space: 3 }"
+            #nav
+          ></ng-image-slider>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!(this.settings$ | async).menuPosition">
+    <div class="col-md-12" style="position: absolute; max-width: 1110px">
+      <app-topmenu
+        [tepMenu]="tepMenu"
+        [tepPart]="tepPart"
+        [house_id]="house_id"
+        [isDefectsUpdate]="isDefectsUpdate"
+      ></app-topmenu>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3" *ngIf="(this.settings$ | async).menuPosition">
+      <app-sidemenu
+        [tepMenu]="tepMenu"
+        [tepPart]="tepPart"
+        [house_id]="house_id"
+      ></app-sidemenu>
+    </div>
+    <div
+      [ngClass]="{
+        'col-md-9': (this.settings$ | async).menuPosition,
+        'col-md-12': !(this.settings$ | async).menuPosition
+      }"
+    >
+      <!--  -->
+      <div class="panel panel-default" *ngIf="defect">
+        <div
+          class="panel-heading panel-heading-divider"
+          style="padding: 50px 0 14px"
+        >
+          <span class="title"
+            >Акт осмотра от
+            <mat-form-field>
+              <input
+                readonly
+                [disabled]="!(this.settings$ | async).canEdit"
+                matInput
+                [matDatepicker]="picker"
+                [value]="actDate"
+                (dateChange)="dateChange($event)"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            Комментарий
+            <mat-form-field class="example-full-width">
+              <input
+                [disabled]="!(this.settings$ | async).canEdit"
+                matInput
+                [(ngModel)]="defect.comment"
+              />
+            </mat-form-field>
+            Статус ТЭП
+            <mat-form-field *ngIf="this.house_info">
+              <ng-container
+                *ngIf="
+                permission2;
+                  else readonlyStatus
+                "
+              >
+                <mat-select
+                  (selectionChange)="changeDefectStatus($event)"
+                  [(ngModel)]="defect.status"
+                >
+                  <mat-option
+                    *ngFor="let status of this.house_info.ref_statuses"
+                    [value]="status.status_id"
+                  >
+                    {{ status.status_name }}
+                  </mat-option>
+                </mat-select>
+              </ng-container>
+              <ng-template #readonlyStatus>
+                <mat-select [disabled]="true" [(ngModel)]="defect.status">
+                  <mat-option
+                    *ngFor="let status of this.house_info.ref_statuses"
+                    [value]="status.status_id"
+                  >
+                    {{ status.status_name }}
+                  </mat-option>
+                </mat-select>
+              </ng-template>
+            </mat-form-field>
+            <!-- Износ: {{ defect.total_damage }} % -->
+          </span>
+        </div>
+        <div *ngIf="isShow" class="panel-body">
+          <ul class="mai-nav-tabs-sub mai-sub-nav nav">
+            <li>
+              <button mat-button (click)="openComission()">
+                Состав комиссии
+              </button>
+            </li>
+            <li>
+              <button mat-button (click)="openIndicators()">Показатели</button>
+            </li>
+            <li>
+              <button (click)="filledByActual()" mat-button>
+                Заполнить по актуальному
+              </button>
+            </li>
+            <li>
+              <button
+                (click)="printFormVOO()"
+                mat-raised-button
+                color="primary"
+              >
+                Загрузить печатную форму акта
+              </button>
+            </li>
+            <li>
+              <button
+                (click)="demageTep()"
+                mat-raised-button
+                style="margin-left: 10%"
+                color="primary"
+              >
+                Износ по сроку
+              </button>
+            </li>
+          </ul>
+          <ng-container *ngIf="currComp == 'commission'">
+            <app-techstatecommission
+              [(comission)]="defect.comission"
+            ></app-techstatecommission>
+          </ng-container>
+          <!--  -->
+          <ng-container *ngIf="currComp == 'indicators'">
+            <app-techstateindicators
+              (dataChanged)="dataChangeHandler($event)"
+              [(defectentries)]="defectentries"
+              [(damage)]="defect.total_damage"
+              [(totalDamage)]="defect.totalDamagePeriod"
+            ></app-techstateindicators>
+          </ng-container>
+          <ng-container *ngIf="currComp == 'edit'">
+            <app-techstateedit
+              [(defect_entry_id)]="entry_id"
+              [(defectentry)]="defectentries"
+            >
+            </app-techstateedit>
+          </ng-container>
+          <!--  -->
+        </div>
+      </div>
+      <!--  -->
+    </div>
+  </div>
+</div>

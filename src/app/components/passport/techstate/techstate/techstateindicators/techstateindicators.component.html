@@ -1,0 +1,106 @@
+<div class="panel panel-default panel-table">
+  <div class="panel-body">
+    <!-- <div class="table-responsive noSwipe">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th style="width: 5%;"></th>
+              <th style="width: 15%;">Констр. элемент</th>
+              <th style="width: 25%;">Описание</th>
+              <th style="width: 15%;">Состояние</th>
+              <th style="width: 15%;">Внсовой коэф-т</th>
+              <th style="width: 15%;">Износ (%)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let defectentry of this.defects">
+
+              <td class="cell-detail">
+                {{ defectentry.damage }}
+                <span class="completed">{{defectentry.damage}}</span><span class="version">Износ</span>
+                 <div class="progress">
+                  <div [ngStyle]="{'width':defectentry.damage + '%' }" class="progress-bar bg-danger progress-bar-striped"></div>
+                </div> 
+
+
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div> -->
+    <div class="example-container">
+      <table mat-table [dataSource]="defects">
+        <!-- Position Column -->
+        <ng-container matColumnDef="id">
+          <th style="width: 5%" mat-header-cell *matHeaderCellDef></th>
+          <td mat-cell *matCellDef="let element">
+            <button
+              (click)="onRowClicked(element.id)"
+              mat-icon-button
+              color="primary"
+            >
+              <mat-icon>open_in_new</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Position Column -->
+        <ng-container matColumnDef="structural_element_name">
+          <th style="width: 15%" mat-header-cell *matHeaderCellDef>
+            Констр. элемент
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.structural_element_name }}
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="structural_element_detail_names">
+          <th style="width: 15%" mat-header-cell *matHeaderCellDef>Описание</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.structural_element_detail_names }}
+          </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="techStateDescr">
+          <th style="width: 15%" mat-header-cell *matHeaderCellDef>
+            Состояние
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.techStateDescr }}
+          </td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="coefficient">
+          <th style="width: 15%" mat-header-cell *matHeaderCellDef>
+            Весовой коэф-т ({{ getCostCoefficient() }})
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.coefficient }}</td>
+        </ng-container>
+
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="damage">
+          <th style="width: 15%" mat-header-cell *matHeaderCellDef>
+            Износ ({{ damage }}%)
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.damage }}</td>
+        </ng-container>
+        <ng-container matColumnDef="damagePeriod">
+          <th style="width: 15%" mat-header-cell *matHeaderCellDef>
+            Износ по году эксплуатации ({{ totalDamage }}%)
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.damagePeriod }}</td>
+        </ng-container>
+
+        <tr
+          mat-header-row
+          *matHeaderRowDef="displayedColumns; sticky: true"
+        ></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </div>
+    <!--  -->
+  </div>
+</div>

@@ -1,0 +1,549 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+        <div [className]="imageObject.length != 0 ? 'col-md-9' : 'col-md-12'">
+          <div class="row">
+            <div class="col-md-9">
+              <span>ТЭП МКД</span>
+              <div class="form-group" *ngIf="this.house_info">
+                <div class="dropdown status-mkd">
+                  <!-- <button
+                    type="button"
+                    class="btn btn-space btn-secondary btn-xs dropdown-toggle"
+                    data-toggle="dropdown"
+                  >
+                    <i class="icon icon-left s7-config"></i>
+                    Текущий статус ТЭП:
+                    {{ this.house_info.current_status.status_name }}
+                  </button> -->
+                  <!-- <div class="dropdown-menu">
+                    <a
+                      class="dropdown-item"
+                      [routerLink]=""
+                      (click)="setStatus(status.status_id, status.status_name)"
+                      *ngFor="let status of this.statuses"
+                    >
+                      {{ status.status_name }}
+                    </a>
+                  </div> -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>Текущий статус ТЭП</mat-label>
+                    <mat-select
+                      [disabled]="permission"
+                      [value]="this.house_info.current_status.status_id"
+                      (selectionChange)="setStatus($event.value)"
+                    >
+                      <mat-option
+                        *ngFor="let status of this.statuses"
+                        [value]="status.status_id"
+                      >
+                        {{ status.status_name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3" *ngIf="this.house_info">
+              <span
+                *ngIf="
+                  this.house_info.current_status.actual_defect_status === 6
+                "
+                class="title"
+                [ngStyle]="{ float: imageObject.length > 0 ? 'left' : 'right' }"
+                >Износ: {{ this.house_info.total_damage }} %</span
+              >
+              <!-- <span class="panel-subtitle"> <span style="color: #000; font-weight: 600;"> Физический износ: </span><span [ngClass]="{ 'badge badge-danger' : this.house_info.total_damage > 30, 'badge badge-warning' : this.house_info.total_damage > 20 && this.house_info.total_damage <= 30, 'badge badge-success' : this.house_info.total_damage <=20 }">{{this.house_info.total_damage}}</span></span> -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-9">
+              <ng-container *ngIf="this.house_info">
+                <span>
+                  <strong>Адрес МКД:</strong>
+                  {{ this.house_info.district_name }} район,
+                  {{ this.house_info.address }}</span
+                >
+              </ng-container>
+            </div>
+            <div class="col-md-3">
+              <mat-slide-toggle
+                *hasPermission="'ROLE_EDIT_TEP'"
+                [ngStyle]="{ float: imageObject.length > 0 ? 'left' : 'right' }"
+                labelPosition="before"
+                (change)="OnChange($event)"
+                [checked]="(this.settings$ | async).canEdit"
+                >Режим правки</mat-slide-toggle
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <!-- <button
+                *ngIf="(this.settings$ | async).canEdit"
+                (click)="saveAct()"
+                mat-raised-button
+                color="primary"
+              >
+                Сохранить
+              </button> -->
+            </div>
+          </div>
+        </div>
+        <div *ngIf="imageObject.length > 0" class="col-md-3">
+          <ng-image-slider
+            style="width: 100%"
+            [images]="imageObject"
+            [animationSpeed]="0.3"
+            [imageSize]="{ height: 140, space: 3 }"
+            #nav
+          ></ng-image-slider>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12" style="position: absolute; max-width: 1110px">
+      <app-topmenu
+        [tepMenu]="tepMenu"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+      ></app-topmenu>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="title">Файлы и документы</span>
+        </div>
+        <div class="panel-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading panel-heading-divider">
+      <span class="title">Печатная форма паспорта</span>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-sm-5 col-lg-4">
+          <div
+            class="
+              col-12 col-sm-8 col-lg-6
+              form-check
+              fh-inline
+              custom-control-inline
+              mt-2
+            "
+          >
+            <label class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                name="fType"
+                (change)="this.formType = 'standartForm'"
+                value=""
+                checked=""
+                class="custom-control-input"
+              /><span class="custom-control-label">Стандартная форма</span>
+            </label>
+            <label class="custom-control custom-radio custom-control-inline">
+              <input
+                type="radio"
+                name="fType"
+                (change)="this.formType = 'workForm'"
+                value="true"
+                class="custom-control-input"
+              /><span class="custom-control-label">Рабочая форма</span>
+            </label>
+          </div>
+          <button
+            class="btn btn-space btn-primary"
+            (click)="printForm(this.formType)"
+          >
+            <i class="icon icon-left s7-config"></i> Загрузить печатную форму
+            паспорта
+          </button>
+        </div>
+        <div *ngIf="this.formType === 'workForm'" class="col-sm-7 col-lg-3">
+          <label class="custom-control custom-checkbox custom-control-inline">
+            <input
+              type="checkbox"
+              name="printSetting"
+              value="showFilledFieldsOnly"
+              class="custom-control-input"
+            /><span class="custom-control-label"> Только заполненные поля</span>
+          </label>
+        </div>
+        <div *ngIf="this.formType === 'workForm'" class="col-lg-4">
+          <div class="row">
+            <div class="col-sm-12">
+              <label
+                class="custom-control custom-checkbox custom-control-inline"
+              >
+                <input
+                  type="checkbox"
+                  name="printSetting"
+                  value="showTitlePages"
+                  class="custom-control-input"
+                /><span class="custom-control-label"> Титульные листы</span>
+              </label>
+            </div>
+            <div class="col-sm-12">
+              <label
+                class="custom-control custom-checkbox custom-control-inline"
+              >
+                <input
+                  type="checkbox"
+                  name="printSetting"
+                  value="showCommon"
+                  class="custom-control-input"
+                /><span class="custom-control-label"> 1. Общая часть</span>
+              </label>
+            </div>
+            <div class="col-sm-12">
+              <label
+                class="custom-control custom-checkbox custom-control-inline"
+              >
+                <input
+                  type="checkbox"
+                  name="printSetting"
+                  value="showCommonMkd"
+                  class="custom-control-input"
+                /><span class="custom-control-label">
+                  2. Общие сведения о многоквартирном доме</span
+                >
+              </label>
+            </div>
+            <div class="col-sm-12">
+              <label
+                class="custom-control custom-checkbox custom-control-inline"
+              >
+                <input
+                  type="checkbox"
+                  name="printSetting"
+                  value="showExplicationLand"
+                  class="custom-control-input"
+                /><span class="custom-control-label">
+                  3. Экспликация земельного участка</span
+                >
+              </label>
+            </div>
+            <div class="col-sm-12">
+              <label
+                class="custom-control custom-checkbox custom-control-inline"
+              >
+                <input
+                  type="checkbox"
+                  name="printSetting"
+                  value="showEngineeringEquipment"
+                  class="custom-control-input"
+                /><span class="custom-control-label">
+                  4. Инженерное оборудование</span
+                >
+              </label>
+            </div>
+            <div class="col-sm-12">
+              <label
+                class="custom-control custom-checkbox custom-control-inline"
+              >
+                <input
+                  type="checkbox"
+                  name="printSetting"
+                  value="showSpecialEngineeringEquipment"
+                  class="custom-control-input"
+                /><span class="custom-control-label">
+                  5. Специальное инженерное оборудование</span
+                >
+              </label>
+            </div>
+            <div class="col-sm-12">
+              <label
+                class="custom-control custom-checkbox custom-control-inline"
+              >
+                <input
+                  type="checkbox"
+                  name="printSetting"
+                  value="showGeneralIndicators"
+                  class="custom-control-input"
+                /><span class="custom-control-label">
+                  6. Общие показатели конструктивных элементов</span
+                >
+              </label>
+            </div>
+            <div class="col-sm-12">
+              <label
+                class="custom-control custom-checkbox custom-control-inline"
+              >
+                <input
+                  type="checkbox"
+                  name="printSetting"
+                  value="showEnergyCharacteristics"
+                  class="custom-control-input"
+                /><span class="custom-control-label">
+                  7. Энергитические характеристики</span
+                >
+              </label>
+            </div>
+            <div class="col-sm-12">
+              <label
+                class="custom-control custom-checkbox custom-control-inline"
+              >
+                <input
+                  type="checkbox"
+                  name="printSetting"
+                  value="showMaintenanceList"
+                  class="custom-control-input"
+                /><span class="custom-control-label">
+                  8. Ведомость технического состояния</span
+                >
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading panel-heading-divider">
+      <span class="title">Изображения</span>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-12">
+          <div class="project-list">
+            <div class="project-item" *ngFor="let file of this.fileEntries">
+              <ng-container *ngIf="file.isImage">
+                <div
+                  class="project-item-actions"
+                  *ngIf="(this.settings$ | async).canEdit"
+                >
+                  <span
+                    class="icon s7-close delete-icon"
+                    (click)="setCurrentId(file.id); deleteFile()"
+                    style="cursor: pointer"
+                  ></span>
+                </div>
+                <div class="project-item-user">
+                  <div class="user-avatar">
+                    <img src="assets/img/avatar.jpg" alt="avatar" />
+                  </div>
+                  <div class="user-info">
+                    <a
+                      [routerLink]=""
+                      (click)="download(file.id, file.file_name)"
+                    >
+                      <span class="name">
+                        {{ file.file_name }}
+                      </span>
+                    </a>
+                  </div>
+                </div>
+                <div class="project-item-title">
+                  <span class="name">Размер файла</span
+                  ><span class="position description"
+                    >{{ file.file_size }} байт
+                  </span>
+                </div>
+                <div class="project-item-date">
+                  <span class="date">{{ file.add_date }}</span>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="panel panel-default text-center"
+    *ngIf="(this.settings$ | async).canEdit"
+  >
+    <div class="panel-heading panel-heading-divider">
+      <span class="title">Загрузка изображений</span>
+    </div>
+    <div class="panel-body">
+      <!-- <div
+        role="alert"
+        *ngIf="this.saveSuccess$ | async"
+        class="alert alert-contrast alert-success alert-dismissible"
+      >
+        <div class="icon"><span class="s7-check"></span></div>
+        <div class="message">
+          <button type="button" (click)="this.clearMessage()" class="close">
+            <span aria-hidden="true" class="s7-close"></span></button
+          ><strong>Сохранено</strong>
+          Файл успешно загружен
+        </div>
+      </div>
+
+      <div
+        role="alert"
+        *ngIf="this.saveFail$ | async"
+        class="alert alert-contrast alert-danger alert-dismissible"
+      >
+        <div class="icon"><span class="s7-close"></span></div>
+        <div class="message">
+          <button type="button" (click)="this.clearMessage()" class="close">
+            <span aria-hidden="true" class="s7-close"></span></button
+          ><strong>Ошибка!</strong>
+          Не удалось загрузить файл
+        </div>
+      </div> -->
+
+      <dropzone
+        [config]="config"
+        class="dropzone-container"
+        [message]="'Для загрузки перетащите сюда требуемые файлы'"
+        (error)="onUploadError($event)"
+        (success)="onUploadSuccess($event)"
+      ></dropzone>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading panel-heading-divider">
+      <span class="title">Документы</span>
+    </div>
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-12">
+          <div class="project-list">
+            <div class="project-item" *ngFor="let file of this.fileEntries">
+              <ng-container *ngIf="!file.isImage">
+                <div
+                  class="project-item-actions"
+                  *ngIf="(this.settings$ | async).canEdit"
+                >
+                  <span
+                    class="icon s7-close delete-icon"
+                    (click)="setCurrentId(file.id); deleteFile()"
+                    data-toggle="modal"
+                    style="cursor: pointer"
+                  ></span>
+                </div>
+                <div class="project-item-user">
+                  <div class="user-avatar">
+                    <span class="s7-note2" style="font-size: 30px"></span>
+                  </div>
+                  <div class="user-info">
+                    <a
+                      [routerLink]=""
+                      (click)="download(file.id, file.file_name)"
+                    >
+                      <span class="name">
+                        {{ file.file_name }}
+                      </span>
+                    </a>
+                  </div>
+                </div>
+                <div class="project-item-title">
+                  <span class="name">Размер файла</span
+                  ><span class="position description"
+                    >{{ file.file_size }} байт
+                  </span>
+                </div>
+                <div class="project-item-date">
+                  <span class="date">{{ file.add_date }}</span>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="panel panel-default text-center"
+    *ngIf="(this.settings$ | async).canEdit"
+  >
+    <div class="panel-heading panel-heading-divider">
+      <span class="title">Загрузка документов</span>
+    </div>
+    <div class="panel-body">
+      <!-- <div
+        role="alert"
+        *ngIf="this.saveSuccess$ | async"
+        class="alert alert-contrast alert-success alert-dismissible"
+      >
+        <div class="icon"><span class="s7-check"></span></div>
+        <div class="message">
+          <button type="button" (click)="this.clearMessage()" class="close">
+            <span aria-hidden="true" class="s7-close"></span></button
+          ><strong>Сохранено</strong>
+          Файл успешно загружен
+        </div>
+      </div>
+
+      <div
+        role="alert"
+        *ngIf="this.saveFail$ | async"
+        class="alert alert-contrast alert-danger alert-dismissible"
+      >
+        <div class="icon"><span class="s7-close"></span></div>
+        <div class="message">
+          <button type="button" (click)="this.clearMessage()" class="close">
+            <span aria-hidden="true" class="s7-close"></span></button
+          ><strong>Ошибка!</strong>
+          Не удалось загрузить файл
+        </div>
+      </div> -->
+
+      <dropzone
+        [config]="config_doc"
+        class="dropzone-container"
+        [message]="'Для загрузки перетащите сюда требуемые файлы'"
+        (error)="onUploadError($event)"
+        (success)="onUploadSuccess($event)"
+      ></dropzone>
+    </div>
+  </div>
+
+  <!-- <div id="md-danger" tabindex="-1" role="dialog" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button
+            type="button"
+            data-dismiss="modal"
+            aria-hidden="true"
+            class="close"
+          >
+            <span class="s7-close"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <div class="panel panel-default">
+    <div class="panel-heading panel-heading-divider" style="display: flex">
+      <div class="col-md-10">
+        <span class="title">Информация об управляющей организации</span>
+      </div>
+      <div class="col-md-2">
+        <button [disabled] ="!this.enableBtn" (click)="getUOformEac()" mat-raised-button color="primary">Отчет</button>
+      </div>
+    </div>
+    <div class="panel-body">
+      <mat-list *ngIf="beginDataUO" role="list">
+        <mat-list-item role="listitem">{{listUoinfo.name ? listUoinfo.name : "Полное наименование организации:"}}</mat-list-item>
+        <mat-list-item role="listitem">{{listUoinfo.shortName ? listUoinfo.shortName : "Сокращенное наименование организации:"}}</mat-list-item>
+        <mat-list-item role="listitem">{{listUoinfo.juridicalAddress ? listUoinfo.juridicalAddress : "Юридический адрес:"}}</mat-list-item>
+        <mat-list-item role="listitem">{{listUoinfo.dolgnHead ? listUoinfo.dolgnHead : "Руководитель:"}}</mat-list-item>
+        <mat-list-item role="listitem">{{listUoinfo.headFIO ? listUoinfo.headFIO : "Должность:"}}</mat-list-item>
+        <mat-list-item role="listitem">Сайт: {{listUoinfo.site}}</mat-list-item>
+        <mat-list-item role="listitem">ИНН: {{listUoinfo.INN}}</mat-list-item>
+        <mat-list-item role="listitem">КПП: {{listUoinfo.KPP}}</mat-list-item>
+        <mat-list-item role="listitem">Почтовый адрес: {{listUoinfo.postAddress}}</mat-list-item>
+        <mat-list-item role="listitem">Телефон: {{listUoinfo.contactPhone}}</mat-list-item>
+        <mat-list-item role="listitem">Почта: {{listUoinfo.contactEmail}}</mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+.paginator {
+    font-size: 3em;
+    transition: 0.1s linear;
+    cursor: pointer;
+    margin-top: 0.6rem;
+}
+
+.paginator:hover {
+    color: #3f51b5;
+}
+
+.right {
+    right: 0;
+    position: absolute;
+    margin-right: 2.5rem;
+}
+
+.switch-button label {
+    height: 23px;
+    width: 23px;
+}

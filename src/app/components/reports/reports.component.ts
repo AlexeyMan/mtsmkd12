@@ -185,7 +185,7 @@ export class ReportsComponent implements OnInit {
           return 0;
         })
         .filter((f) => f != 0);
-      let fields = [];
+      let fields:string[] = [];
       if (this.actTR) fields.push("act");
       if (this.planTR) fields.push("plan");
       if (this.factTR) fields.push("fact");

@@ -430,7 +430,7 @@ export class TepTableComponent implements AfterViewInit, OnInit {
       }
     }
 
-    // this.router.navigate(["mkd", row["house_id"], "common-parameters"]);
+    this.router.navigate(["mkd", row["house_id"], "common-parameters"]);
   }
     exportExcel() {
       // let data: any = {};

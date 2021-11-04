@@ -1,0 +1,117 @@
+.s7-trash {
+  font-size: 20px;
+}
+
+.savebutton {
+  width: 150px;
+}
+
+.ng-select.custom {
+  max-width: 280px !important;
+}
+
+.ng-select.custom .ng-select-container {
+  min-height: 0px;
+  border-radius: 0;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: rgba(255, 255, 255, 0.5);
+  opacity: 10;
+  background-clip: border-box;
+  border: 0px solid rgba(0, 0, 0, 0.125);
+}
+
+#floater {
+  width: 100%;
+  position: fixed;
+  bottom: -4px;
+  left: 0px;
+  z-index: 1000;
+}
+
+.example-container {
+  height: 400px;
+  overflow: auto;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: #dedddd;
+}
+
+button {
+  outline: none;
+}
+
+mat-card {
+  padding: 0;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: 0;
+  box-shadow: none !important;
+}
+
+mat-card >>> mat-radio-button {
+  margin: 10px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-checkbox {
+  line-height: 5rem;
+}
+
+.example-container {
+  height: 400px;
+  overflow: auto;
+}
+
+table >>> .mat-form-field-wrapper {
+  padding-bottom: 0rem;
+}
+
+table >>> .mat-form-field-infix {
+  padding-top: 0.5rem;
+}
+
+table >>> th >>> .material-icons {
+  position: relative;
+  bottom: 1px;
+  right: -1px;
+}
+
+mat-button-toggle >>> .mat-button-toggle-label-content {
+  line-height: 30px;
+  padding: 0 6px;
+}
+
+mat-button-toggle >>> button {
+  outline: none;
+}
+
+.mat-form-field-wrapper {
+  padding-bottom: inherit;
+}
+
+.mat-form-field-infix {
+  margin: 0;
+  padding-top: 8px;
+}

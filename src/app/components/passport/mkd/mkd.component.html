@@ -1,0 +1,373 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+        <div [className]="imageObject.length != 0 ? 'col-md-9' : 'col-md-12'">
+          <div class="row">
+            <div class="col-md-9">
+              <span>ТЭП МКД</span>
+              <div class="form-group" *ngIf="this.house_info">
+                <div class="dropdown status-mkd">
+                  <!-- <button
+                    type="button"
+                    class="btn btn-space btn-secondary btn-xs dropdown-toggle"
+                    data-toggle="dropdown"
+                  >
+                    <i class="icon icon-left s7-config"></i>
+                    Текущий статус ТЭП:
+                    {{ this.house_info.current_status.status_name }}
+                  </button> -->
+                  <!-- <div class="dropdown-menu">
+                    <a
+                      class="dropdown-item"
+                      [routerLink]=""
+                      (click)="setStatus(status.status_id, status.status_name)"
+                      *ngFor="let status of this.statuses"
+                    >
+                      {{ status.status_name }}
+                    </a>
+                  </div> -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>Текущий статус ТЭП</mat-label>
+                    <mat-select
+                      [disabled]="permission"
+                      [value]="this.house_info.current_status.statusId"
+                      (selectionChange)="setStatus($event.value)"
+                    >
+                      <mat-option
+                        *ngFor="let status of this.statuses"
+                        [value]="status.statusId"
+                      >
+                        {{ status.statusName }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3" *ngIf="this.house_info">
+              <span
+                *ngIf="
+                  this.house_info.current_status.actual_defect_status === 6
+                "
+                class="title"
+                [ngStyle]="{ float: imageObject.length > 0 ? 'left' : 'right' }"
+                >Износ: {{ this.house_info.total_damage }} %</span
+              >
+              <!-- <span class="panel-subtitle"> <span style="color: #000; font-weight: 600;"> Физический износ: </span><span [ngClass]="{ 'badge badge-danger' : this.house_info.total_damage > 30, 'badge badge-warning' : this.house_info.total_damage > 20 && this.house_info.total_damage <= 30, 'badge badge-success' : this.house_info.total_damage <=20 }">{{this.house_info.total_damage}}</span></span> -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-9">
+              <ng-container *ngIf="this.house_info">
+                <span>
+                  <strong>Адрес МКД:</strong>
+                  {{ this.house_info.district_name }} район,
+                  {{ this.house_info.address }}</span
+                >
+              </ng-container>
+            </div>
+            <div class="col-md-3">
+              <mat-slide-toggle
+                *hasPermission="'ROLE_EDIT_TEP'"
+                [ngStyle]="{ float: imageObject.length > 0 ? 'left' : 'right' }"
+                labelPosition="before"
+                (change)="OnChange($event)"
+                [checked]="(this.settings$ | async)!.canEdit"
+                >Режим правки</mat-slide-toggle
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <!-- <button
+                *ngIf="(this.settings$ | async).canEdit"
+                (click)="saveAct()"
+                mat-raised-button
+                color="primary"
+              >
+                Сохранить
+              </button> -->
+            </div>
+          </div>
+        </div>
+        <div *ngIf="imageObject.length > 0" class="col-md-3">
+          <ng-image-slider
+            style="width: 100%"
+            [images]="imageObject"
+            [animationSpeed]="0.3"
+            [imageSize]="{ height: 140, space: 3 }"
+            #nav
+          ></ng-image-slider>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!(this.settings$ | async)?.menuPosition">
+    <div class="col-md-12" style="position: absolute; max-width: 1110px">
+      <!-- <app-topmenu
+        [tepMenu]="tepMenu"
+        [tepPart]="tepPart"
+        [house_id]="house_id"
+      ></app-topmenu> -->
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3" *ngIf="(this.settings$ | async)?.menuPosition">
+      <!-- <app-sidemenu
+        [tepMenu]="tepMenu"
+        [tepPart]="tepPart"
+        [house_id]="house_id"
+      ></app-sidemenu> -->
+    </div>
+    <div
+      [ngClass]="{
+        'col-md-9': (this.settings$ | async)?.menuPosition,
+        'col-md-12': !(this.settings$ | async)?.menuPosition
+      }"
+    >
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="title">{{ this.menuTitle }}</span>
+        </div>
+        <div class="panel-body"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="panel panel-default">
+            <div
+              class="panel-body"
+              style="height: 51px; padding-top: 0; padding-bottom: 0"
+            >
+              <div class="row">
+                <div class="col-md-1">
+                  <a (click)="directionSection('back')"
+                    ><i
+                      class="fa fa-chevron-left paginator"
+                      id="back"
+                      aria-hidden="true"
+                    ></i
+                  ></a>
+                </div>
+                <div class="col-md-10" style="text-align: center">
+                  <p style="line-height: 2.5em; font-size: 1.5em">
+                    {{ this.menuTitle }}
+                  </p>
+                </div>
+                <div class="col-md-1">
+                  <a (click)="directionSection('next')"
+                    ><i
+                      class="fa fa-chevron-right paginator right"
+                      id="next"
+                      aria-hidden="true"
+                    ></i
+                  ></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="panel panel-default"> -->
+      <div class="panel-body" *ngIf="this.loading$ | async">
+        <div class="row justify-content-center">
+          <div class="spinner-container">
+            <mat-spinner [diameter]="20"></mat-spinner>
+          </div>
+        </div>
+      </div>
+
+      <!-- <app-fieldset
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 0"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      >
+      </app-fieldset>
+      <app-simplerepair
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 1"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      >
+      </app-simplerepair>
+      <app-flatstable
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 2"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      >
+      </app-flatstable>
+      <app-cleaningareas
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 3"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      >
+      </app-cleaningareas>
+      <app-explicationland
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 4"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      >
+      </app-explicationland>
+      <app-tempcond
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 5"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      >
+      </app-tempcond>
+      <app-energcost
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 6"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      >
+      </app-energcost>
+      <app-energuse
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 7"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      >
+      </app-energuse>
+      <app-meteringdevices
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 9"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      >
+      </app-meteringdevices>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 14"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'external-finishing'"
+      >
+      </app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 8"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'energy-meter'"
+      >
+      </app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 10"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'basements-walls-floors'"
+      >
+      </app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 11"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'house-roofing'"
+      >
+      </app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 12"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'watersupply-sewerage'"
+      >
+      </app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 13"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'window-opening-doorway'"
+      ></app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 15"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'heat-supply-system'"
+      ></app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 16"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'interior-finishing'"
+      ></app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 17"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'electricity-supply'"
+      ></app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 18"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'special-purpose-rooms'"
+      ></app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 19"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'improvement-playgrounds'"
+      ></app-passport-page>
+      <app-passport-page
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 20"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+        [url]="'special-engineering-equipment'"
+      ></app-passport-page>
+      <app-commoninformation
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 21"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      ></app-commoninformation>
+      <app-lift-data
+        (notify)="onNotify($event)"
+        *ngIf="isTable === 22"
+        [tepPart]="tep_part"
+        [house_id]="house_id"
+        [menuTitle]="menuTitle"
+      ></app-lift-data> -->
+    </div>
+  </div>
+</div>

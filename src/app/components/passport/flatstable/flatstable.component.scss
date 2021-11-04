@@ -1,0 +1,15 @@
+.savebutton {
+  width: 150px;
+}
+
+#floater {
+  width: 100%;
+  position: fixed;
+  bottom: -4px;
+  left: 0px;
+  z-index: 1000;
+}
+
+mat-form-field {
+  width: 100%;
+}

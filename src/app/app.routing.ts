@@ -5,6 +5,8 @@ import { LoginComponent } from './components/login';
 import { AppComponent } from './app.component';
 import { AuthGuard } from "./_guards";
 import { TepTableComponent } from "./components/tep-table/tep-table.component";
+import { MkdComponent } from './components/passport/mkd';
+import { MkdMenuResolver, TepIdResolver, TepSectionResolver } from './_resolvers/mkd.resolver';
 // import {
 //   TeplistDepartmentResolver,
 //   TeplistFilterResolver,
@@ -23,6 +25,19 @@ const routes: Routes = [
       // alldepartments: TeplistDepartmentResolver,
     // },
     canActivate: [AuthGuard],
+  },
+  {
+    path: "mkd/:id/:alias",
+    component: MkdComponent,
+    resolve: {
+      tepMenu: MkdMenuResolver,
+      houseid: TepIdResolver,
+      alias: TepSectionResolver,
+    },
+    canActivate: [AuthGuard],
+    data: {
+      role: "ROLE_VIEW_TEP",
+    },
   },
 ];
 

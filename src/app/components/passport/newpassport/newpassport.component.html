@@ -1,0 +1,94 @@
+<h2 mat-dialog-title>Добавление нового паспорта</h2>
+<mat-dialog-content>
+  <form
+    [formGroup]="newForm"
+    (ngSubmit)="onSubmit()"
+    class="form-signin"
+    name="newForm"
+  >
+    <div class="row">
+      <div class="col-sm-12">
+        <mat-form-field appearance="fill">
+          <mat-label>Подразделение</mat-label>
+          <mat-select required formControlName="departments">
+            <mat-option
+              *ngFor="let department of this.alldepartments"
+              [value]="department.department_id"
+            >
+              {{ department.description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <mat-form-field appearance="fill">
+          <mat-label>Район</mat-label>
+          <mat-select
+            required
+            (selectionChange)="districtChange($event)"
+            formControlName="districts"
+          >
+            <mat-option
+              *ngFor="let district of this.filters?.districts"
+              [value]="district.districtId"
+            >
+              {{ district.districtName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-12">
+        <mat-form-field appearance="fill">
+          <mat-label>Улица</mat-label>
+          <mat-select required formControlName="streets">
+            <cdk-virtual-scroll-viewport
+              [itemSize]="18"
+              [style.height.px]="5 * 48"
+            >
+              <mat-option
+                *cdkVirtualFor="let street of this.allstreets"
+                [value]="street.id"
+              >
+                {{ street.name }}
+              </mat-option>
+            </cdk-virtual-scroll-viewport>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-3">
+        <mat-form-field appearance="fill">
+          <mat-label>Номер дома</mat-label>
+          <input required formControlName="number" matInput />
+        </mat-form-field>
+      </div>
+      <div class="col-sm-3">
+        <mat-form-field appearance="fill">
+          <mat-label>Корпус</mat-label>
+          <input formControlName="building" matInput />
+        </mat-form-field>
+      </div>
+      <div class="col-sm-3">
+        <mat-form-field appearance="fill">
+          <mat-label>Литера</mat-label>
+          <input formControlName="letter" matInput />
+        </mat-form-field>
+      </div>
+      <div class="col-sm-3">
+        <mat-form-field appearance="fill">
+          <mat-label>Строение</mat-label>
+          <input formControlName="construction" matInput />
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [disabled]="this.newForm.invalid" (click)="onSubmit()" cdkFocusInitial>Создать</button>
+  <button mat-button mat-dialog-close>Закрыть</button>
+</mat-dialog-actions>

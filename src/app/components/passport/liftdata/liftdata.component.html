@@ -1,0 +1,285 @@
+<div class="button-container" *ngIf="!this.loading">
+    <button mat-raised-button 
+        *ngIf="(this.settings$ | async).canEdit"
+        class="add-button btn btn-space btn-primary" 
+        data-toggle="modal" 
+        data-target="#md-edit" 
+        (click)="openDialog()"
+        style="margin-bottom: 10px;">
+        Добавить
+    </button>
+    <button *ngIf="(this.settings$ | async).canEdit" mat-raised-button [disabled]="!dataSource.data.length || !selection.hasValue()" (click)="removeLifts()"
+        class="dell-button btn btn-space btn-primary">
+        Удалить выделенные
+    </button>
+    <button  mat-raised-button [disabled]="!dataSource.data.length" (click)="exportExcel()"
+        class="excel-button btn btn-space btn-primary">
+        Экспорт в Excel
+    </button>
+<table mat-table [dataSource]="dataSource" >
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox  *ngIf="(this.settings$ | async).canEdit" (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+                [indeterminate]="selection.hasValue() && !isAllSelected()" matTooltip="Выбрать все" [matTooltipShowDelay]="1000">
+            </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+            <mat-checkbox *ngIf="(this.settings$ | async).canEdit" (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                [checked]="selection.isSelected(row)" >
+            </mat-checkbox>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="registrationNum">
+        <th mat-header-cell *matHeaderCellDef> Регистрационный номер </th>
+        <td mat-cell *matCellDef="let element"> {{element.registrationNum}} </td>
+    </ng-container>
+    <ng-container matColumnDef="floorCount">
+        <th mat-header-cell *matHeaderCellDef> Кол-во этажей </th>
+        <td mat-cell *matCellDef="let element" > {{element.floorCount}} </td>
+    </ng-container>
+    <ng-container matColumnDef="stairway">
+        <th mat-header-cell *matHeaderCellDef> Номер парадной </th>
+        <td mat-cell *matCellDef="let element"> {{element.stairway}} </td>
+    </ng-container>
+    <ng-container matColumnDef="stopCount">
+        <th mat-header-cell *matHeaderCellDef> Кол-во остановок </th>
+        <td mat-cell *matCellDef="let element"> {{element.stopCount}} </td>
+    </ng-container>
+    <ng-container matColumnDef="buildDate">
+        <th mat-header-cell *matHeaderCellDef> Дата ввода в эксплуатацию </th>
+        <td mat-cell *matCellDef="let element"> {{rundata(element.buildDate)}} </td>
+    </ng-container>
+    <ng-container matColumnDef="liftType">
+        <th mat-header-cell *matHeaderCellDef> Тип лифта </th>
+        <td mat-cell *matCellDef="let element">
+            <div [ngSwitch]="element.liftType">
+               <ng-template *ngFor ="let el of this.listLiftType" ngSwitchCase="{{el.value}}">{{el.name}}</ng-template>
+               <ng-template ngSwitchDefault></ng-template>
+            </div>
+             </td>
+    </ng-container>
+    <ng-container matColumnDef="engineType">
+        <th mat-header-cell *matHeaderCellDef>Расположение машинного отделения</th>
+        <td mat-cell *matCellDef="let element">
+            <div [ngSwitch]="element.engineType">
+               <ng-template *ngFor ="let el of this.listEngineType" ngSwitchCase="{{el.value}}">{{el.name}}</ng-template>
+               <ng-template ngSwitchDefault></ng-template>
+            </div>
+             </td>
+    </ng-container>
+    <ng-container matColumnDef="housingServiceName">
+        <th mat-header-cell *matHeaderCellDef> Обслуживающая организация </th>
+        <td mat-cell *matCellDef="let element"> {{element.housingServiceName}} </td>
+    </ng-container>
+    <ng-container matColumnDef="damage">
+        <th mat-header-cell *matHeaderCellDef style="white-space: nowrap"> Износ, % </th>
+        <td mat-cell *matCellDef="let element"> {{element.damage}} </td>
+    </ng-container>
+    <ng-container matColumnDef="editBtn">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" style="width: 95px;" (click)="$event.stopPropagation()">
+            <button  *ngIf="(this.settings$ | async).canEdit" mat-icon-button id="btnEditLifts" class="mat-focus-indicator mat-icon-button btn-block"
+                 (click)="openEditDialog(element);"
+                 data-toggle="modal"               
+                 matTooltip="Редактировать" [matTooltipShowDelay]="1000"
+                 data-target="#md-edit"> 
+             <mat-icon  class="icon icon-left s7-edit"></mat-icon>
+            </button>
+            <button *ngIf="(this.settings$ | async).canEdit" mat-icon-button (click)="deleteTep(element.id);" matTooltip="Удалить" [matTooltipShowDelay]="1000">
+                <mat-icon style="color: darkgray;">
+                    delete
+                </mat-icon>
+            </button>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)">
+    </tr>
+    <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" style="text-align: center;" colspan="10">Нет данных</td>
+    </tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+<div
+    id="openDialog"
+    data-toggle="modal"               
+    data-target="#md-edit">
+</div>
+<!-- Модальное окно добавить редактировать лифт -->
+<div id="md-edit" tabindex="-1" role="dialog" class="modal fade"  style="font-family: Roboto, 'Helvetica Neue', sans-serif;">
+    <div class="modal-dialog full-width">
+        <div class="modal-content" style="max-width: 1100px;">
+            <div class="modal-header">
+                <button id="btnClose" type="button" data-dismiss="modal" aria-hidden="true" class="close">
+                    <span class="s7-close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form 
+                    [formGroup]="editForm" 
+                    (ngSubmit)="onEditSubmit()"
+                    class="form-signin"
+                    name="editForm"
+                    >
+                    <div class="text-center">
+                        <h3 class="mb-4">{{this.textEditForm}} информации о лифтовом оборудовании</h3>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group row col-md-12">
+                            <span class="col-md- col-form-label-filter panel-subtitle text-left" style="padding-left: 18px;">Регистрационный
+                                номер</span>
+                            <div class="col-md-12">
+                                <input id="registrationNum" type="text"
+                                    [ngClass]="{'is-invalid': this.validData(fe.registrationNum)}"
+                                    formControlName="registrationNum"
+                                    placeholder="Новое наименование" class="form-control"
+                                     />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group row col-md-12" style="white-space: nowrap">
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Номер парадной</span>
+                                <input id="stairway" type="text"
+                                [ngClass]="{'is-invalid': this.validData(fe.stairway)}"
+                                formControlName="stairway"
+                                placeholder="" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Кол-во этажей</span>
+                                <input id="floorCount" type="text"
+                                    [ngClass]="{'is-invalid':  this.validData(fe.floorCount)}"
+                                    formControlName="floorCount"
+                                    placeholder="" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Кол-во остановок</span>
+                                <input id="stopCount" type="text"
+                                    [ngClass]="{'is-invalid': this.validData(fe.stopCount)}"
+                                    formControlName="stopCount"
+                                    placeholder="" class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Износ, %</span>
+                                <input id="damage" type="text"
+                                    [ngClass]="{'is-invalid': this.validData(fe.damage)}"
+                                    formControlName="damage"
+                                    placeholder=""
+                                    appFloatnumber=2
+                                    class="form-control" />
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Тип лифта</span>
+                                <ng-select formControlName="liftType" class="custom">
+                                    <ng-option *ngFor="let item of this.listLiftType" [value]="item.value"> {{ item.name }} </ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left" >Тип дверей</span>
+                                <ng-select  formControlName="doorType" class="custom" >
+                                    <ng-option *ngFor="let item of this.listDoorType" [value]="item.value"> {{ item.name }} </ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Тип шахты</span>
+                                <ng-select  formControlName="shaftType" class="custom" >
+                                    <ng-option *ngFor="let item of this.listShaftType" [value]="item.value"> {{ item.name }} </ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left" >Расположение машинного отсека</span>
+                                <ng-select formControlName="engineType" class="custom" >
+                                    <ng-option *ngFor="let item of this.listEngineType" [value]="item.value"> {{ item.name }} </ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Дата ввода в эксплуатацию</span>
+                                <div class="col-md-12" class="customForm" appearance="fill" [ngClass]="{ 'alarmStyle': this.validData(fe.buildDate) }">                                  
+                                    <input matInput type="date" placeholder="ДД.ММ.ГГГГ" 
+                                        formControlName="buildDate"
+                                        class="customInput "  />
+                                     <button type="button" matSuffix mat-icon-button aria-label="Clear" (click)="this.fe.buildDate.setValue('')">
+                                            <mat-icon style="font-size: 15px; line-height: 20px;">close</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Дата выводы из эксплуатации</span>
+                                <div class="col-md-12" class="customForm" appearance="fill">                                  
+                                    <input matInput type="date" placeholder="ДД.ММ.ГГГГ" 
+                                        [ngClass]="{ 'is-invalid': submitted && fe.decommissionDate.errors }" formControlName="decommissionDate"
+                                        class="customInput "  />
+                                        <button type="button"  matSuffix mat-icon-button aria-label="Clear" (click)="this.fe.decommissionDate.setValue('')">
+                                            <mat-icon style="font-size: 15px; line-height: 20px;">close</mat-icon>
+                                          </button>
+                                    </div>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Дата реконструкции</span>
+                                <div class="col-md-12" class="customForm" appearance="fill" >                                  
+                                    <input matInput type="date" placeholder="ДД.ММ.ГГГГ" 
+                                        [ngClass]="{ 'is-invalid': submitted && fe.rebuildDate.errors }" formControlName="rebuildDate"
+                                        class="customInput "  />
+                                        <button type="button" matSuffix mat-icon-button (click)="this.fe.rebuildDate.setValue('')">
+                                            <mat-icon style="font-size: 15px; line-height: 20px;">close</mat-icon>
+                                          </button>
+                                    </div>
+                            </div>
+                            <div class="col-md-3" >
+                                  <span class="col-md-3 col-form-label-filter panel-subtitle text-left">Дата модернизации</span>
+                                <div class="col-md-12" class="customForm" appearance="fill">
+                                    <input matInput type="date" placeholder="ДД.ММ.ГГГГ"  formControlName="modernizationDate" 
+                                        class="customInput "  />
+                                        <button type="button" matSuffix mat-icon-button (click)="this.fe.modernizationDate.setValue('')">
+                                            <mat-icon style="font-size: 15px; line-height: 20px;">close</mat-icon>
+                                           
+                                          </button>
+                                    </div>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="col-md-6 col-form-label-filter panel-subtitle text-left">Диспетчеризация</span>
+                                <ng-select formControlName="dispatcherType" class="custom" >
+                                    <ng-option *ngFor="let item of this.listDespatcherType" [value]="item.value"> {{ item.name }} </ng-option>
+                                </ng-select>
+                            </div>
+                            <div class="col-md-6">
+                                <span class="col-md-6 col-form-label-filter panel-subtitle text-left">Поставщик услуг диспетчеризации</span>
+                                <input id="dispatcherServiceName" type="text"
+                                    [ngClass]="{ 'is-invalid': submitted && fe.dispatcherServiceName.errors }" formControlName="dispatcherServiceName"
+                                    placeholder="" class="form-control" />
+                            </div>
+                            <div class="col-md-12">
+                                <span class="col-md-12 col-form-label-filter panel-subtitle text-left">Обслуживающая организация</span>
+                                <input id="housingServiceName" type="text"
+                                    [ngClass]="{ 'is-invalid': submitted && fe.housingServiceName.errors }" formControlName="housingServiceName"
+                                    placeholder="" class="form-control" />
+                            </div>
+                            <div class="col-md-12">
+                                <span class="col-md-12 col-form-label-filter panel-subtitle text-left">Комментарий</span>
+                                <input id="remark" type="text"
+                                    [ngClass]="{ 'is-invalid': submitted && fe.remark.errors }" formControlName="remark"
+                                    placeholder="" class="form-control" />
+                            </div>
+                            
+                            <div style="text-align: center; padding-top: 25px; " class="col-md-12 button-container">
+                                <button mat-raised-button data-dismiss="modal" aria-hidden="true" class="add-button btn btn-space" (click)="openDialog();" >
+                                    Закрыть
+                                </button>
+                                <button mat-raised-button
+                                    class="dell-button btn btn-space btn-primary" type="submit">
+                                    Сохранить
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

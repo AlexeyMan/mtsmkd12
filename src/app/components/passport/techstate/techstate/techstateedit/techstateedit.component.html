@@ -1,0 +1,478 @@
+<div class="panel panel-default panel-table" *ngIf="defectentry">
+  <div class="row">
+    <div class="col-md-4">
+      <!--  -->
+      <mat-tree [dataSource]="dataSourceTree" [treeControl]="treeControl">
+        <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+          <button mat-icon-button disabled></button>
+          <button
+            mat-button
+            (click)="setSelected(node.node)"
+            [matTooltip]="node.node.structural_element_name"
+            matTooltipPosition="after"
+            [ngStyle]="{
+              background: activeNode == node.node.id ? 'whitesmoke' : ''
+            }"
+          >
+            {{ node.name }}
+          </button>
+        </mat-tree-node>
+        <mat-tree-node
+          *matTreeNodeDef="let node; when: hasChild"
+          matTreeNodePadding
+        >
+          <button
+            mat-icon-button
+            matTreeNodeToggle
+            [attr.aria-label]="'toggle ' + node.structural_element_name"
+          >
+            <mat-icon class="mat-icon-rtl-mirror">
+              {{
+                treeControl.isExpanded(node) ? "expand_more" : "chevron_right"
+              }}
+            </mat-icon>
+          </button>
+          <button
+            [ngStyle]="{
+              background: activeNode == node.node.id ? 'whitesmoke' : ''
+            }"
+            mat-button
+            (click)="setSelected(node.node)"
+            [matTooltip]="node.node.structural_element_name"
+            matTooltipPosition="after"
+          >
+            {{ node.name }}
+          </button>
+        </mat-tree-node>
+      </mat-tree>
+      <!--  -->
+    </div>
+    <div *ngIf="isShowForm" class="col-md-8">
+      <form
+        id="ngform01"
+        [formGroup]="editForm"
+        (ngSubmit)="onSubmit(editForm.value)"
+      >
+        <div class="col-md-12">
+          <button
+            *ngIf="(this.settings$ | async).canEdit"
+            style="float: right; display: none"
+            form="ngform01"
+            mat-button
+            id="sbmt"
+          >
+            Применить
+          </button>
+        </div>
+        <div class="panel-heading">
+          <div class="row">
+            <ng-container *ngIf="is_field; else size">
+              <div class="col-md-8">
+                <strong>Элемент: </strong>
+                {{ this.structural_element_name }}
+                </div>
+              <div class="col-md-4" style="text-align: end; display: inline-flex; justify-content: space-around;">
+                <strong>Значение: </strong>
+                <div style="white-space: nowrap;">
+                  <input
+                  formControlName="size"
+                  [(ngModel)]="this.psize"
+                  [readonly]="!(this.settings$ | async).canEdit"
+                  style="width: 50px;"
+                  matInput
+                />
+                {{ size_measure_unit ? size_measure_unit : "" }}
+                </div>
+              </div>
+            </ng-container>
+            <ng-template #size>
+              <div class="col-md-9">
+                <div
+                  style="
+                    position: absolute;
+                    top: 50%;
+                    transform: translate(0%, -65%);
+                  "
+                >
+                  <strong>Элемент: </strong>
+                  {{ this.structural_element_name }}
+                </div>
+              </div>
+              <div class="col-md-3">
+                <strong>Вес: </strong>
+                <mat-form-field
+                  style="max-width: 100px"
+                  class="example-full-width"
+                >
+                  <input
+                    formControlName="coefficient"
+                    [(ngModel)]="this.coefficient"
+                    [readonly]="!(this.settings$ | async).canEdit"
+                    matInput
+                  />
+                </mat-form-field>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-12">
+            <mat-form-field appearance="fill">
+              <mat-label>Материал</mat-label>
+              <mat-select
+                [multiple]="true"
+                [disabled]="!(this.settings$ | async).canEdit"
+                [(ngModel)]="this.materials"
+                formControlName="materials"
+                (selectionChange)="materialsChange($event)"
+              >
+                <mat-option
+                  *ngFor="let element of structuralElementRef"
+                  data-toggle="tooltip" [title]="element.name"
+                  [value]="element.id"
+                  >{{ element.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="panel-heading">Оценка состояния</div>
+
+        <div class="form-group row">
+          <div class="col-md-9">
+            <mat-form-field appearance="fill">
+              <mat-label>Техническое состояние</mat-label>
+              <mat-select
+                formControlName="techStateDescrLink"
+                [(ngModel)]="this.techStateDescrLink"
+                [disabled]="!(this.settings$ | async).canEdit"
+                multiple
+              >
+                <!-- <mat-select-trigger *ngIf="techStateDescrLink.length">
+                  {{ selectedTechCondName() }}
+                </mat-select-trigger> -->
+                <mat-option
+                  *ngFor="let techCondDescription of techCondDescriptions"
+                  data-toggle="tooltip" [title]="techCondDescription.wsName +
+                  ' / ' +
+                  techCondDescription.dsName +
+                  ' / ' +
+                  techCondDescription.materialName || 'Не указано'"
+                  [value]="techCondDescription.id"
+                >
+                  {{
+                    techCondDescription.wsName +
+                      " / " +
+                      techCondDescription.dsName +
+                      " / " +
+                      techCondDescription.materialName || "Не указано"
+                  }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-md-3">
+            <mat-checkbox
+              formControlName="takeAccountMaterial"
+              [(ngModel)]="this.takeAccountMaterial"
+              [disabled]="!(this.settings$ | async).canEdit"
+              (change)="materialsChange()"
+              >с учетом материала</mat-checkbox
+            >
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-12">
+            <mat-form-field appearance="fill">
+              <mat-label>Виды работ</mat-label>
+              <mat-select
+                formControlName="necessaryWorkListLink"
+                [(ngModel)]="this.necessaryWorkListLink"
+                [disabled]="!(this.settings$ | async).canEdit"
+                multiple
+              >
+                <mat-option
+                  *ngFor="let work of filteredWorks"
+                  [value]="work.id"
+                >
+                  {{ work.name || "Не указано" }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-12">
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Стоимость работ</mat-label>
+              <input
+                appFloatnumber
+                autocomplete="off"
+                formControlName="necessary_work_cost"
+                [(ngModel)]="this.necessary_work_cost"
+                [readonly]="!(this.settings$ | async).canEdit"
+                matInput
+                (change)="diffPercent($event, 'necessary_work_cost')"
+              />
+            </mat-form-field>
+            <div
+              [id]="'necessary_work_cost'"
+              style="display: none"
+              class="equal"
+            >
+              Расхождение <strong>10%</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Износ</mat-label>
+              <input
+                appFloatnumber
+                autocomplete="off"
+                formControlName="damage"
+                [(ngModel)]="this.damage"
+                [readonly]="!(this.settings$ | async).canEdit"
+                matInput
+                (change)="diffPercent($event, 'damage')"
+              />
+            </mat-form-field>
+            <div [id]="'damage'" style="display: none" class="equal">
+              Расхождение <strong>10%</strong>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Износ по году эксплуатации</mat-label>
+              <input
+                appFloatnumber
+                formControlName="damagePeriod"
+                [(ngModel)]="this.damagePeriod"
+                [readonly]="true"
+                matInput
+              />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="panel panel-default panel-table">
+          <div class="panel-heading">Дефектные участки</div>
+          <div class="panel-body">
+            <div class="example-container mat-elevation-z8">
+              <!--  -->
+              <table mat-table [(dataSource)]="dataSourceTable">
+                <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <button
+                      *ngIf="(this.settings$ | async).canEdit"
+                      mat-icon-button
+                      color="primary"
+                      (click)="addRow()"
+                      type="button"
+                    >
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <button
+                      type="button"
+                      (click)="deleteRow(element)"
+                      [disabled]="!(this.settings$ | async).canEdit"
+                      mat-icon-button
+                      mat-icon-button
+                      color="warn"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef>Сумма</td>
+                </ng-container>
+
+                <ng-container matColumnDef="section_number">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Номер
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ element.section_number }}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <ng-container matColumnDef="section_size">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Размер
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field appearance="outline">
+                      <input
+                        [disabled]="!(this.settings$ | async).canEdit"
+                        matInput
+                        [(ngModel)]="element.section_size"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                    </mat-form-field>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef>{{ getSizeCost() }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="damage">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Износ
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    <mat-form-field appearance="outline">
+                      <input
+                        [disabled]="!(this.settings$ | async).canEdit"
+                        matInput
+                        [(ngModel)]="element.damage"
+                        [ngModelOptions]="{ standalone: true }"
+                      />
+                    </mat-form-field>
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <ng-container matColumnDef="damage_by_size">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Взвешенный износ
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+                    {{ damageBySize(element) }}
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef>
+                    {{ damageBySizeCost() }}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="images">
+                  <th mat-header-cell *matHeaderCellDef>
+                    Изображения
+                  </th>
+                  <td mat-cell *matCellDef="let element">
+
+                  <ng-container *ngIf="!(this.settings$ | async).canEdit; else editPhoto">
+                    <ng-image-slider
+                    [ngStyle]="{ opacity: element.images.length ? 1 : 0 }"
+                    style="width: 100%"
+                    [images]="element.images"
+                    [animationSpeed]="0.3"
+                    [imageSize]="{ height: 80, space: 3 }"
+                    #nav
+                  ></ng-image-slider>
+                  </ng-container>
+                  <ng-template #editPhoto>
+                    <ng-container *ngIf="element.id; else noEditPhoto">
+                      <button
+                      *ngIf="(this.settings$ | async).canEdit"
+                      mat-icon-button
+                      color="primary"
+                      (click)="defectAreasPhoto(element)"
+                      type="button"
+                      >
+                      <mat-icon>mode_edit</mat-icon>
+                      </button>
+                      <label>К-во фото: {{element.images.length}}</label>
+                    </ng-container>
+                    <ng-template #noEditPhoto>
+                      <label>Необходимо сохранить д/у</label>
+                    </ng-template>
+
+                  </ng-template>
+
+                  </td>
+                  <td mat-footer-cell *matFooterCellDef></td>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="displayedColumns; sticky: true"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                ></tr>
+                <tr
+                  mat-footer-row
+                  *matFooterRowDef="displayedColumns; sticky: true"
+                ></tr>
+              </table>
+              <!--  -->
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-heading">Примечания</div>
+
+        <div class="form-group row">
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Дата ремонта</mat-label>
+              <input
+                formControlName="repair_date_remark"
+                [(ngModel)]="this.repair_date_remark"
+                [readonly]="!(this.settings$ | async).canEdit"
+                [disabled]="!(this.settings$ | async).canEdit"
+                matInput
+                [matDatepicker]="picker"
+                (dateChange)="dateChangeRepair($event)"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Дата осмотра</mat-label>
+              <input
+                formControlName="inspection_date_remark"
+                [(ngModel)]="this.inspection_date_remark"
+                [readonly]="!(this.settings$ | async).canEdit"
+                [disabled]="!(this.settings$ | async).canEdit"
+                matInput
+                [matDatepicker]="picker1"
+                (dateChange)="dateChangeInspection($event)"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker1"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="col-md-6">
+            <mat-form-field appearance="fill">
+              <mat-label>Комментарий</mat-label>
+              <textarea
+                formControlName="comment"
+                [(ngModel)]="this.comment"
+                [readonly]="!(this.settings$ | async).canEdit"
+                matInput
+              ></textarea>
+            </mat-form-field>
+          </div>
+          <div class="col-md-6">
+            <mat-checkbox
+              formControlName="failure_state"
+              [(ngModel)]="this.failure_state"
+              [disabled]="!(this.settings$ | async).canEdit"
+              (change)="failureChange($event)"
+              >Аварийность</mat-checkbox
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

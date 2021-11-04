@@ -22,6 +22,10 @@ import {MatPaginatorIntl} from "@angular/material/paginator";
 import { getRussianPaginatorIntl } from "./_helpers/russian-paginator";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DeleteDialogComponent } from "./components/dialog/delete-tep-dialog/delete-tep-dialog.component";
+// import { PassportModule } from './passport-module';
+import { MkdComponent } from './components/passport/mkd/mkd.component';
+import { NgImageSliderModule } from 'ng-image-slider';
+import { HasPermissionDirective } from './_helpers/hasPermission.directive';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +35,9 @@ import { DeleteDialogComponent } from "./components/dialog/delete-tep-dialog/del
     FiltersComponent,
     ReportsComponent,
     FavoritTabsComponent,
-    DeleteDialogComponent
+    DeleteDialogComponent,
+    MkdComponent,
+    HasPermissionDirective
   ],
   imports: [
     BrowserModule,
@@ -42,6 +48,7 @@ import { DeleteDialogComponent } from "./components/dialog/delete-tep-dialog/del
     BrowserAnimationsModule,
     MaterialModule,
     NgSelectModule,
+    NgImageSliderModule,
   ],
   entryComponents: [
     DeleteDialogComponent,

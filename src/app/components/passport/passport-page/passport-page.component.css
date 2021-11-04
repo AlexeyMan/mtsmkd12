@@ -1,0 +1,36 @@
+mat-form-field {
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.fixed-header {
+  position: fixed;
+  z-index: 999;
+  height: 50px;
+}
+
+#frugalmap {
+  height: 300px;
+  width: 100%;
+  top: 50px;
+  position: relative;
+  background: #2ab4c0;
+}
+
+.mat-elevation-z5 {
+  position: relative;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  max-width: 1110px;
+}
+
+mat-toolbar {
+  background: white;
+  z-index: 1;
+}

@@ -12,11 +12,12 @@ export interface HouseInfo {
   total_damage: number;
   filename: string;
   eas_id: number;
+  district_name: string;
 }
 
 export interface GeneralSettings {
   menuPosition: Boolean;
-  canEdit: Boolean;
+  canEdit: any;
   showDebugPanel: Boolean;
   visible_columns: string[];
 }

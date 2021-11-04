@@ -1,0 +1,72 @@
+
+.add-button {
+    margin: 10px;
+    width: 175px;
+  }
+  .dell-button {
+    //   margin-left: 10px;
+      width: 175px;
+  }
+  
+  .button-container {
+    //   padding: 15px;
+      background-color: white;
+      padding-top: 0px;
+  }
+  
+  .excel-button {
+      margin: 10px;
+      float: right;
+  }
+  .custom{
+      min-height: 0px;
+      padding-bottom: 0;
+  }
+  .mat-button-focus-overlay { background-color: transparent!important; }
+
+  .custom::ng-deep .ng-select-container {
+      border-style: solid;
+      border: 2px solid #ebebeb;
+      min-height: 0;
+      height: 3.23077rem;  
+      
+  }
+  .custom::ng-deep .ng-select-container:after{
+      border-style: none;
+  }
+  .custom::ng-deep .ng-value-container {
+      padding-left: 10px;
+      padding-top: 0;
+  }
+  .customInput {
+      font-size: 18px;
+      float: left;
+      padding-left: 10px;
+      margin-top: -3px;
+  }
+  .customInput::after {
+      font-size: 18px;
+      float: left;
+      padding-left: 2px;
+      height: 42px;
+      line-height: 1;
+  }
+  .customForm {
+      border-style: solid;
+      border: 2px solid #ebebeb;
+      min-height: 0;
+      height: 3.23077rem;  
+      padding-right: 36px;
+  }
+  span {
+      height: 32px;
+  }
+  .alarmStyle {
+      border-color: #F45846;
+  }
+  .form-control{
+    padding-left: 10px;
+  }
+  input{
+      color: black;
+  }

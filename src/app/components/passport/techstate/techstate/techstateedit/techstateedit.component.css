@@ -1,0 +1,136 @@
+.example-tree-invisible {
+  display: none;
+}
+
+.example-tree ul,
+.example-tree li {
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style-type: none;
+}
+
+button {
+  outline: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 22rem;
+}
+
+mat-tree {
+  max-height: 95rem;
+  overflow-x: hidden;
+}
+
+.background-highlight {
+  background-color: whitesmoke;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: #dedddd;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-checkbox {
+  line-height: 5rem;
+}
+
+.example-container {
+  max-height: 400px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+table >>> .mat-form-field-wrapper {
+  padding-bottom: 0rem;
+}
+
+table >>> .mat-column-id {
+  min-width: fit-content !important;
+  max-width: fit-content !important;
+}
+
+table >>> .mat-form-field-infix {
+  padding-top: 0.5rem;
+}
+
+table >>> mat-form-field {
+  width: 8rem;
+}
+
+table >>> ng-image-slider >>> .main {
+  border-radius: 5px;
+}
+
+table >>> th >>> .material-icons {
+  position: relative;
+  bottom: 1px;
+  right: -1px;
+} 
+
+table >>> .ng-image-slider .ng-image-slider-container .main .next {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -10px;
+  outline: 0;
+  width: 20px;
+  height: 20px; 
+  font-size: 25px;
+  line-height: 18px;
+  z-index: 8;
+  transition: .5s ease-in-out;
+  text-align: center;
+}
+
+table >>> .ng-image-slider .ng-image-slider-container .main .prev {
+  position: absolute;
+  right: 4px;
+  top: 50%;
+  background-color: #fff;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -10px;
+  outline: 0;
+  width: 20px;
+  height: 20px;
+  font-size: 25px;
+  line-height: 18px;
+  z-index: 8;
+  transition: .5s ease-in-out;
+  text-align: center;
+}
+
+table >>> .ng-image-slider >>> .caption {
+  display: none;
+}
+
+.equal {
+  background: rgba(255, 64, 129, 0.54);
+  position: absolute;
+  top: 48px;
+  width: 54.1rem;
+  border-radius: 0 0 3px 3px;
+  padding: 3px;
+  font-size: 9px;
+}

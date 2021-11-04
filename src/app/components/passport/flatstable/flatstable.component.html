@@ -1,0 +1,1701 @@
+<div id="floater" *ngIf="(this.settings$ | async).canEdit">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3" *ngIf="(this.settings$ | async).menuPosition"></div>
+      <div class="col-md-9">
+        <div class="card semitrans">
+          <button class="btn btn-space btn-primary savebutton" form="ngform01">
+            <i class="icon icon-left s7-config"></i> Сохранить
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form
+  (ngSubmit)="onSubmit(form.value)"
+  id="ngform01"
+  [formGroup]="form"
+  *ngIf="this.indi !== undefined"
+>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Отдельные квартиры</div>
+        <div class="panel-body">
+          <div class="table-responsive noSwipe">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 15%"></th>
+                  <th style="width: 10%">1 к.кв.</th>
+                  <th style="width: 10%">2 к.кв.</th>
+                  <th style="width: 10%">3 к.кв.</th>
+                  <th style="width: 10%">4 к.кв.</th>
+                  <th style="width: 10%">5 к.кв</th>
+                  <th style="width: 10%">6 к.кв</th>
+                  <th style="width: 10%">7+ к.кв</th>
+                  <th style="width: 15%">Итого</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>К-во квартир</td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('ifc1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ifc1"
+                      [(ngModel)]="this.indi.individual[1].flat_count"
+                      (input)="changeRoomCount('indi', 'individual', 1)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('ifc2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ifc2"
+                      [(ngModel)]="this.indi.individual[2].flat_count"
+                      (input)="changeRoomCount('indi', 'individual', 2)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('ifc3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ifc3"
+                      [(ngModel)]="this.indi.individual[3].flat_count"
+                      (input)="changeRoomCount('indi', 'individual', 3)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('ifc4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ifc4"
+                      [(ngModel)]="this.indi.individual[4].flat_count"
+                      (input)="changeRoomCount('indi', 'individual', 4)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('ifc5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ifc5"
+                      [(ngModel)]="this.indi.individual[5].flat_count"
+                      (input)="changeRoomCount('indi', 'individual', 5)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('ifc6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ifc6"
+                      [(ngModel)]="this.indi.individual[6].flat_count"
+                      (input)="changeRoomCount('indi', 'individual', 6)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('ifc7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ifc7"
+                      [(ngModel)]="this.indi.individual[7].flat_count"
+                    />
+                  </td>
+                  <td class="text-right">
+                    {{ this.ifcSum$ | async | number }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>К-во комнат</td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('irc1').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      formControlName="irc1"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('irc2').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      formControlName="irc2"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('irc3').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      formControlName="irc3"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('irc4').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      formControlName="irc4"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('irc5').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      formControlName="irc5"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('irc6').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      formControlName="irc6"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('irc7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="irc7"
+                      [(ngModel)]="this.indi.individual[7].room_count"
+                    />
+                  </td>
+                  <td class="text-right">
+                    {{ this.ircSum$ | async | number }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Площадь, всего</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ita1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ita1"
+                      [(ngModel)]="this.indi.individual[1].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ita2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ita2"
+                      [(ngModel)]="this.indi.individual[2].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ita3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ita3"
+                      [(ngModel)]="this.indi.individual[3].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ita4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ita4"
+                      [(ngModel)]="this.indi.individual[4].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ita5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ita5"
+                      [(ngModel)]="this.indi.individual[5].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ita6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ita6"
+                      [(ngModel)]="this.indi.individual[6].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ita7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ita7"
+                      [(ngModel)]="this.indi.individual[7].total_area"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.itaSum$ | async | number: "1.1-2" }}
+                  </td>
+                </tr>
+                <!--  -->
+                <tr>
+                  <td>В частной собственности</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilpo1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilpo1"
+                      [value]="this.indi.individual[1].fla_privately_owned"
+                      (input)="changeField('indi', 1, 'fla_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilpo2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilpo2"
+                      [(ngModel)]="this.indi.individual[2].fla_privately_owned"
+                      (input)="changeField('indi', 2, 'fla_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilpo3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilpo3"
+                      [(ngModel)]="this.indi.individual[3].fla_privately_owned"
+                      (input)="changeField('indi', 3, 'fla_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilpo4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilpo4"
+                      [(ngModel)]="this.indi.individual[4].fla_privately_owned"
+                      (input)="changeField('indi', 4, 'fla_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilpo5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilpo5"
+                      [(ngModel)]="this.indi.individual[5].fla_privately_owned"
+                      (input)="changeField('indi', 5, 'fla_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilpo6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilpo6"
+                      [(ngModel)]="this.indi.individual[6].fla_privately_owned"
+                      (input)="changeField('indi', 6, 'fla_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilpo7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilpo7"
+                      [(ngModel)]="this.indi.individual[7].fla_privately_owned"
+                      (input)="changeField('indi', 7, 'fla_privately_owned')"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.ilpoSum$ | async | number }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>В государственной собственности</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilso1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilso1"
+                      [(ngModel)]="this.indi.individual[1].fla_state_owned"
+                      (input)="changeField('indi', 1, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilso2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilso2"
+                      [(ngModel)]="this.indi.individual[2].fla_state_owned"
+                      (input)="changeField('indi', 2, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilso3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilso3"
+                      [(ngModel)]="this.indi.individual[3].fla_state_owned"
+                      (input)="changeField('indi', 3, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilso4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilso4"
+                      [(ngModel)]="this.indi.individual[4].fla_state_owned"
+                      (input)="changeField('indi', 4, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilso5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilso5"
+                      [(ngModel)]="this.indi.individual[5].fla_state_owned"
+                      (input)="changeField('indi', 5, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilso6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilso6"
+                      [(ngModel)]="this.indi.individual[6].fla_state_owned"
+                      (input)="changeField('indi', 6, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ilso7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ilso7"
+                      [(ngModel)]="this.indi.individual[7].fla_state_owned"
+                      (input)="changeField('indi', 7, 'fla_state_owned')"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.ilsoSum$ | async | number }}
+                  </td>
+                </tr>
+                <!--  -->
+                <tr>
+                  <td>Площадь, жилая</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ila1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ila1"
+                      [(ngModel)]="this.indi.individual[1].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ila2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ila2"
+                      [(ngModel)]="this.indi.individual[2].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ila3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ila3"
+                      [(ngModel)]="this.indi.individual[3].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ila4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ila4"
+                      [(ngModel)]="this.indi.individual[4].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ila5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ila5"
+                      [(ngModel)]="this.indi.individual[5].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ila6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ila6"
+                      [(ngModel)]="this.indi.individual[6].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ila7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ila7"
+                      [(ngModel)]="this.indi.individual[7].living_area"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.ilaSum$ | async | number: "1.1-2" }}
+                  </td>
+                </tr>
+                <!--  -->
+                <tr>
+                  <td>В частной собственности</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itpo1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itpo1"
+                      [(ngModel)]="this.indi.individual[1].fta_privately_owned"
+                      (input)="changeField('indi', 1, 'fta_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itpo2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itpo2"
+                      [(ngModel)]="this.indi.individual[2].fta_privately_owned"
+                      (input)="changeField('indi', 2, 'fta_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itpo3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itpo3"
+                      [(ngModel)]="this.indi.individual[3].fta_privately_owned"
+                      (input)="changeField('indi', 3, 'fta_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itpo4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itpo4"
+                      [(ngModel)]="this.indi.individual[4].fta_privately_owned"
+                      (input)="changeField('indi', 4, 'fta_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itpo5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itpo5"
+                      [(ngModel)]="this.indi.individual[5].fta_privately_owned"
+                      (input)="changeField('indi', 5, 'fta_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itpo6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itpo6"
+                      [(ngModel)]="this.indi.individual[6].fta_privately_owned"
+                      (input)="changeField('indi', 6, 'fta_privately_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itpo7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itpo7"
+                      [(ngModel)]="this.indi.individual[7].fta_privately_owned"
+                      (input)="changeField('indi', 7, 'fta_privately_owned')"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.itpoSum$ | async | number }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>В государственной собственности</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itso1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itso1"
+                      [(ngModel)]="this.indi.individual[1].fta_state_owned"
+                      (input)="changeField('indi', 1, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itso2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itso2"
+                      [(ngModel)]="this.indi.individual[2].fta_state_owned"
+                      (input)="changeField('indi', 2, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itso3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itso3"
+                      [(ngModel)]="this.indi.individual[3].fta_state_owned"
+                      (input)="changeField('indi', 3, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itso4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itso4"
+                      [(ngModel)]="this.indi.individual[4].fta_state_owned"
+                      (input)="changeField('indi', 4, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itso5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itso5"
+                      [(ngModel)]="this.indi.individual[5].fta_state_owned"
+                      (input)="changeField('indi', 5, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itso6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itso6"
+                      [(ngModel)]="this.indi.individual[6].fta_state_owned"
+                      (input)="changeField('indi', 6, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('itso7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="itso7"
+                      [(ngModel)]="this.indi.individual[7].fta_state_owned"
+                      (input)="changeField('indi', 7, 'fta_state_owned')"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.itsoSum$ | async | number }}
+                  </td>
+                </tr>
+                <!--  -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Коммунальные квартиры</div>
+        <div class="panel-body">
+          <div class="table-responsive noSwipe">
+            <table class="table table-striped table-hover">
+              <thead>
+                <tr>
+                  <th style="width: 15%"></th>
+                  <th style="width: 10%">1 к.кв.</th>
+                  <th style="width: 10%">2 к.кв.</th>
+                  <th style="width: 10%">3 к.кв.</th>
+                  <th style="width: 10%">4 к.кв.</th>
+                  <th style="width: 10%">5 к.кв</th>
+                  <th style="width: 10%">6 к.кв</th>
+                  <th style="width: 10%">7+ к.кв</th>
+                  <th style="width: 15%">Итого</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>К-во квартир</td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('cfc1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cfc1"
+                      [(ngModel)]="this.indi.communal[1].flat_count"
+                      (input)="changeRoomCount('indi', 'communal', 1)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('cfc2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cfc2"
+                      [(ngModel)]="this.indi.communal[2].flat_count"
+                      (input)="changeRoomCount('indi', 'communal', 2)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('cfc3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cfc3"
+                      [(ngModel)]="this.indi.communal[3].flat_count"
+                      (input)="changeRoomCount('indi', 'communal', 3)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('cfc4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cfc4"
+                      [(ngModel)]="this.indi.communal[4].flat_count"
+                      (input)="changeRoomCount('indi', 'communal', 4)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('cfc5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cfc5"
+                      [(ngModel)]="this.indi.communal[5].flat_count"
+                      (input)="changeRoomCount('indi', 'communal', 5)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('cfc6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cfc6"
+                      [(ngModel)]="this.indi.communal[6].flat_count"
+                      (input)="changeRoomCount('indi', 'communal', 6)"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('cfc7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cfc7"
+                      [(ngModel)]="this.indi.communal[7].flat_count"
+                    />
+                  </td>
+                  <td class="text-right">
+                    {{ this.cfcSum$ | async | number: "1.1-2" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>К-во комнат</td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('crc1').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      [value]="this.form.controls.crc1.value"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('crc2').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      [value]="this.form.controls.crc2.value"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('crc3').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      [value]="this.form.controls.crc3.value"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('crc4').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      [value]="this.form.controls.crc4.value"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('crc5').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      [value]="this.form.controls.crc5.value"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('crc6').valid }"
+                      readonly
+                      type="text"
+                      class="form-control"
+                      [value]="this.form.controls.crc6.value"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appIntnumber
+                      [ngClass]="{ 'is-invalid': !form.get('crc7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="crc7"
+                      [(ngModel)]="this.indi.communal[7].room_count"
+                    />
+                  </td>
+                  <td class="text-right">
+                    {{ this.crcSum$ | async | number: "1.1-2" }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Площадь, всего</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cta1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cta1"
+                      [(ngModel)]="this.indi.communal[1].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cta2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cta2"
+                      [(ngModel)]="this.indi.communal[2].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cta3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cta3"
+                      [(ngModel)]="this.indi.communal[3].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cta4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cta4"
+                      [(ngModel)]="this.indi.communal[4].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cta5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cta5"
+                      [(ngModel)]="this.indi.communal[5].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cta6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cta6"
+                      [(ngModel)]="this.indi.communal[6].total_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cta7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cta7"
+                      [(ngModel)]="this.indi.communal[7].total_area"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.ctaSum$ | async | number: "1.1-2" }}
+                  </td>
+                </tr>
+                <!--  -->
+                <tr>
+                  <td>В частной собственности</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clpo1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clpo1"
+                      [value]="this.indi.communal[1].fla_privately_owned"
+                      (input)="
+                        changeField('communal', 1, 'fla_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clpo2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clpo2"
+                      [value]="this.indi.communal[2].fla_privately_owned"
+                      (input)="
+                        changeField('communal', 2, 'fla_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clpo3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clpo3"
+                      [value]="this.indi.communal[3].fla_privately_owned"
+                      (input)="
+                        changeField('communal', 3, 'fla_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clpo4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clpo4"
+                      [value]="this.indi.communal[4].fla_privately_owned"
+                      (input)="
+                        changeField('communal', 4, 'fla_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clpo5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clpo5"
+                      [value]="this.indi.communal[5].fla_privately_owned"
+                      (input)="
+                        changeField('communal', 5, 'fla_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clpo6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clpo6"
+                      [value]="this.indi.communal[6].fla_privately_owned"
+                      (input)="
+                        changeField('communal', 6, 'fla_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clpo7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clpo7"
+                      [value]="this.indi.communal[7].fla_privately_owned"
+                      (input)="
+                        changeField('communal', 7, 'fla_privately_owned')
+                      "
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.clpoSum$ | async | number }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>В государственной собственности</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clso1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clso1"
+                      [value]="this.indi.communal[1].fla_state_owned"
+                      (input)="changeField('communal', 1, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clso2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clso2"
+                      [value]="this.indi.communal[2].fla_state_owned"
+                      (input)="changeField('communal', 2, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clso3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clso3"
+                      [value]="this.indi.communal[3].fla_state_owned"
+                      (input)="changeField('communal', 3, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clso4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clso4"
+                      [value]="this.indi.communal[4].fla_state_owned"
+                      (input)="changeField('communal', 4, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clso5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clso5"
+                      [value]="this.indi.communal[5].fla_state_owned"
+                      (input)="changeField('communal', 5, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clso6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clso6"
+                      [value]="this.indi.communal[6].fla_state_owned"
+                      (input)="changeField('communal', 6, 'fla_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('clso7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="clso7"
+                      [value]="this.indi.communal[7].fla_state_owned"
+                      (input)="changeField('communal', 7, 'fla_state_owned')"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.clsoSum$ | async | number }}
+                  </td>
+                </tr>
+                <!--  -->
+                <tr>
+                  <td>Площадь, жилая</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cla1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cla1"
+                      [(ngModel)]="this.indi.communal[1].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cla2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cla2"
+                      [(ngModel)]="this.indi.communal[2].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cla3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cla3"
+                      [(ngModel)]="this.indi.communal[3].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cla4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cla4"
+                      [(ngModel)]="this.indi.communal[4].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cla5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cla5"
+                      [(ngModel)]="this.indi.communal[5].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cla6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cla6"
+                      [(ngModel)]="this.indi.communal[6].living_area"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('cla7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="cla7"
+                      [(ngModel)]="this.indi.communal[7].living_area"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.claSum$ | async | number: "1.1-2" }}
+                  </td>
+                </tr>
+                <!--  -->
+                <tr>
+                  <td>В частной собственности</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctpo1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctpo1"
+                      [value]="this.indi.communal[1].fta_privately_owned"
+                      (input)="
+                        changeField('communal', 1, 'fta_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctpo2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctpo2"
+                      [value]="this.indi.communal[2].fta_privately_owned"
+                      (input)="
+                        changeField('communal', 2, 'fta_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctpo3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctpo3"
+                      [value]="this.indi.communal[3].fta_privately_owned"
+                      (input)="
+                        changeField('communal', 3, 'fta_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctpo4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctpo4"
+                      [value]="this.indi.communal[4].fta_privately_owned"
+                      (input)="
+                        changeField('communal', 4, 'fta_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctpo5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctpo5"
+                      [value]="this.indi.communal[5].fta_privately_owned"
+                      (input)="
+                        changeField('communal', 5, 'fta_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctpo6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctpo6"
+                      [value]="this.indi.communal[6].fta_privately_owned"
+                      (input)="
+                        changeField('communal', 6, 'fta_privately_owned')
+                      "
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctpo7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctpo7"
+                      [value]="this.indi.communal[7].fta_privately_owned"
+                      (input)="
+                        changeField('communal', 7, 'fta_privately_owned')
+                      "
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.ctpoSum$ | async | number }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>В государственной собственности</td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctso1').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctso1"
+                      [value]="this.indi.communal[1].fta_state_owned"
+                      (input)="changeField('communal', 1, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctso2').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctso2"
+                      [value]="this.indi.communal[2].fta_state_owned"
+                      (input)="changeField('communal', 2, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctso3').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctso3"
+                      [value]="this.indi.communal[3].fta_state_owned"
+                      (input)="changeField('communal', 3, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctso4').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctso4"
+                      [value]="this.indi.communal[4].fta_state_owned"
+                      (input)="changeField('communal', 4, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctso5').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctso5"
+                      [value]="this.indi.communal[5].fta_state_owned"
+                      (input)="changeField('communal', 5, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctso6').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctso6"
+                      [value]="this.indi.communal[6].fta_state_owned"
+                      (input)="changeField('communal', 6, 'fta_state_owned')"
+                    />
+                  </td>
+                  <td class="text-right">
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [ngClass]="{ 'is-invalid': !form.get('ctso7').valid }"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      type="text"
+                      class="form-control"
+                      formControlName="ctso7"
+                      [value]="this.indi.communal[7].fta_state_owned"
+                      (input)="changeField('communal', 7, 'fta_state_owned')"
+                    />
+                  </td>
+
+                  <td class="text-right">
+                    {{ this.ctsoSum$ | async | number }}
+                  </td>
+                </tr>
+                <!--  -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">Общежития</div>
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <mat-form-field appearance="fill">
+                <mat-label>Количество комнат в общежитии (шт)</mat-label>
+                <input
+                  appFloatnumber
+                  autocomplete="off"
+                  [readonly]="!(this.settings$ | async).canEdit"
+                  matInput
+                  formControlName="hostelRoomCount"
+                  [(ngModel)]="this.indi.hostel.hostelRoomCount"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <mat-form-field appearance="fill">
+                <mat-label>Общая площадь общежитий</mat-label>
+                <input
+                  appFloatnumber
+                  autocomplete="off"
+                  [readonly]="!(this.settings$ | async).canEdit"
+                  matInput
+                  formControlName="hostelTotalArea"
+                  [(ngModel)]="this.indi.hostel.hostelTotalArea"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <mat-form-field appearance="fill">
+                <mat-label>Жилая площадь общежитий</mat-label>
+                <input
+                  appFloatnumber
+                  autocomplete="off"
+                  [readonly]="!(this.settings$ | async).canEdit"
+                  matInput
+                  formControlName="hostelLivingArea"
+                  [(ngModel)]="this.indi.hostel.hostelLivingArea"
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <mat-form-field appearance="fill">
+                <mat-label
+                  >Количество встроенных нежилых помещений (шт)</mat-label
+                >
+                <input
+                  appFloatnumber
+                  autocomplete="off"
+                  [readonly]="!(this.settings$ | async).canEdit"
+                  matInput
+                  formControlName="nonLivingRoomCount"
+                  [(ngModel)]="
+                    this.indi.otherCharacteristics.nonLivingRoomCount
+                  "
+                />
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <mat-form-field appearance="fill">
+                <mat-label
+                  >Общая площадь встроенных нежилых помещений</mat-label
+                >
+                <input
+                  appFloatnumber
+                  autocomplete="off"
+                  [readonly]="!(this.settings$ | async).canEdit"
+                  matInput
+                  formControlName="nonLivingRoomTotalArea"
+                  [(ngModel)]="
+                    this.indi.otherCharacteristics.nonLivingRoomTotalArea
+                  "
+                />
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+<app-debugpanel
+  *ngIf="(this.settings$ | async).showDebugPanel"
+  [debugData]="this.printValue() | json"
+></app-debugpanel>

@@ -1,0 +1,87 @@
+<h2 mat-dialog-title>Фотографии дефектных участков</h2>
+<mat-dialog-content>
+        <ng-container *ngIf="defectAreasImageObject.length; else noPhoto">
+          <form [formGroup]="form">
+            <table mat-table [dataSource]="defectAreasImageObject">
+      
+              <!-- Position Column -->
+              <!-- <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+              </ng-container> -->
+          
+              <!-- Name Column -->
+              <ng-container matColumnDef="image">
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td style="width: 10em;" mat-cell *matCellDef="let element">
+                    <ng-image-slider
+                    style="width: 100%"
+                    [images]="toArray(element)"
+                    [animationSpeed]="0.3"
+                    [imageSize]="{ height: 80, space: 3 }"
+                    #nav
+                  ></ng-image-slider>
+                </td>
+              </ng-container>
+          
+              <!-- Weight Column -->
+              <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let element">
+                    <!-- <mat-form-field appearance="outline">
+                        <input
+                          class="form-control"
+                          [formControlName]="element.id"
+                        />
+                      </mat-form-field> -->
+                      <mat-form-field appearance="outline">
+                        <input
+                          matInput
+                          [formControlName]="element.id"
+                        />
+                      </mat-form-field>
+                </td>
+              </ng-container>
+          
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> </th>
+                <td mat-cell *matCellDef="let element">
+                    <button
+                    type="button"
+                    mat-icon-button
+                    color="warn"
+                    (click)="deletePhoto(element.id)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+          
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+          </form>
+        </ng-container>
+        <ng-template #noPhoto>
+            <div style="text-align: center;">Нет фото</div>
+        </ng-template>
+        <mat-card>
+          <mat-file-upload
+          [labelText]="'Выберите фото для добавления'"
+          [selectButtonText]="'Выбрать фото'"
+          [selectFilesButtonType]="button"
+          [uploadButtonText]="'Загрузить'"
+          [uploadButtonType]="submit"
+          [allowMultipleFiles]="true"
+          [showUploadButton]="false"
+          [customSvgIcon]="delete_forever"
+          (selectedFilesChanged)="uploadPhoto($event)"
+        >
+      </mat-file-upload>
+        </mat-card>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="updatePhoto()" cdkFocusInitial>Сохранить</button>
+  <button mat-button (click)="closeDialog()">Закрыть</button>
+</mat-dialog-actions>

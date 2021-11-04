@@ -1,0 +1,145 @@
+<div class="container">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="row">
+        <div [className]="imageObject.length != 0 ? 'col-md-9' : 'col-md-12'">
+          <div class="row">
+            <div class="col-md-9">
+              <span>ТЭП МКД</span>
+              <div class="form-group" *ngIf="this.house_info">
+                <div class="dropdown status-mkd">
+                  <!-- <button
+                      type="button"
+                      class="btn btn-space btn-secondary btn-xs dropdown-toggle"
+                      data-toggle="dropdown"
+                    >
+                      <i class="icon icon-left s7-config"></i>
+                      Текущий статус ТЭП:
+                      {{ this.house_info.current_status.status_name }}
+                    </button> -->
+                  <!-- <div class="dropdown-menu">
+                      <a
+                        class="dropdown-item"
+                        [routerLink]=""
+                        (click)="setStatus(status.status_id, status.status_name)"
+                        *ngFor="let status of this.statuses"
+                      >
+                        {{ status.status_name }}
+                      </a>
+                    </div> -->
+                  <mat-form-field appearance="outline">
+                    <mat-label>Текущий статус ТЭП</mat-label>
+                    <mat-select
+                      [disabled]="
+                        permission
+                      "
+                      [value]="this.house_info.current_status.status_id"
+                      (selectionChange)="setStatus($event.value)"
+                    >
+                      <mat-option
+                        *ngFor="let status of this.statuses"
+                        [value]="status.status_id"
+                      >
+                        {{ status.status_name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3" *ngIf="this.house_info">
+              <span
+                *ngIf="
+                  this.house_info.current_status.actual_defect_status === 6
+                "
+                class="title"
+                [ngStyle]="{ float: imageObject.length > 0 ? 'left' : 'right' }"
+                >Износ: {{ this.house_info.total_damage }} %</span
+              >
+              <!-- <span class="panel-subtitle"> <span style="color: #000; font-weight: 600;"> Физический износ: </span><span [ngClass]="{ 'badge badge-danger' : this.house_info.total_damage > 30, 'badge badge-warning' : this.house_info.total_damage > 20 && this.house_info.total_damage <= 30, 'badge badge-success' : this.house_info.total_damage <=20 }">{{this.house_info.total_damage}}</span></span> -->
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-9">
+              <ng-container *ngIf="this.house_info">
+                <span>
+                  <strong>Адрес МКД:</strong>
+                  {{ this.house_info.district_name }} район,
+                  {{ this.house_info.address }}</span
+                >
+              </ng-container>
+            </div>
+            <div class="col-md-3">
+              <mat-slide-toggle
+                *hasPermission="'ROLE_EDIT_TEP'"
+                [ngStyle]="{ float: imageObject.length > 0 ? 'left' : 'right' }"
+                labelPosition="before"
+                (change)="OnChange($event)"
+                [checked]="(this.settings$ | async).canEdit"
+                >Режим правки</mat-slide-toggle
+              >
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <button (click)="createAct()" mat-raised-button color="primary">
+                Создать
+              </button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="imageObject.length > 0" class="col-md-3">
+          <ng-image-slider
+            style="width: 100%"
+            [images]="imageObject"
+            [animationSpeed]="0.3"
+            [imageSize]="{ height: 140, space: 3 }"
+            #nav
+          ></ng-image-slider>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!(this.settings$ | async).menuPosition">
+    <div class="col-md-12" style="position: absolute; max-width: 1110px">
+      <app-topmenu
+        [tepMenu]="tepMenu"
+        [tepPart]="tepPart"
+        [house_id]="house_id"
+      ></app-topmenu>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-3" *ngIf="(this.settings$ | async).menuPosition">
+      <app-sidemenu
+        [tepMenu]="tepMenu"
+        [tepPart]="tepPart"
+        [house_id]="house_id"
+      ></app-sidemenu>
+    </div>
+    <div
+      [ngClass]="{
+        'col-md-9': (this.settings$ | async).menuPosition,
+        'col-md-12': !(this.settings$ | async).menuPosition
+      }"
+    >
+      <!--  -->
+      <div class="panel panel-default">
+        <div
+          class="panel-heading panel-heading-divider"
+          style="padding: 50px 0 14px"
+        >
+          <!--  -->
+          <div class="panel-body">
+            Акт осмотра удалён
+            <!--  -->
+          </div>
+          <!--  -->
+        </div>
+      </div>
+      <!--  -->
+    </div>
+  </div>
+</div>

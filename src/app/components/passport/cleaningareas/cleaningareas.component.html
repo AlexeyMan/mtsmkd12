@@ -1,0 +1,98 @@
+<div class="panel panel-default" *ngIf="this.explications">
+  <div class="panel-body" [formGroup]="form">
+    <div class="row">
+      <div class="col-sm-12">
+        <button
+          form="ngform01"
+          *ngIf="(this.settings$ | async).canEdit"
+          style="float: right"
+          mat-raised-button
+          color="primary"
+          type="submit"
+        >
+          Сохранить
+        </button>
+      </div>
+    </div>
+    <form id="ngform01" (ngSubmit)="onSubmit(form.value)" [formGroup]="form">
+      <div class="row">
+        <ng-container *ngFor="let elem of exp_view; let i = index">
+          <ng-container *ngIf="elem.group_flag != 1; else header">
+            <ng-container
+              *ngIf="
+                elem.attr_caption == 'Кадастровый номер участка';
+                else noMask
+              "
+            >
+              <div class="col-sm-3">
+                <mat-form-field appearance="fill" class="example-full-width">
+                  <mat-label>{{ elem.attr_caption }}</mat-label>
+                  <input
+                    appFloatnumber
+                    autocomplete="off"
+                    [textMask]="{ mask: cadastr }"
+                    [readonly]="!(this.settings$ | async).canEdit"
+                    [(ngModel)]="elem.attr_value"
+                    [formControlName]="elem.attr_id"
+                    matInput
+                /></mat-form-field>
+              </div>
+            </ng-container>
+            <ng-template #noMask>
+              <ng-container *ngIf="elem.attr_caption != 'Всего'; else sum">
+                <div class="col-sm-3">
+                  <mat-form-field appearance="fill" class="example-full-width">
+                    <mat-label>{{ elem.attr_caption }}</mat-label>
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [readonly]="!(this.settings$ | async).canEdit"
+                      [(ngModel)]="elem.attr_value"
+                      (change)="diffPercent(elem.attr_value, elem.attr_id)"
+                      [formControlName]="elem.attr_id"
+                      matInput
+                  /></mat-form-field>
+                  <div [id]="elem.attr_id" style="display: none" class="equal">
+                    Расхождение <strong>10%</strong>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-template #sum>
+                <div class="col-sm-3">
+                  <mat-form-field appearance="fill" class="example-full-width">
+                    <mat-label>{{ elem.attr_caption }}</mat-label>
+                    <input
+                      appFloatnumber
+                      autocomplete="off"
+                      [readonly]="true"
+                      [value]="sumEl(i)"
+                      [formControlName]="elem.attr_id"
+                      matInput
+                  /></mat-form-field>
+                </div>
+              </ng-template>
+            </ng-template>
+          </ng-container>
+          <ng-template #header>
+            <div class="col-sm-12" style="padding-bottom: 10px">
+              <ng-container
+                *ngIf="elem.attr_caption != 'в том числе:'; else h6header"
+              >
+                <h4>{{ elem.attr_caption }}</h4>
+                <mat-divider></mat-divider>
+              </ng-container>
+              <ng-template #h6header>
+                <h5>{{ elem.attr_caption }}</h5>
+              </ng-template>
+            </div>
+          </ng-template>
+        </ng-container>
+      </div>
+    </form>
+  </div>
+</div>
+
+<app-debugpanel
+  *ngIf="(this.settings$ | async).showDebugPanel"
+  [debugData]="this.printValue() | json"
+></app-debugpanel>

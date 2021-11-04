@@ -1,0 +1,47 @@
+mat-form-field {
+  width: 100%;
+}
+
+.equal {
+  background: rgba(255, 64, 129, 0.54);
+  position: absolute;
+  top: 48px;
+  width: 45.25rem;
+  border-radius: 0 0 3px 3px;
+  padding: 3px;
+  font-size: 9px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.fixed-header {
+  position: fixed;
+  z-index: 999;
+  height: 50px;
+}
+
+#frugalmap {
+  height: 300px;
+  width: 100%;
+  top: 50px;
+  position: relative;
+  background: #2ab4c0;
+}
+
+.mat-elevation-z5 {
+  position: relative;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  max-width: 1110px;
+}
+
+mat-toolbar {
+  background: white;
+  z-index: 1;
+}
+

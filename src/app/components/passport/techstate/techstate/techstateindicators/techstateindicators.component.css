@@ -1,0 +1,27 @@
+.example-container {
+    height: 400px;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+
+  ::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f4f4f4;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+  }
+  ::-webkit-scrollbar-thumb:window-inactive {
+    background: #dedddd;
+  }
+
+  button {
+    outline: none;
+  }
