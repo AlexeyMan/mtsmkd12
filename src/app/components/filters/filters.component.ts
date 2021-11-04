@@ -804,6 +804,10 @@ export class FiltersComponent implements OnInit {
     this.filterRequest.coldwater = this.coldWater;
 
     this.filterRequest.columns = this.columsSelectView;
+
+    this.filterRequest.pageIndex = 1;
+    this.filterRequest.limit = 10;
+    this.filterRequest.sortDirection = "address";
   }
   // свернуть развернуть
   cBtn: boolean = true;

@@ -1,7 +1,7 @@
 <app-header [load]="loadFiltrs" (openFav)="openFav($event)"></app-header>
 <mat-progress-bar
   *ngIf="loadData"
-  style="margin-top: 2px"
+  style="margin-top: 4px; position: absolute;"
   mode="indeterminate"
 ></mat-progress-bar>
 <!-- <mat-progress-bar *ngIf="loadFiltrs" style="margin-top: 2px;" mode="indeterminate"></mat-progress-bar> -->
@@ -56,7 +56,7 @@
         </div> -->
 
       <mat-table
-        #table
+        #tableDS
         [dataSource]="dataSource"
         cdkDropList
         cdkDropListOrientation="horizontal"

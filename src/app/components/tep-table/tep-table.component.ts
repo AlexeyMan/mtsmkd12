@@ -155,6 +155,14 @@ export class TepTableComponent implements AfterViewInit, OnInit {
       });
     }
   }
+  // addValinFilters={
+  //     // const this.filters = <TepListFilter>{};
+  //   pageIndex: this.paginator.pageIndex + 1,
+  //   limi: this.paginator.pageSize,
+  //   sortDirection:
+  //   (this.sort.direction === "asc" ? "" : "-") + this.sort.active,
+  // }
+  addValinFilters:any;
   ngOnInit() {
     this.loadData = true;
     this.lastSelectedRowIndex = Number(
@@ -187,20 +195,32 @@ export class TepTableComponent implements AfterViewInit, OnInit {
     } else {
       this.loadMkdListItems(this.filters);
     }
-
+  //   this.addValinFilters={
+  //     // const this.filters = <TepListFilter>{};
+  //   pageIndex: this.paginator.pageIndex + 1,
+  //   limi: this.paginator.pageSize,
+  //   sortDirection:
+  //   (this.sort.direction === "asc" ? "" : "-") + this.sort.active,
+  // }
     // if(!this.reconnectTableData){
     // this.reconnectTableData = true;
     // }
   }
   ngAfterViewInit() {
     //переход по страницам
-    let filters = this.apiStore.getStore('mainPageUserFilters')
-    // this.paginator.page.pipe(tap(() => filters)).subscribe();
+    // let filters = this.apiStore.getStore('mainPageUserFilters')
+    this.paginator.page.pipe(tap(() => this.filters)).subscribe();
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     merge(this.sort.sortChange, this.paginator.page)
-    .pipe(tap(() => filters))
+    .pipe(tap(() => {
+      this.filters.pageIndex = this.paginator.pageIndex+1;
+      this.filters.limit = this.paginator.pageSize;
+      this.filters.sortDirection =
+    (this.sort.direction === "asc" ? "" : "-") + this.sort.active;
+    }))
     .subscribe(
-      ()=>this.loadMkdListItems(filters)
+      ()=>{this.loadMkdListItems(this.filters)
+      this.addValinFilters}
       );
 
     if (this.apiStore.checkStore('mainPageTableData')) {
@@ -345,14 +365,17 @@ export class TepTableComponent implements AfterViewInit, OnInit {
         (teps) => {
           let data = (teps as { [key: string]: any })['data'];
           let mainUserFilters = (teps as { [key: string]: any })['filters'];
+          // mainUserFilters.paginator = this.paginator.pageIndex + 1;
           this.options = (teps as { [key: string]: any })['options'];
           this.dataSource = new MatTableDataSource(data);
           this.apiStore.setStore('mainPageUserFilters', mainUserFilters);
           this.apiStore.setStore('mainPageTableData', data);
           this.apiStore.setStore('mainPageTotal', this.options?.total);
           this.displayedColumns = mainUserFilters.columns;
-          this.dataSource.paginator = this.paginator;
-          setTimeout(() => {this.paginator.length = this.options!.total;})
+          setTimeout(() => {
+            this.paginator.pageIndex = mainUserFilters.pageIndex-1;
+            this.paginator.length = this.options!.total;
+          })
           // this.paginator.length = this.options!.total;
 
           this.dataSource.sort = this.sort;
