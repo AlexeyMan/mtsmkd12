@@ -8,7 +8,7 @@
     <div class="col-sm-12">
       <div class="panel panel-default">
         <mat-toolbar
-          *ngIf="(this.settings$ | async).canEdit"
+          *ngIf="(this.settings$ | async)?.canEdit"
           id="secondToolbar"
           [ngClass]="{ 'mat-elevation-z5': true, sticky: isSticky }"
           [ngStyle]="{
@@ -28,7 +28,7 @@
         </mat-toolbar>
         <div class="panel-body">
           <ng-container *ngFor="let rotate of this.rotation">
-            <ng-container *ngFor="let group of this.data | keyvalue">
+            <ng-container *ngFor="let group of this.data">
               <ng-container *ngIf="group.key == rotate">
                 <div class="panel-heading panel-heading-divider">
                   {{ group.value.name }}
@@ -76,7 +76,7 @@
                           >
                             <mat-form-field appearance="fill">
                               <input
-                                [readonly]="!(this.settings$ | async).canEdit"
+                                [readonly]="!(this.settings$ | async)?.canEdit"
                                 appFloatnumber
                                 autocomplete="off"
                                 [(ngModel)]="elem.value"
@@ -97,7 +97,7 @@
                           <ng-template #noFloat>
                             <mat-form-field appearance="fill">
                               <input
-                                [readonly]="!(this.settings$ | async).canEdit"
+                                [readonly]="!(this.settings$ | async)?.canEdit"
                                 [(ngModel)]="elem.value"
                                 matInput
                                 [formControlName]="elem.key"
@@ -108,7 +108,7 @@
                       </ng-container>
                       <ng-template #checkbox>
                         <mat-checkbox
-                          [disabled]="!(this.settings$ | async).canEdit"
+                          [disabled]="!(this.settings$ | async)?.canEdit"
                           [value]="elem.value"
                           [formControlName]="elem.key"
                         ></mat-checkbox>
@@ -130,7 +130,7 @@
     </div>
   </div>
 </form>
-<app-debugpanel
+<!-- <app-debugpanel
   *ngIf="(this.settings$ | async).showDebugPanel"
   [debugData]="this.printValue() | json"
-></app-debugpanel>
+></app-debugpanel> -->

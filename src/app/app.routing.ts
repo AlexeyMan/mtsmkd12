@@ -14,7 +14,7 @@ import { MkdMenuResolver, TepIdResolver, TepSectionResolver } from './_resolvers
 // } from "./_resolvers/teplist.resolver";
 
 const routes: Routes = [
-  { path: "", redirectTo: "/login", pathMatch: "full" },
+  { path: "", redirectTo: "/passport", pathMatch: "full" },
   { path: "login", component: LoginComponent },
   {
     path: "passport",

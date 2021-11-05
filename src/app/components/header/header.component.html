@@ -63,7 +63,11 @@
         Создать ТЭП
       </button> -->
       <mat-menu #belowMenu="matMenu">
-        <button [routerLink]="['/admin']" mat-menu-item>
+        <button
+          *hasPermission="'ROLE_ADMIN'"
+          [routerLink]="['/admin']"
+          mat-menu-item
+        >
           Управление доступом
         </button>
         <button [routerLink]="['/admin', 'history']" mat-menu-item>
@@ -72,13 +76,25 @@
         <button [routerLink]="['/admin', 'history-user']" mat-menu-item>
           Журнал действий пользователя
         </button>
-        <button [routerLink]="['/admin', 'reference']" mat-menu-item>
+        <button
+          *hasPermission="'ROLE_VIEW_REFERENCE'"
+          [routerLink]="['/admin', 'reference']"
+          mat-menu-item
+        >
           Справочники
         </button>
-        <button [routerLink]="['/admin', 'refernce', 'addresses']" mat-menu-item>
+        <button
+          *hasPermission="'ROLE_VIEW_REFERENCE'"
+          [routerLink]="['/admin', 'refernce', 'addresses']"
+          mat-menu-item
+        >
           Адресный справочник
         </button>
-        <button [routerLink]="['/admin', 'import']" mat-menu-item>
+        <button
+          *hasPermission="'ROLE_SECTION_EXCEL_IMPORT_ADMIN'"
+          [routerLink]="['/admin', 'import']"
+          mat-menu-item
+        >
           Импорт из Excel
         </button>
         <button [routerLink]="['/admin', 'settings']" mat-menu-item>

@@ -195,11 +195,22 @@ export class AuthenticationService {
   }
 
   hasRole(role:any): Observable<boolean> {
+
+    if (localStorage.getItem("userRole")) {
+      // return true;
+      this._userRole.next(localStorage.getItem("userRole")?.split(","));
+    }
+    // return false;
+  // }
+    // if(localStorage.d ("userRole")){
+    // }
     let isEnabledRole = false;
-    this._userRole.subscribe((roles:any) => {
-      roles.indexOf("ROLE_ADMIN") !== -1
-        ? (isEnabledRole = true)
-        : (isEnabledRole = roles.indexOf(role) !== -1);
+    this._userRole.subscribe((roles) => {
+      if(roles){
+        roles.indexOf("ROLE_ADMIN") !== -1
+          ? (isEnabledRole = true)
+          : (isEnabledRole = roles.indexOf(role) !== -1);
+      }
     });
     return of(isEnabledRole);
   }

@@ -189,7 +189,7 @@ export class MkdComponent implements OnInit {
       .pipe(first())
       .subscribe(
         (data) => {
-          this.house_info!.current_status.statusId = status_id;
+          this.house_info!.current_status.status_id = status_id;
           // this.house_info.current_status.status_name = status.status_name;
 
           this.common.getTepStatuses(this.house_id).subscribe((q) => {

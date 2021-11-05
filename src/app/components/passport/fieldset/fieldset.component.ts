@@ -5,36 +5,35 @@ import {
   Input,
   OnInit,
   Output,
-} from "@angular/core";
-import { BehaviorSubject, Observable, zip } from "rxjs";
-import "jquery";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { TepField } from "../../../_models/tep";
-import { GeneralSettings } from "../../../_models/common";
-import { TeplistService } from "../../../_services/teplist.service";
-import { FakeviewService } from "../../../_services/fakeview.service";
-import { SettingsService } from "../../../_services/settings.service";
-import { last } from "rxjs/operators";
-import { Category } from "../../../_models/filters";
-import { RefserviceService } from "src/app/_services/refservice.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
+} from '@angular/core';
+import { BehaviorSubject, Observable, zip } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { TepField } from '../../../_models/tep';
+import { GeneralSettings } from '../../../_models/common';
+import { TeplistService } from '../../../_services/teplist.service';
+import { FakeviewService } from '../../../_services/fakeview.service';
+import { SettingsService } from '../../../_services/settings.service';
+import { last } from 'rxjs/operators';
+import { Category } from '../../../_models/filters';
+import { RefserviceService } from 'src/app/_services/refservice.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
-  selector: "app-fieldset",
-  templateUrl: "./fieldset.component.html",
-  styleUrls: ["./fieldset.component.scss"],
+  selector: 'app-fieldset',
+  templateUrl: './fieldset.component.html',
+  styleUrls: ['./fieldset.component.scss'],
 })
 export class FieldsetComponent implements OnInit {
-  @Input() house_id: number;
-  @Input() menuTitle: string;
+  @Input() house_id: number = -1;
+  @Input() menuTitle: string = '';
   @Output() notify: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   // options: any = {format: 'DD/MM/YYYY', locale: 'ru'};
 
-  private _tepPart = new BehaviorSubject<string>("");
-  private _strTepPart = "";
+  private _tepPart = new BehaviorSubject<string>('');
+  private _strTepPart = '';
   private jquerycalled = 0;
-  private submitted = false;
+  public submitted = false;
 
   private saveFailSubject = new BehaviorSubject<boolean>(false);
   public saveFail$ = this.saveFailSubject.asObservable();
@@ -42,7 +41,7 @@ export class FieldsetComponent implements OnInit {
   private saveSuccessSubject = new BehaviorSubject<boolean>(false);
   public saveSuccess$ = this.saveSuccessSubject.asObservable();
 
-  private enableSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  // private enableSubject: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   @Input() set tepPart(value: string) {
     this._tepPart.next(value);
@@ -56,12 +55,12 @@ export class FieldsetComponent implements OnInit {
 
   // tslint:disable-next-line:no-inferrable-types
   private initialized: boolean = true;
-  private tepFields: TepField[];
-  private error = "";
-  settings$: Observable<GeneralSettings>;
+  public tepFields: TepField[] | undefined;
+  private error = '';
+  settings$: Observable<GeneralSettings> | undefined;
 
-  category_list$: Observable<Category[]>;
-  management_org$: Observable<any[]>;
+  category_list$: Observable<Category[]> | undefined;
+  management_org$: Observable<any[]> | undefined;
 
   constructor(
     private api: TeplistService,
@@ -107,24 +106,24 @@ export class FieldsetComponent implements OnInit {
           // if ((tt["ref"] ?? null) === this.fview.MANAGEMENT_COMPANIES) {
           //   tt["fieldoptions"] = managementCompanies;
           // }
-          this.tepFields.push(
+          this.tepFields!.push(
             new TepField(
               element.key,
               element.value,
-              tt["type"],
-              tt["caption"],
-              tt["unit"],
-              tt["showAs"],
-              tt["fieldoptions"]
+              tt['type'],
+              tt['caption'],
+              tt['unit'],
+              tt['showAs'],
+              tt['fieldoptions']
             )
           );
 
           formGroup[element.key] = this._assignValue(
-            this.tepFields[this.tepFields.length - 1]
+            this.tepFields![this.tepFields!.length - 1]
           );
         });
         let checkboxFields = this.tepFields.filter(
-          (field) => field.showAs == "check"
+          (field) => field.showAs == 'check'
         );
         checkboxFields.forEach((field) => {
           formGroup[field.code].value = !!field.value;
@@ -146,12 +145,12 @@ export class FieldsetComponent implements OnInit {
   }
 
   private mapValidators(validators) {
-    const formValidators = [];
+    const formValidators:any = [];
     if (validators) {
       for (const validation of Object.keys(validators)) {
-        if (validation === "required") {
+        if (validation === 'required') {
           formValidators.push(Validators.required);
-        } else if (validation === "min") {
+        } else if (validation === 'min') {
           formValidators.push(Validators.min(validators[validation]));
         }
       }
@@ -160,20 +159,20 @@ export class FieldsetComponent implements OnInit {
   }
 
   private _assignValue(tfield: TepField): FormControl {
-    if (tfield.showAs === "check") {
+    if (tfield.showAs === 'check') {
       return new FormControl(
-        { value: tfield.value === "1", disabled: !this.settings.canEdit() },
+        { value: tfield.value === 1, disabled: !this.settings.canEdit() },
         undefined
       );
-    } else if (tfield.type === "int") {
+    } else if (tfield.type === 'int') {
       return new FormControl(
         { value: tfield.value, disabled: !this.settings.canEdit() },
-        Validators.pattern("^\\d*$")
+        Validators.pattern('^\\d*$')
       );
-    } else if (tfield.type === "float") {
+    } else if (tfield.type === 'float') {
       return new FormControl(
         { value: tfield.value, disabled: !this.settings.canEdit() },
-        Validators.pattern("^\\d*(\\,|\\.)?\\d+$")
+        Validators.pattern('^\\d*(\\,|\\.)?\\d+$')
       );
     } else {
       return new FormControl(
@@ -186,7 +185,7 @@ export class FieldsetComponent implements OnInit {
   onSubmit(form) {
     this.submitted = true;
     const result = {};
-    result["data"] = form;
+    result['data'] = form;
     console.log(JSON.stringify(result));
 
     if (this.form.invalid) {
@@ -199,18 +198,18 @@ export class FieldsetComponent implements OnInit {
       .pipe(last())
       .subscribe(
         (data) => {
-          if (data["error"]) {
+          if (data['error']) {
             // this.saveSuccessSubject.next(false);
             // this.saveFailSubject.next(true);
             // this.error = data["error_message"];
-            this._snackBar.open("Ошибка", undefined, {
-              panelClass: "snackbar-error",
+            this._snackBar.open('Ошибка', undefined, {
+              panelClass: 'snackbar-error',
             });
           } else {
             // this.saveSuccessSubject.next(true);
             // this.saveFailSubject.next(false);
-            this._snackBar.open("Успешно", undefined, {
-              panelClass: "snackbar-success",
+            this._snackBar.open('Успешно', undefined, {
+              panelClass: 'snackbar-success',
             });
           }
         },
@@ -218,8 +217,8 @@ export class FieldsetComponent implements OnInit {
           // this.error = error;
           // this.saveFailSubject.next(true);
           // this.saveSuccessSubject.next(false);
-          this._snackBar.open("Ошибка", undefined, {
-            panelClass: "snackbar-error",
+          this._snackBar.open('Ошибка', undefined, {
+            panelClass: 'snackbar-error',
           });
         }
       );
@@ -227,14 +226,14 @@ export class FieldsetComponent implements OnInit {
 
   private printValue(): Object {
     const result = {};
-
-    this.tepFields.forEach((element) => {
-      result[element.code] =
-        element.type !== "datetime"
-          ? this.form.controls[element.code].value
-          : this.parseDate(this.form.controls[element.code].value);
-    });
-
+    if (this.tepFields) {
+      this.tepFields.forEach((element) => {
+        result[element.code] =
+          element.type !== 'datetime'
+            ? this.form.controls[element.code].value
+            : this.parseDate(this.form.controls[element.code].value);
+      });
+    }
     return result;
   }
 
@@ -247,7 +246,7 @@ export class FieldsetComponent implements OnInit {
     if (dateString) {
       return String(new Date(dateString).getTime());
     } else {
-      return null;
+      return '';
     }
   }
 }

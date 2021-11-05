@@ -16,6 +16,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, SortDirection } from '@angular/material/sort';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AuthenticationService } from 'src/app/_services/authentication.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-favorit-tabs',
   templateUrl: './favorit-tabs.component.html',
@@ -65,7 +66,8 @@ export class FavoritTabsComponent implements OnInit, AfterViewInit {
   constructor(
     private api: TeplistService,
     private apiStore: LocalStorageService,
-    private authService: AuthenticationService
+    private authService: AuthenticationService,
+    private router: Router,
   ) {}
   ngOnInit(): void {
     //Проверка на роль пользователя
@@ -100,7 +102,7 @@ export class FavoritTabsComponent implements OnInit, AfterViewInit {
       }
     }
 
-    // this.router.navigate(["mkd", row["house_id"], "common-parameters"]);
+    this.router.navigate(["mkd", row["house_id"], "common-parameters"]);
   }
   drop(event: CdkDragDrop<Mkdlistitem>) {
     moveItemInArray(

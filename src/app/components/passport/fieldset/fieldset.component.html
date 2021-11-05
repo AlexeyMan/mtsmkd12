@@ -43,7 +43,7 @@
     <div class="row">
       <div class="col-sm-12">
         <button
-          *ngIf="(this.settings$ | async).canEdit"
+          *ngIf="(this.settings$ | async)?.canEdit"
           style="float: right; outline: none; margin: 0px 20px 0px 0px"
           mat-raised-button
           color="primary"
@@ -52,7 +52,7 @@
           Сохранить
         </button>
         <button
-        *ngIf="(this.settings$ | async).canEdit"
+        *ngIf="(this.settings$ | async)?.canEdit"
         style="float: right; outline: none; margin: 0px 20px 0px 0px"
         mat-raised-button
         color="primary"
@@ -96,7 +96,7 @@
                         [formControlName]="field.code"
                         id="{{ field.code }}"
                         [ngClass]="{
-                          'is-invalid': submitted && !form.get(field.code).valid
+                          'is-invalid': submitted && form.get(field.code)?.valid
                         }"
                         name="{{ field.code }}"
                         value="{{ field.value }}"
@@ -107,8 +107,7 @@
                       class="col-md-1"
                       *ngIf="
                         (this.settings$ | async)?.canEdit &&
-                        field.value &&
-                        field.value !== 0
+                        field.value &&  (field.value) !== 0
                       "
                     >
                       <span
@@ -132,7 +131,7 @@
                         [formControlName]="field.code"
                         id="{{ field.code }}"
                         [ngClass]="{
-                          'is-invalid': submitted && !form.get(field.code).valid
+                          'is-invalid': submitted && !form.get(field.code)?.valid
                         }"
                         name="{{ field.code }}"
                         value="{{ field.value }}"
@@ -178,7 +177,7 @@
                   "
                   class="col-md-7"
                 >
-                  <ng-container *ngIf="!(this.settings$ | async).canEdit">
+                  <ng-container *ngIf="!(this.settings$ | async)?.canEdit">
                     <ng-select
                       [items]="this.field.fieldoptions"
                       [multiple]="false"
@@ -193,7 +192,7 @@
                     >
                     </ng-select>
                   </ng-container>
-                  <ng-container *ngIf="(this.settings$ | async).canEdit">
+                  <ng-container *ngIf="(this.settings$ | async)?.canEdit">
                     <ng-select
                       [items]="this.field.fieldoptions"
                       [multiple]="false"
@@ -209,7 +208,7 @@
                   </ng-container>
                 </div>
                 <div *ngIf="field.code === 'category_id'" class="col-md-7">
-                  <ng-container *ngIf="!(this.settings$ | async).canEdit">
+                  <ng-container *ngIf="!(this.settings$ | async)?.canEdit">
                     <ng-select
                       [items]="this.category_list$ | async"
                       [multiple]="false"
@@ -224,7 +223,7 @@
                     >
                     </ng-select>
                   </ng-container>
-                  <ng-container *ngIf="(this.settings$ | async).canEdit">
+                  <ng-container *ngIf="(this.settings$ | async)?.canEdit">
                     <ng-select
                       [items]="this.category_list$ | async"
                       [multiple]="false"
@@ -244,7 +243,7 @@
                   *ngIf="field.code === 'management_org_id'"
                   class="col-md-7"
                 >
-                  <ng-container *ngIf="!(this.settings$ | async).canEdit">
+                  <ng-container *ngIf="!(this.settings$ | async)?.canEdit">
                     <ng-select
                       [items]="this.management_org$ | async"
                       [multiple]="false"
@@ -259,7 +258,7 @@
                     >
                     </ng-select>
                   </ng-container>
-                  <ng-container *ngIf="(this.settings$ | async).canEdit">
+                  <ng-container *ngIf="(this.settings$ | async)?.canEdit">
                     <ng-select
                       [items]="this.management_org$ | async"
                       [multiple]="false"
@@ -278,14 +277,14 @@
                 <div *ngIf="field.showAs === 'check'" class="col-md-7">
                   <div
                     class="col-12 col-sm-8 col-lg-6 form-check mt-2"
-                    *ngIf="!(this.settings$ | async).canEdit"
+                    *ngIf="!(this.settings$ | async)?.canEdit"
                   >
                     <label
                       class="custom-control custom-checkbox custom-control-inline"
                     >
                       <input
                         type="checkbox"
-                        disabled="disabled"
+                        [disabled]="true"
                         [formControlName]="field.code"
                         [attr.checked]="field.value === 1"
                         id="{{ field.code }}"
@@ -298,7 +297,7 @@
                   </div>
                   <div
                     class="col-12 col-sm-8 col-lg-6 form-check mt-2"
-                    *ngIf="(this.settings$ | async).canEdit"
+                    *ngIf="(this.settings$ | async)?.canEdit"
                   >
                     <label
                       class="custom-control custom-checkbox custom-control-inline"
@@ -344,10 +343,10 @@
                 }}</label>
               </div>
             </form>
-            <app-debugpanel
+            <!-- <app-debugpanel
               *ngIf="(this.settings$ | async).showDebugPanel"
               [debugData]="this.printValue() | json"
-            ></app-debugpanel>
+            ></app-debugpanel> -->
           </div>
         </div>
       </div>

@@ -20,9 +20,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
   styleUrls: ["./commoninformation.component.css"],
 })
 export class CommoninformationComponent implements OnInit {
-  @Input() tepPart: string;
-  @Input() house_id: number;
-  @Input() menuTitle: string;
+  @Input() tepPart: string ="";
+  @Input() house_id: number = -1;
+  @Input() menuTitle: string="";
 
   @Output() notify: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -46,7 +46,7 @@ export class CommoninformationComponent implements OnInit {
 
   // Form variables
   private error = "";
-  settings$: Observable<GeneralSettings>;
+  settings$: Observable<GeneralSettings> | undefined;
   form = new FormGroup({});
 
   private saveFailSubject = new BehaviorSubject<boolean>(false);
@@ -118,7 +118,7 @@ export class CommoninformationComponent implements OnInit {
       this.house_id = parseFloat(url[1].path);
     });
 
-    this.api.getCleaningAreas(this.house_id).subscribe((res) => {
+    this.api.getCleaningAreas(this.house_id).subscribe((res:any) => {
       this.sumField1 = res.find(
         (elem) =>
           elem.attr_caption === "Уборочная площадь лестничных маршей и площадок"
@@ -160,13 +160,13 @@ export class CommoninformationComponent implements OnInit {
       let oldVal = this.oldData.find((p) => p.key == i);
       if (Number(oldVal.value)) {
         if (oldVal.value * 0.9 > a || oldVal.value * 1.1 < a) {
-          document.getElementById(i).style.display = "inherit";
-        } else document.getElementById(i).style.display = "none";
+          document.getElementById(i)!.style.display = "inherit";
+        } else document.getElementById(i)!.style.display = "none";
       }
     }
   }
 
-  sum(name, fieldKey, key) {
+  sum(name: string, fieldKey: string | null, key: string) {
     let elems = this.data[key].fields;
     switch (name) {
       case "Общая площадь дома": {
@@ -185,27 +185,27 @@ export class CommoninformationComponent implements OnInit {
           Number(this.sumField4)
         ).toFixed(2);
       }
-      case "Площадь нежилых помещений функционального назначения": {
-        this.form.controls["non_living_building_area"].setValue(
-          Number(
-            this.data[key].fields.filter(
-              (el) =>
-                el.name ===
-                "Площадь нежилых помещений функционального назначения"
-            )[0].value
-          ).toFixed(2)
-        );
-      }
+      // case "Площадь нежилых помещений функционального назначения": {
+      //   this.form.controls["non_living_building_area"].setValue(
+      //     Number(
+      //       this.data[key].fields.filter(
+      //         (el) =>
+      //           el.name ===
+      //           "Площадь нежилых помещений функционального назначения"
+      //       )[0].value
+      //     ).toFixed(2)
+      //   );
+      // }
       case "В частной собственности": {
         if (fieldKey === "living_building_area_privately_owned") {
           // общая жилая
           if (this.livingQuarters) {
             let sumIndividual = Object.values(this.livingQuarters["individual"])
-              .map((t) => t["fta_privately_owned"])
+              .map((t:any) => t["fta_privately_owned"])
               .reduce((acc, value) => Number(acc) + Number(value), 0);
 
             let sumCommunal = Object.values(this.livingQuarters["communal"])
-              .map((t) => t["fta_privately_owned"])
+              .map((t:any) => t["fta_privately_owned"])
               .reduce((acc, value) => Number(acc) + Number(value), 0);
             this.form.controls["living_building_area_privately_owned"].setValue(
               Number(sumIndividual + sumCommunal).toFixed(2)
@@ -234,11 +234,11 @@ export class CommoninformationComponent implements OnInit {
           if (this.livingQuarters) {
             // S11 – Итого Отд. квартиры всего ГОС
             let sumIndividual = Object.values(this.livingQuarters["individual"])
-              .map((t) => t["fta_state_owned"])
+              .map((t:any) => t["fta_state_owned"])
               .reduce((acc, value) => Number(acc) + Number(value), 0);
             // S31 – Итого Ком. квартиры всего ГОС
             let sumCommunal = Object.values(this.livingQuarters["communal"])
-              .map((t) => t["fta_state_owned"])
+              .map((t:any) => t["fta_state_owned"])
               .reduce((acc, value) => Number(acc) + Number(value), 0);
             // S5 – Общая пл. общежитий
             let communal = this.livingQuarters["hostel"].hostelTotalArea;

@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div class="container">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -7,38 +8,38 @@
             <div class="col-md-9">
               <span>ТЭП МКД</span>
               <div class="form-group" *ngIf="this.house_info">
-                <div class="dropdown status-mkd">
-                  <!-- <button
+                <!-- <div class="dropdown status-mkd">
+                  <button
                     type="button"
                     class="btn btn-space btn-secondary btn-xs dropdown-toggle"
                     data-toggle="dropdown"
                   >
                     <i class="icon icon-left s7-config"></i>
                     Текущий статус ТЭП:
-                    {{ this.house_info.current_status.status_name }}
-                  </button> -->
-                  <!-- <div class="dropdown-menu">
+                    {{ this.house_info.current_status.statusName }}
+                  </button>
+                  <div class="dropdown-menu">
                     <a
                       class="dropdown-item"
                       [routerLink]=""
-                      (click)="setStatus(status.status_id, status.status_name)"
+                      (click)="setStatus(status.statusId)"
                       *ngFor="let status of this.statuses"
                     >
-                      {{ status.status_name }}
+                      {{ status.statusName }}
                     </a>
                   </div> -->
                   <mat-form-field appearance="outline">
                     <mat-label>Текущий статус ТЭП</mat-label>
                     <mat-select
                       [disabled]="permission"
-                      [value]="this.house_info.current_status.statusId"
+                      [value]="this.house_info.current_status.status_id"
                       (selectionChange)="setStatus($event.value)"
                     >
                       <mat-option
                         *ngFor="let status of this.statuses"
-                        [value]="status.statusId"
+                        [value]="status.status_id"
                       >
-                        {{ status.statusName }}
+                        {{ status.status_name }}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
@@ -73,7 +74,7 @@
                 [ngStyle]="{ float: imageObject.length > 0 ? 'left' : 'right' }"
                 labelPosition="before"
                 (change)="OnChange($event)"
-                [checked]="(this.settings$ | async)!.canEdit"
+                [checked]="(this.settings$ | async)?.canEdit"
                 >Режим правки</mat-slide-toggle
               >
             </div>
@@ -106,11 +107,11 @@
 
   <div class="row" *ngIf="!(this.settings$ | async)?.menuPosition">
     <div class="col-md-12" style="position: absolute; max-width: 1110px">
-      <!-- <app-topmenu
+      <app-topmenu
         [tepMenu]="tepMenu"
-        [tepPart]="tepPart"
+        [tepPart]="tep_part"
         [house_id]="house_id"
-      ></app-topmenu> -->
+      ></app-topmenu>
     </div>
   </div>
 
@@ -181,7 +182,7 @@
         </div>
       </div>
 
-      <!-- <app-fieldset
+      <app-fieldset
         (notify)="onNotify($event)"
         *ngIf="isTable === 0"
         [tepPart]="tep_part"
@@ -189,71 +190,71 @@
         [menuTitle]="menuTitle"
       >
       </app-fieldset>
-      <app-simplerepair
+      <!-- <app-simplerepair
         (notify)="onNotify($event)"
         *ngIf="isTable === 1"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
       >
-      </app-simplerepair>
-      <app-flatstable
+      </app-simplerepair> -->
+      <!-- <app-flatstable
         (notify)="onNotify($event)"
         *ngIf="isTable === 2"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
       >
-      </app-flatstable>
-      <app-cleaningareas
+      </app-flatstable> -->
+      <!-- <app-cleaningareas
         (notify)="onNotify($event)"
         *ngIf="isTable === 3"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
       >
-      </app-cleaningareas>
-      <app-explicationland
+      </app-cleaningareas> -->
+      <!-- <app-explicationland
         (notify)="onNotify($event)"
         *ngIf="isTable === 4"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
       >
-      </app-explicationland>
-      <app-tempcond
+      </app-explicationland> -->
+      <!-- <app-tempcond
         (notify)="onNotify($event)"
         *ngIf="isTable === 5"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
       >
-      </app-tempcond>
-      <app-energcost
+      </app-tempcond> -->
+      <!-- <app-energcost
         (notify)="onNotify($event)"
         *ngIf="isTable === 6"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
       >
-      </app-energcost>
-      <app-energuse
+      </app-energcost> -->
+      <!-- <app-energuse
         (notify)="onNotify($event)"
         *ngIf="isTable === 7"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
       >
-      </app-energuse>
-      <app-meteringdevices
+      </app-energuse> -->
+      <!-- <app-meteringdevices
         (notify)="onNotify($event)"
         *ngIf="isTable === 9"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
       >
-      </app-meteringdevices>
-      <app-passport-page
+      </app-meteringdevices> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 14"
         [tepPart]="tep_part"
@@ -261,8 +262,8 @@
         [menuTitle]="menuTitle"
         [url]="'external-finishing'"
       >
-      </app-passport-page>
-      <app-passport-page
+      </app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 8"
         [tepPart]="tep_part"
@@ -270,8 +271,8 @@
         [menuTitle]="menuTitle"
         [url]="'energy-meter'"
       >
-      </app-passport-page>
-      <app-passport-page
+      </app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 10"
         [tepPart]="tep_part"
@@ -279,8 +280,8 @@
         [menuTitle]="menuTitle"
         [url]="'basements-walls-floors'"
       >
-      </app-passport-page>
-      <app-passport-page
+      </app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 11"
         [tepPart]="tep_part"
@@ -288,8 +289,8 @@
         [menuTitle]="menuTitle"
         [url]="'house-roofing'"
       >
-      </app-passport-page>
-      <app-passport-page
+      </app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 12"
         [tepPart]="tep_part"
@@ -297,63 +298,63 @@
         [menuTitle]="menuTitle"
         [url]="'watersupply-sewerage'"
       >
-      </app-passport-page>
-      <app-passport-page
+      </app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 13"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
         [url]="'window-opening-doorway'"
-      ></app-passport-page>
-      <app-passport-page
+      ></app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 15"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
         [url]="'heat-supply-system'"
-      ></app-passport-page>
-      <app-passport-page
+      ></app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 16"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
         [url]="'interior-finishing'"
-      ></app-passport-page>
-      <app-passport-page
+      ></app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 17"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
         [url]="'electricity-supply'"
-      ></app-passport-page>
-      <app-passport-page
+      ></app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 18"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
         [url]="'special-purpose-rooms'"
-      ></app-passport-page>
-      <app-passport-page
+      ></app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 19"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
         [url]="'improvement-playgrounds'"
-      ></app-passport-page>
-      <app-passport-page
+      ></app-passport-page> -->
+      <!-- <app-passport-page
         (notify)="onNotify($event)"
         *ngIf="isTable === 20"
         [tepPart]="tep_part"
         [house_id]="house_id"
         [menuTitle]="menuTitle"
         [url]="'special-engineering-equipment'"
-      ></app-passport-page>
+      ></app-passport-page> -->
       <app-commoninformation
         (notify)="onNotify($event)"
         *ngIf="isTable === 21"
@@ -361,7 +362,7 @@
         [house_id]="house_id"
         [menuTitle]="menuTitle"
       ></app-commoninformation>
-      <app-lift-data
+      <!-- <app-lift-data
         (notify)="onNotify($event)"
         *ngIf="isTable === 22"
         [tepPart]="tep_part"
@@ -370,4 +371,4 @@
       ></app-lift-data> -->
     </div>
   </div>
-</div>
+<!-- </div> -->

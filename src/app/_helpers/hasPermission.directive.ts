@@ -54,7 +54,7 @@ export class HasPermissionDirective {
   private checkPermission() {
     let hasPermission:boolean = false;
 
-    if (this.permissions) {
+    if (this.permissions && this.userPermissions) {
       // this.roles.indexOf("ROLE_ADMIN") !== -1
       //   ? (hasPermission = true)
       //   : (hasPermission = this.roles.indexOf(this.role) !== -1);

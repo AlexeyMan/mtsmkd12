@@ -1,0 +1,77 @@
+<ul class="mai-nav-tabs-sub mai-sub-nav nav">
+  <li *ngFor="let menuitem of this.tepMenu; let isFirst = first">
+    <button mat-button [matMenuTriggerFor]="aboveMenu">
+      {{ menuitem.menuCaption }}
+    </button>
+    <mat-menu #aboveMenu="matMenu">
+      <ng-container *ngFor="let submenuitem of menuitem.items">
+        <button
+          (click)="
+            onRowClicked(
+              house_id,
+              submenuitem.alias === null ? submenuitem.id : submenuitem.alias
+            )
+          "
+          mat-menu-item
+        >
+          {{ submenuitem.menuCaption }}
+        </button>
+      </ng-container>
+    </mat-menu>
+  </li>
+  <li>
+    <button mat-button (click)="onRowClicked(house_id, 'documents')">
+      Файлы и документы
+    </button>
+  </li>
+  <li>
+    <button mat-button [matMenuTriggerFor]="aboveMenu">
+      Техническое состояние
+    </button>
+    <mat-menu #aboveMenu="matMenu">
+      <cdk-virtual-scroll-viewport
+        [itemSize]="18"
+        [style.height.px]="
+          this.defectLists.length < 8 ? this.defectLists.length * 48 : 8 * 48
+        "
+        style="overflow-x: hidden"
+      >
+        <ng-container *cdkVirtualFor="let defect of this.defectLists">
+          <div mat-menu-item style="display: flex">
+            <ng-container
+              *ngIf="
+                permission === 'ROLE_ADMIN' ||
+                (defect.status !== 6 &&
+                  permission === 'ROLE_CONFIRM_DEFECT_ACT')
+              "
+            >
+              <span
+                *ngIf="(this.settings$ | async)!.canEdit"
+                (click)="techStateDelete(defect.id)"
+                class="material-icons"
+              >
+                delete_forever
+              </span>
+            </ng-container>
+            <button class="defButton" (click)="onTechStateClicked(defect.id)">
+              {{ defect.dateFrom + " " + defect.caption }}
+            </button>
+          </div>
+        </ng-container>
+      </cdk-virtual-scroll-viewport>
+      <button
+        *hasPermission="['ROLE_ADMIN', 'ROLE_CONFIRM_DEFECT_ACT']; op: 'OR'"
+        style="color: white; background: #3f51b5"
+        (click)="newTechStateClicked()"
+        mat-menu-item
+      >
+        Создать новый акт осмотра
+      </button>
+    </mat-menu>
+  </li>
+  <li>
+    <button mat-button (click)="onRowClicked(house_id, 'current-repair')">
+      Текущий ремонт
+    </button>
+  </li>
+</ul>

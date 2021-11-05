@@ -48,14 +48,14 @@ export interface MkdCommonParameters {
 
   export class TepField {
     code: string;
-    value: string;
+    value: number;
     type: string;
     caption: string;
     unit: string;
     showAs: string;
     fieldoptions: FieldOption[];
 
-    constructor(code: string, value: string, type = 'string', caption = 'Не задано', unit = '', showAs = 'small', fieldoptions = []) {
+    constructor(code: string, value: number, type = 'string', caption = 'Не задано', unit = '', showAs = 'small', fieldoptions = []) {
       this.code = code;
       this.caption = caption;
       this.fieldoptions = fieldoptions;

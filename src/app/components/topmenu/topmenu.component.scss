@@ -1,0 +1,62 @@
+.mai-nav-tabs-sub {
+  position: relative;
+  display: flex;
+  left: 0;
+  top: 100%;
+  z-index: 999;
+  width: 100%;
+  height: 70px;
+  background-color: #ffffff;
+}
+
+.mai-nav-tabs-sub > .nav-item > .nav-link {
+  padding: 0px 24px;
+}
+
+button {
+  outline: none;
+}
+
+.defButton {
+  background: none;
+  border: none;
+}
+
+ul {
+  display: flex;
+  li {
+    flex-basis: auto;
+    flex-grow: 1;
+    button {
+      border-radius: 0;
+      padding: 10px;
+      width: 100%;
+    }
+  }
+}
+
+.material-icons {
+  position: relative;
+  top: 12px;
+  right: 6px;
+  transition: 0.1s linear;
+}
+
+.material-icons:hover {
+  color: red;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f4f4f4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e0e0e0;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+  background: #dedddd;
+}

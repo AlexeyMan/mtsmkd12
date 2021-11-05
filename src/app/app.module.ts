@@ -26,6 +26,12 @@ import { DeleteDialogComponent } from "./components/dialog/delete-tep-dialog/del
 import { MkdComponent } from './components/passport/mkd/mkd.component';
 import { NgImageSliderModule } from 'ng-image-slider';
 import { HasPermissionDirective } from './_helpers/hasPermission.directive';
+import { TopmenuComponent } from "./components/topmenu/topmenu.component";
+import { MomentDateAdapter } from "@angular/material-moment-adapter";
+import { DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { FieldsetComponent } from "./components/passport/fieldset/fieldset.component";
+// import { RouterModule } from "@angular/router";
+import { CommoninformationComponent } from "./components/passport/commoninformation/commoninformation.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +43,10 @@ import { HasPermissionDirective } from './_helpers/hasPermission.directive';
     FavoritTabsComponent,
     DeleteDialogComponent,
     MkdComponent,
-    HasPermissionDirective
+    HasPermissionDirective,
+    TopmenuComponent,
+    FieldsetComponent,
+    CommoninformationComponent
   ],
   imports: [
     BrowserModule,
@@ -59,8 +68,16 @@ import { HasPermissionDirective } from './_helpers/hasPermission.directive';
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     { provide: MatPaginatorIntl, useValue: getRussianPaginatorIntl() },
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE],
+    },
   ],
-  exports: [ FiltersComponent],
+  exports: [
+    // RouterModule,
+    FiltersComponent
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
