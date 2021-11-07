@@ -8,7 +8,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 export class EventData {
   name: string;
   value: any;
-  constructor(name, value) {
+  constructor(name: string, value: any) {
       this.name = name;
       this.value = value;
   }
@@ -146,7 +146,7 @@ export class TechstateService {
   saveConcreteTechStateParam(
     house_id: number,
     defectlist_id: number,
-    concreteState_id,
+    concreteState_id: string,
     data: any
   ): Observable<DefectList[]> {
     return this.http
@@ -262,7 +262,7 @@ export class TechstateService {
       );
   }
 
-  addPhoto (house, defect, dSection, data): Observable<any> {
+  addPhoto (house: any, defect: any, dSection: any, data: FormData): Observable<any> {
     return this.http
       .post<DefectList[]>(
         AppSettings.API_ENDPOINT +
@@ -287,7 +287,7 @@ export class TechstateService {
         })
       );
   }
-  getPhoto (dSection): Observable<any> {
+  getPhoto (dSection: any): Observable<any> {
     return this.http
     .get<any>(
       AppSettings.API_ENDPOINT +
@@ -302,7 +302,7 @@ export class TechstateService {
       })
     );
   }
-  updatePhoto (house, defect, dSection, data): Observable<any> {
+  updatePhoto (house: any, defect: any, dSection: any, data: { files: never[]; }): Observable<any> {
     return this.http
     .post<DefectList[]>(
       AppSettings.API_ENDPOINT +
@@ -319,7 +319,7 @@ export class TechstateService {
       })
     );
   }
-  deletePhoto(house, defect, dSection, id): Observable<any> {
+  deletePhoto(house: any, defect: any, dSection: any, id: any): Observable<any> {
     return this.http
     .delete<DefectList[]>(
       AppSettings.API_ENDPOINT +

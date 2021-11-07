@@ -2243,7 +2243,7 @@ export class FakeviewService {
 
   getParameterData(code: string) {
     let result: Object | undefined;
-    this.t_object.forEach((element) => {
+    this.t_object.forEach((element:any) => {
       if (element["code"] === code) {
         result = element;
       }

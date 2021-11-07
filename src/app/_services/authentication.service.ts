@@ -91,7 +91,7 @@ export class AuthenticationService {
       );
   }
 
-  getUserByName(user_name): Observable<UserDetail[]> {
+  getUserByName(user_name: string): Observable<UserDetail[]> {
     return this.http
       .get<UserDetail[]>(
         AppSettings.API_ENDPOINT + "admin/users?user_name=" + user_name

@@ -94,8 +94,8 @@ export class CommoninformationComponent implements OnInit {
     this.saveFailSubject.next(false);
 
     this.settings$ = this.settings.settings$;
-    this.api.getCommonParametersById(String(this.house_id)).subscribe((res) => {
-      const formGroup = {};
+    this.api.getCommonParametersById(String(this.house_id)).subscribe((res:any) => {
+      const formGroup:any = {};
       this.data = res["subsections"];
       this.rotation = res["order"];
       this.oldData = JSON.parse(
@@ -103,7 +103,7 @@ export class CommoninformationComponent implements OnInit {
       );
 
       Object.keys(this.data).forEach((key) => {
-        this.data[key].fields.forEach((field) => {
+        this.data[key].fields.forEach((field:any) => {
           formGroup[field.key] = new FormControl(field.value, undefined);
         });
       });
@@ -120,32 +120,32 @@ export class CommoninformationComponent implements OnInit {
 
     this.api.getCleaningAreas(this.house_id).subscribe((res:any) => {
       this.sumField1 = res.find(
-        (elem) =>
+        (elem:any) =>
           elem.attr_caption === "Уборочная площадь лестничных маршей и площадок"
       ).attr_value;
       this.sumField2 = res.find(
-        (elem) =>
+        (elem:any) =>
           elem.attr_caption ===
           "Уборочная площадь коридоров мест общего пользования"
       ).attr_value;
       this.sumField3 = res.find(
-        (elem) => elem.attr_caption === "Всего"
+        (elem:any) => elem.attr_caption === "Всего"
       ).attr_value;
     });
-    this.api.getLivingQuarters(this.house_id).subscribe((res) => {
+    this.api.getLivingQuarters(this.house_id).subscribe((res:any) => {
       this.livingQuarters = res;
       this.sumField4 = res["hostel"].hostelTotalArea;
       this.sumField5 = Object.values(res["individual"])
-        .map((t) => t.total_area)
+        .map((t:any) => t.total_area)
         .reduce((acc, value) => Number(acc) + Number(value), 0);
 
       this.sumField6 = Object.values(res["communal"])
-        .map((t) => t.total_area)
+        .map((t:any) => t.total_area)
         .reduce((acc, value) => Number(acc) + Number(value), 0);
     });
   }
 
-  isSum(name, key) {
+  isSum(name: string, key: string) {
     return (
       name == "Общая площадь дома" ||
       name == "Площадь жилых помещений" ||
@@ -155,9 +155,9 @@ export class CommoninformationComponent implements OnInit {
     );
   }
 
-  diffPercent(a, i) {
+  diffPercent(a: number, i: string) {
     if (i.search("year") == -1) {
-      let oldVal = this.oldData.find((p) => p.key == i);
+      let oldVal = this.oldData.find((p: { key: string; }) => p.key == i);
       if (Number(oldVal.value)) {
         if (oldVal.value * 0.9 > a || oldVal.value * 1.1 < a) {
           document.getElementById(i)!.style.display = "inherit";
@@ -166,8 +166,8 @@ export class CommoninformationComponent implements OnInit {
     }
   }
 
-  sum(name: string, fieldKey: string | null, key: string) {
-    let elems = this.data[key].fields;
+  sum(name: string, fieldKey: string | null, key: string):any {
+    let elems:any = this.data[key].fields;
     switch (name) {
       case "Общая площадь дома": {
         return (
@@ -269,10 +269,10 @@ export class CommoninformationComponent implements OnInit {
     }
   }
 
-  changeField(key, fieldKey) {
+  changeField(key: string | number, fieldKey: any) {
     let elems = this.data[key].fields;
     let nonLivingBuildingArea = Number(
-      elems.find((el) => el.key === "non_living_building_area").value
+      elems.find((el: { key: string; }) => el.key === "non_living_building_area").value
     );
     switch (fieldKey) {
       case "nlba_privately_owned":
@@ -306,17 +306,17 @@ export class CommoninformationComponent implements OnInit {
     return sum;
   }
 
-  parse_float(number): number {
+  parse_float(number:any): number {
     return parseFloat(number.toString().replace(/,/g, "."));
   }
 
   onChanges(): void {
-    this.form.valueChanges.subscribe((val) => {
-      // this.sumControlValues();
-    });
+    // this.form.valueChanges.subscribe((val) => {
+    //   // this.sumControlValues();
+    // });
   }
 
-  onSubmit(form) {
+  onSubmit(form: any) {
     let result;
     result = this.printValue();
 
@@ -328,7 +328,7 @@ export class CommoninformationComponent implements OnInit {
       .postFieldSetData(this.house_id, this.tepPart, JSON.stringify(result))
       .pipe()
       .subscribe(
-        (data) => {
+        (data:any) => {
           if (data["error"]) {
             // this.saveSuccessSubject.next(false);
             // this.saveFailSubject.next(true);
@@ -344,7 +344,7 @@ export class CommoninformationComponent implements OnInit {
             });
           }
         },
-        (error) => {
+        (error:any) => {
           // this.error = error;
           // this.saveFailSubject.next(true);
           // this.saveSuccessSubject.next(false);
@@ -356,10 +356,10 @@ export class CommoninformationComponent implements OnInit {
   }
 
   private printValue(): Object {
-    let rez = {};
+    let rez:any = {};
     if (this.data) {
       Object.keys(this.data).forEach((key) => {
-        this.data[key].fields.forEach((field) => {
+        this.data[key].fields.forEach((field:any) => {
           field.value = this.form.controls[field.key].value;
           rez[field.key] = this.form.controls[field.key].value;
         });

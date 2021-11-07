@@ -47,7 +47,7 @@ export class TopmenuComponent implements OnInit {
 
   getDefectList() {
     this.api.getDefectListList(this.house_id).subscribe((p) => {
-      p.forEach((elem) => {
+      p.forEach((elem:any) => {
         elem["dateFrom"] = new Date(elem["dateFrom"].split(" ")[0]);
       });
       p.sort((a: any, b: any) => {
@@ -55,7 +55,7 @@ export class TopmenuComponent implements OnInit {
         b = new Date(b["dateFrom"]);
         return a > b ? -1 : a < b ? 1 : 0;
       });
-      p.forEach((elem) => {
+      p.forEach((elem:any) => {
         elem["dateFrom"] = moment(elem["dateFrom"]).format("DD.MM.YYYY");
       });
       this.defectLists = p;
@@ -68,15 +68,15 @@ export class TopmenuComponent implements OnInit {
     });
   }
 
-  onRowClicked(house_id, path) {
+  onRowClicked(house_id: any, path: any) {
     this.router.navigate(["mkd", house_id, path]);
   }
 
-  onTechStateClicked(defect_id) {
+  onTechStateClicked(defect_id: any) {
     this.router.navigate(["mkd", this.house_id, "techstate", defect_id]);
   }
 
-  techStateDelete(defect_id) {
+  techStateDelete(defect_id: number) {
     this.api.deleteDefectList(this.house_id, defect_id).subscribe((p) => {
       this._snackBar.open(`Запись удалена`, undefined, {
         panelClass: "snackbar-success",
@@ -92,7 +92,7 @@ export class TopmenuComponent implements OnInit {
     this.router.navigate(["mkd", this.house_id, "techstate-new"]);
   }
 
-  OnChange($event) {
+  OnChange($event:any) {
     this.settings.setEditMode($event.checked);
   }
 }

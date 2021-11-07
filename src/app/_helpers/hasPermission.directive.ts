@@ -28,13 +28,13 @@ export class HasPermissionDirective {
   }
 
   @Input()
-  set hasPermission(val) {
+  set hasPermission(val:any) {
     this.permissions = val;
     this.updateView();
   }
 
   @Input()
-  set hasPermissionOp(permop) {
+  set hasPermissionOp(permop:any) {
     this.logicalOp = permop;
     this.updateView();
   }

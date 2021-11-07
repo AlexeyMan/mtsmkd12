@@ -85,7 +85,7 @@ export class FieldsetComponent implements OnInit {
       }
     });
 
-    const formGroup = {};
+    const formGroup:any = {};
 
     this._tepPart.subscribe((part) => {
       const merged = zip(this.api.getParameterData(this.house_id, part));
@@ -101,7 +101,7 @@ export class FieldsetComponent implements OnInit {
         }));
 
         source.forEach((element) => {
-          const tt = this.fview.getParameterData(element.key);
+          const tt:any= this.fview.getParameterData(element.key);
 
           // if ((tt["ref"] ?? null) === this.fview.MANAGEMENT_COMPANIES) {
           //   tt["fieldoptions"] = managementCompanies;
@@ -144,7 +144,7 @@ export class FieldsetComponent implements OnInit {
     return this.form.controls;
   }
 
-  private mapValidators(validators) {
+  private mapValidators(validators:any) {
     const formValidators:any = [];
     if (validators) {
       for (const validation of Object.keys(validators)) {
@@ -182,9 +182,9 @@ export class FieldsetComponent implements OnInit {
     }
   }
 
-  onSubmit(form) {
+  onSubmit(form: any) {
     this.submitted = true;
-    const result = {};
+    const result:any = {};
     result['data'] = form;
     console.log(JSON.stringify(result));
 
@@ -197,7 +197,7 @@ export class FieldsetComponent implements OnInit {
       .postFieldSetData(this.house_id, this._strTepPart, JSON.stringify(result))
       .pipe(last())
       .subscribe(
-        (data) => {
+        (data:any) => {
           if (data['error']) {
             // this.saveSuccessSubject.next(false);
             // this.saveFailSubject.next(true);
@@ -213,7 +213,7 @@ export class FieldsetComponent implements OnInit {
             });
           }
         },
-        (error) => {
+        (error:any) => {
           // this.error = error;
           // this.saveFailSubject.next(true);
           // this.saveSuccessSubject.next(false);
@@ -225,7 +225,7 @@ export class FieldsetComponent implements OnInit {
   }
 
   private printValue(): Object {
-    const result = {};
+    const result:any = {};
     if (this.tepFields) {
       this.tepFields.forEach((element) => {
         result[element.code] =

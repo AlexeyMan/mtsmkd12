@@ -431,7 +431,7 @@ export class TeplistService {
         AppSettings.API_ENDPOINT + "houses/" + id + "/cleaning-areas"
       )
       .pipe(
-        map((res) => {
+        map((res:any) => {
           return res;
         }),
         catchError((error) => {

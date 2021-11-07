@@ -151,7 +151,7 @@ export class MkdComponent implements OnInit {
         return arr.push(item);
       });
     });
-    arr.forEach((item, i) => {
+    arr.forEach((item: { alias: string; }, i: number) => {
       if (item.alias === this.tep_part) {
         console.log(item.alias);
         this.back = arr[i - 1]
@@ -183,12 +183,12 @@ export class MkdComponent implements OnInit {
     }
   }
 
-  setStatus(status_id) {
+  setStatus(status_id: number) {
     this.common
       .sendTepStatus(this.house_id, status_id)
       .pipe(first())
       .subscribe(
-        (data) => {
+        (data:any) => {
           this.house_info!.current_status.status_id = status_id;
           // this.house_info.current_status.status_name = status.status_name;
 
@@ -196,17 +196,17 @@ export class MkdComponent implements OnInit {
             this.statuses = q;
           });
         },
-        (error) => {
+        (error:any) => {
           console.log(error);
         }
       );
   }
 
-  OnChange($event) {
+  OnChange($event:any) {
     this.settings.setEditMode($event.checked);
   }
 
-  directionSection(direction) {
+  directionSection(direction:any) {
     switch (direction) {
       case 'back':
         this.router.navigate(['/mkd', this.house_id, this.back]);
